@@ -1,0 +1,59 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Xray AWS Security Hub integration
+
+Parameters:
+  S3BucketName:
+    Type: String
+    Default: jfrog-xray-security-hub
+    Description:
+      S3 bucket name for the Xray Security Hub Integration assets. This string can include
+      numbers, lowercase letters, and hyphens (-). It cannot start
+      or end with a hyphen (-).
+    AllowedPattern: ^[0-9a-z]+([0-9a-z-]*[0-9a-z])*$
+    ConstraintDescription:
+      Xray Security Hub Integration bucket name can include numbers, lowercase
+      letters, and hyphens (-). It cannot start or end with a hyphen (-).
+  S3KeyPrefix:
+    Type: String
+    Default: xray-aws-security-hub
+    Description:
+      S3 key prefix for the Xray Security Hub Integration assets. Quick Start key prefix
+      can include numbers, lowercase letters, uppercase letters, hyphens (-), and
+      forward slash (/).
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
+    ConstraintDescription:
+      Xray Security Hub Integration key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slash (/).
+  LambdaAuthorizerName:
+    Type: String
+    Default: XrayAuthorizer
+    Description: Lambda name for the Xray Security Hub Integration lambda. This string can include
+    letters, numbers, hyphens (-), or underscores (_).
+    AllowedPattern: ^[0-9a-zA-Z-_]*$
+    ConstraintDescription:
+      Xray Security Hub Integration lambda can include letters, numbers, hyphens (-), or underscores (_).
+  LambdaProcessorName:
+    Type: String
+    Default: XrayProcessor
+    Description: Lambda name for the Xray Security Hub Integration lambda. This string can include
+    letters, numbers, hyphens (-), or underscores (_).
+    AllowedPattern: ^[0-9a-zA-Z-_]*$
+    ConstraintDescription:
+      Xray Security Hub Integration lambda can include letters, numbers, hyphens (-), or underscores (_).
+
+Resources:
+  LambdaStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://${S3BucketName}.s3.${AWS::Region}.${AWS::URLSuffix}/${S3KeyPrefix}/cft/lambda.yaml
+      Parameters:
+        LambdaAuthorizerName: !Ref LambdaAuthorizerName
+        LambdaProcessorName: !Ref LambdaProcessorName
+
+  ApiGatewayStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://${S3BucketName}.s3.${AWS::Region}.${AWS::URLSuffix}/${S3KeyPrefix}/cft/api-gateway.yaml
+      Parameters:
+        LambdaAuthorizerArn: !GetAtt LambdaStack.Outputs.AuthorizerArn
+        LambdaProcessorArn: !GetAtt LambdaStack.Outputs.ProcessorArn
