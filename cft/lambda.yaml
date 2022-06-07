@@ -85,7 +85,6 @@ Resources:
               - 'sts:AssumeRole'
       Description: Security Hub Xray integration Lambda execution role
       Path: /
-      RoleName: SecurityHubXrayLambdaRole
 
   LambdaAuthorizer:
     Type: AWS::Lambda::Function
