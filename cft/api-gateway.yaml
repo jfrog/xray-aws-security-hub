@@ -74,33 +74,6 @@ Resources:
       RestApiId: !Ref ApiRestApi
       ValidateRequestBody: True
       ValidateRequestParameters: False
-  #
-  # ApiEmptyModel:
-  #   Type: AWS::ApiGateway::Model
-  #   Properties:
-  #     ContentType: 'application/json'
-  #     Description: This is a default error schema model
-  #     Name: Empty
-  #     RestApiId: !Ref ApiRestApi
-  #     Schema:
-  #       $schema: http://json-schema.org/draft-04/schema#
-  #       title: Error Schema
-  #       type: object
-  #       properties:
-  #         message:
-  #           type: string
-  #
-  # ApiErrorModel:
-  #   Type: AWS::ApiGateway::Model
-  #   Properties:
-  #     ContentType: 'application/json'
-  #     Description: This is a default empty schema model
-  #     Name: Empty
-  #     RestApiId: !Ref ApiRestApi
-  #     Schema:
-  #       $schema: http://json-schema.org/draft-04/schema#
-  #       title: Empty Schema
-  #       type: object
 
   ApiXrayWebhookModel:
     Type: AWS::ApiGateway::Model
@@ -259,6 +232,7 @@ Resources:
       RestApiId: !Ref ApiRestApi
       StageName: Dev
       TracingEnabled: True
+    DependsOn: ApiAccount
 
   ApiDevDeployment:
     Type: AWS::ApiGateway::Deployment
