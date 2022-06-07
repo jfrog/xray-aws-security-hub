@@ -6,7 +6,7 @@ Parameters:
     Type: String
     Default: XrayAuthorizer
     Description: Lambda name for the Xray Security Hub Integration lambda. This string can include
-    letters, numbers, hyphens (-), or underscores (_).
+      letters, numbers, hyphens (-), or underscores (_).
     AllowedPattern: ^[0-9a-zA-Z-_]*$
     ConstraintDescription:
       Xray Security Hub Integration lambda can include letters, numbers, hyphens (-), or underscores (_).
@@ -14,7 +14,7 @@ Parameters:
     Type: String
     Default: XrayProcessor
     Description: Lambda name for the Xray Security Hub Integration lambda. This string can include
-    letters, numbers, hyphens (-), or underscores (_).
+      letters, numbers, hyphens (-), or underscores (_).
     AllowedPattern: ^[0-9a-zA-Z-_]*$
     ConstraintDescription:
       Xray Security Hub Integration lambda can include letters, numbers, hyphens (-), or underscores (_).
