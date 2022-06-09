@@ -7,6 +7,7 @@ project:
     - us-west-1
 
 tests:
+
   security-hub:
     parameters:
       S3BucketName: "$[taskcat_autobucket]"
@@ -15,3 +16,6 @@ tests:
 
   lambdas:
     template: cft/lambda.yaml
+
+  sqsqueues:
+    template: cft/sqs-queue.yaml

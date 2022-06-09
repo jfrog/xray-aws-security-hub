@@ -5,7 +5,7 @@ Parameters:
   LambdaAuthorizerArn:
     Type: String
     Description: Arn for the authorizer lambda
-  LambdaProcessorArn:
+  LambdaRequestProcessorArn:
     Type: String
     Description: Arn for the processor lambda
 
@@ -188,7 +188,7 @@ Resources:
             - ':apigateway:'
             - !Ref AWS::Region
             - ':lambda:path/2015-03-31/functions/'
-            - !Ref LambdaProcessorArn
+            - !Ref LambdaRequestProcessorArn
             - /invocations
       MethodResponses:
         - ResponseModels:

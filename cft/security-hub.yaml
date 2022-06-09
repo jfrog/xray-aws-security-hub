@@ -32,11 +32,26 @@ Parameters:
     AllowedPattern: ^[0-9a-zA-Z-_]*$
     ConstraintDescription:
       Xray Security Hub Integration lambda can include letters, numbers, hyphens (-), or underscores (_).
-  LambdaProcessorName:
+  LambdaRequestProcessorName:
     Type: String
-    Default: XrayProcessor
+    Default: XrayRequestProcessor
     Description: Lambda name for the Xray Security Hub Integration lambda. This string can include
       letters, numbers, hyphens (-), or underscores (_).
+    AllowedPattern: ^[0-9a-zA-Z-_]*$
+    ConstraintDescription:
+      Xray Security Hub Integration lambda can include letters, numbers, hyphens (-), or underscores (_).
+  LambdaMappingTransformerName:
+    Type: String
+    Default: XrayMappingTransformer
+    Description: Lambda name for the Xray Security Hub Integration lambda. This string can include
+      letters, numbers, hyphens (-), or underscores (_).
+    AllowedPattern: ^[0-9a-zA-Z-_]*$
+    ConstraintDescription:
+      Xray Security Hub Integration lambda can include letters, numbers, hyphens (-), or underscores (_).
+  SourceSQSForMappingTransformerArn:
+    Type: String
+    Default: XraySourceQueueARN
+    Description: Event source mapping name for triggering LambdaMappingTransformer.
     AllowedPattern: ^[0-9a-zA-Z-_]*$
     ConstraintDescription:
       Xray Security Hub Integration lambda can include letters, numbers, hyphens (-), or underscores (_).
@@ -48,12 +63,26 @@ Resources:
       TemplateURL: !Sub https://${S3BucketName}.s3.${AWS::Region}.${AWS::URLSuffix}/${S3KeyPrefix}/cft/lambda.yaml
       Parameters:
         LambdaAuthorizerName: !Ref LambdaAuthorizerName
-        LambdaProcessorName: !Ref LambdaProcessorName
+        LambdaRequestProcessorName: !Ref LambdaRequestProcessorName
+        LambdaMappingTransformerName: !Ref LambdaMappingTransformerName
+        # Enabling creates Circular dependency between resources: [ApiGatewayStack, SQSQueueStack, LambdaStack]
+        # how do we reference ARN for SQS queue other than this? Export?
+        SourceSQSForMappingTransformerArn: !GetAtt SQSQueueStack.Outputs.XraySourceQueueARN
+    DependsOn: SQSQueueStack
 
   ApiGatewayStack:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub https://${S3BucketName}.s3.${AWS::Region}.${AWS::URLSuffix}/${S3KeyPrefix}/cft/api-gateway.yaml
       Parameters:
+        # API Gateway doesn't interact with LambdaMappingTransformer
         LambdaAuthorizerArn: !GetAtt LambdaStack.Outputs.AuthorizerArn
-        LambdaProcessorArn: !GetAtt LambdaStack.Outputs.ProcessorArn
+        LambdaRequestProcessorArn: !GetAtt LambdaStack.Outputs.RequestProcessorArn
+
+  SQSQueueStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://${S3BucketName}.s3.${AWS::Region}.${AWS::URLSuffix}/${S3KeyPrefix}/cft/sqs-queue.yaml
+      #Parameters:
+        # We need to interact only with LambdaMappingTransformer (send messages)
+        #LambdaMappingTransformerArn: !GetAtt LambdaStack.Outputs.MappingTransformerArn

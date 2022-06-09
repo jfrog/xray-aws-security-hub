@@ -10,14 +10,33 @@ Parameters:
     AllowedPattern: ^[0-9a-zA-Z-_]*$
     ConstraintDescription:
       Xray Security Hub Integration lambda can include letters, numbers, hyphens (-), or underscores (_).
-  LambdaProcessorName:
+  LambdaRequestProcessorName:
     Type: String
-    Default: XrayProcessor
+    Default: XrayRequestProcessor
     Description: Lambda name for the Xray Security Hub Integration lambda. This string can include
       letters, numbers, hyphens (-), or underscores (_).
     AllowedPattern: ^[0-9a-zA-Z-_]*$
     ConstraintDescription:
       Xray Security Hub Integration lambda can include letters, numbers, hyphens (-), or underscores (_).
+  LambdaMappingTransformerName:
+    Type: String
+    Default: XrayMappingTransformer
+    Description: Lambda name for the Xray Security Hub Integration lambda. This string can include
+      letters, numbers, hyphens (-), or underscores (_).
+    AllowedPattern: ^[0-9a-zA-Z-_]*$
+    ConstraintDescription:
+      Xray Security Hub Integration lambda can include letters, numbers, hyphens (-), or underscores (_).
+
+  SourceSQSForMappingTransformerArn:
+    Type: String
+    Description: Arn for the source SQS queue
+
+#  SQSQueueStackName:
+#    Description: Name of the SQS stack
+#    Type: String
+#    Default: SQSQueueStack
+
+
 
 Resources:
   LambdaPolicy:
@@ -65,11 +84,27 @@ Resources:
                 - ':'
                 - !Ref AWS::AccountId
                 - ':log-group:/aws/lambda/'
-                - !Ref LambdaProcessorName
+                - !Ref LambdaRequestProcessorName
+                - ':*'
+          - Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:PutLogEvents
+            Resource: !Join
+              - ''
+              - - 'arn:'
+                - !Ref AWS::Partition
+                - ':logs:'
+                - !Ref AWS::Region
+                - ':'
+                - !Ref AWS::AccountId
+                - ':log-group:/aws/lambda/'
+                - !Ref LambdaMappingTransformerName
                 - ':*'
       PolicyName: SecurityHubXrayLambdaPolicy
       Roles:
         - !Ref LambdaRole
+  # TODO: add different roles for the lambdas, only Transformer requires SQS access
 
   LambdaRole:
     Type: AWS::IAM::Role
@@ -85,6 +120,33 @@ Resources:
               - 'sts:AssumeRole'
       Description: Security Hub Xray integration Lambda execution role
       Path: /
+      Policies:
+        - PolicyName: logs
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+        - PolicyName: sqs
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sqs:ReceiveMessage
+                  - sqs:ReceiveMessage
+                  - sqs:DeleteMessage
+                  - sqs:GetQueueAttributes
+                Resource: !Ref SourceSQSForMappingTransformerArn
+#        - PolicyName: lambda
+#          PolicyDocument:
+#            Statement:
+#              - Effect: Allow
+#                Action:
+#                  - lambda:InvokeFunction
+#                Resource: !Sub ${WorkerLambda.Arn}
 
   LambdaAuthorizer:
     Type: AWS::Lambda::Function
@@ -331,8 +393,9 @@ Resources:
       PackageType: Zip
       Role: !GetAtt LambdaRole.Arn
       Runtime: python3.8
+      Timeout: 60
 
-  LambdaProcessor:
+  LambdaRequestProcessor:
     Type: AWS::Lambda::Function
     Properties:
       Code:
@@ -361,22 +424,100 @@ Resources:
               console.log(JSON.stringify(event));
               console.log(JSON.stringify(context));
 
-              // TODO implement
+              // TODO implement. Add API call to SQS to create a message with exact body payload
               return {
                   statusCode: 200,
                   body: JSON.stringify('Hello from Lambda!'),
               };
           };
-      Description: Dummy lambda
-      FunctionName: !Ref LambdaProcessorName
+      Description: Dummy lambda Request Processor
+      FunctionName: !Ref LambdaRequestProcessorName
       Handler: index.handler
       MemorySize: 128
       PackageType: Zip
       Role: !GetAtt LambdaRole.Arn
       Runtime: nodejs16.x
+      Timeout: 60
+      Environment:
+        Variables:
+          TASK_QUEUE_URL: !Ref SourceSQSForMappingTransformerArn
+
+  LambdaMappingTransformer:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: |
+          // Load the AWS SDK for Node.js
+          var AWS = require('aws-sdk');
+          // Set the region
+          AWS.config.update({region: 'REGION'});
+            
+          // Create an SQS service object
+          var sqs = new AWS.SQS({apiVersion: '2012-11-05'});
+            
+          var queueURL = "SQS_QUEUE_URL";
+          
+          var params = {
+            AttributeNames: [
+              "SentTimestamp"
+            ],
+            MaxNumberOfMessages: 10,
+            MessageAttributeNames: [
+              "All"
+            ],
+            QueueUrl: queueURL,
+            VisibilityTimeout: 20,
+            WaitTimeSeconds: 0
+          };
+            
+          sqs.receiveMessage(params, function(err, data) {
+            if (err) {
+              console.log("Receive Error", err);
+            } else if (data.Messages) {
+              var deleteParams = {
+                QueueUrl: queueURL,
+                ReceiptHandle: data.Messages[0].ReceiptHandle
+              };
+              sqs.deleteMessage(deleteParams, function(err, data) {
+                if (err) {
+                  console.log("Delete Error", err);
+                } else {
+                  console.log("Message Deleted", data);
+                }
+              });
+            }
+          });
+      Description: Dummy lambda Mapping Transformer
+      FunctionName: !Ref LambdaMappingTransformerName
+      Handler: index.handler
+      MemorySize: 128
+      PackageType: Zip
+      Role: !GetAtt LambdaRole.Arn
+      Runtime: nodejs16.x
+      Timeout: 60
+      Environment:
+        Variables:
+          SQS_QUEUE_URL: !Ref SourceSQSForMappingTransformerArn
+
+
+  # Lambda will read events from the source SQS
+  LambdaFunctionEventSourceMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      # By default, an event source mapping batches records (10) together into a single payload that Lambda sends to your function
+      # Match it to Security hub limit batch limit
+      BatchSize: 10
+      Enabled: true
+      EventSourceArn: !Ref SourceSQSForMappingTransformerArn
+#      EventSourceArn:
+#        Fn::ImportValue:
+#          Fn::Sub: ${SQSQueueStackName}-XraySourceQueueARN
+      FunctionName: !GetAtt LambdaMappingTransformer.Arn
 
 Outputs:
   AuthorizerArn:
     Value: !GetAtt LambdaAuthorizer.Arn
-  ProcessorArn:
-    Value: !GetAtt LambdaProcessor.Arn
+  RequestProcessorArn:
+    Value: !GetAtt LambdaRequestProcessor.Arn
+  MappingTransformerArn:
+    Value: !GetAtt LambdaMappingTransformer.Arn
