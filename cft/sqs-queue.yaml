@@ -6,9 +6,6 @@ Parameters:
     Default: "jane.doe@example.com"
     Description: "Email address to notify of operational issues."
     Type: String
-#  LambdaMappingTransformerArn:
-#    Type: String
-#    Description: Arn for the Mapping Transformer lambda
 
 Resources:
   XraySourceQueue:

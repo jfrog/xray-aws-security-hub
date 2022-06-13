@@ -1,0 +1,78 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  xray-aws-security-hub
+
+  Sample SAM Template for xray-aws-security-hub
+  
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  AuthorizerFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: authorizer
+      CodeUri: authorizer/
+      Handler: app.lambdaHandler
+      Runtime: nodejs16.x
+      Timeout: 6
+      Architectures:
+        - x86_64
+      Events: # How do we trigger
+        ProcessCallPayload:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /send
+            Method: get
+
+  ProcessorFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: processor
+      CodeUri: processor/
+      Handler: app.lambdaHandler
+      Runtime: nodejs16.x
+      Timeout: 6
+      Architectures:
+        - x86_64
+      Events: # Initiated by API call form API gateway
+        ProcessCallPayload:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /send
+            Method: post
+
+  TransformerFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: transformer
+      CodeUri: transformer/
+      Handler: app.lambdaHandler
+      Runtime: nodejs16.x
+      Timeout: 6
+      Architectures:
+        - x86_64
+      Events: # Initiated by the message in SQS queue
+        TransformCallPayload:
+          Type: SQS # More info https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#sqs
+          Properties:
+            Queue: arn:aws:sqs:us-west-2:012345678901:my-queue
+            BatchSize: 10
+            Enabled: false
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  ProcessorApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/send/"
+  ProcessorFunction:
+    Description: "Processor Lambda Function ARN"
+    Value: !GetAtt ProcessorFunction.Arn
+  ProcessorFunctionIamRole:
+    Description: "Implicit IAM Role created for Processor function"
+    Value: !GetAtt ProcessorFunctionRole.Arn
