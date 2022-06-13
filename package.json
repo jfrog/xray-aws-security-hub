@@ -1,5 +1,9 @@
 {
   "dependencies": {
-    "aws-sdk": "^2.1152.0"
+    "aws-sdk": "^2.1152.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "eslint": "^8.17.0"
   }
 }
