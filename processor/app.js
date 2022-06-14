@@ -54,7 +54,7 @@ async function createIssuesList(event) {
       issue: JSON.stringify(result),
     });
   }
-  const lodashSpiltArray = _.chunk(issuesArray, 3);
+  const lodashSpiltArray = _.chunk(issuesArray, 10);
   console.log(JSON.stringify(lodashSpiltArray));
   return lodashSpiltArray;
 }
