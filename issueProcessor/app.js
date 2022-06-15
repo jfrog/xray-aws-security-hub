@@ -34,7 +34,7 @@ const formatResponse = (body) => {
   return response;
 };
 
-async function sendSQSmessage(issuesArray) {
+async function sendSQSmessage(event) {
   // const queueURL = process.env.SQS_QUEUE_URL;
   const queueURL = 'https://sqs.us-west-1.amazonaws.com/096302395721/XraySourceQueue.fifo';
   const messageResponses = [];
@@ -44,7 +44,7 @@ async function sendSQSmessage(issuesArray) {
     Entries: [],
   };
 
-  for (const issue of issuesArray) {
+  for (const issue of event) {
     const myuuid = uuidv4();
     params.Entries.push({
       Id: myuuid,

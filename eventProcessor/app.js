@@ -1,4 +1,7 @@
 import _ from 'lodash';
+import aws from 'aws-sdk';
+
+const lambda = new aws.Lambda();
 
 const formatError = (error) => {
   const response = {
@@ -40,11 +43,24 @@ function createIssuesChunks(issues) {
   return _.chunk(issues, 10);
 }
 
+const asyncLambdaInvoke = async ({ functionName, issuesChunks }) => {
+  const FunctionName = `${functionName}`;
+  console.log(`invoking function: ${FunctionName}`);
+  const result = await lambda
+    .invoke({
+      FunctionName,
+      InvocationType: 'Event',
+      Payload: JSON.stringify(issuesChunks),
+    })
+    .promise();
+  console.log(`${FunctionName} invoked`, JSON.stringify(result));
+};
+
 export async function lambdaHandler(event) {
   try {
     const issues = createIssues(event);
     const issuesChunks = createIssuesChunks(issues);
-    // TODO invoke another lambda
+    await asyncLambdaInvoke({ functionName: 'IssueProcessor', issuesChunks });
     return formatResponse(issuesChunks);
   } catch (error) {
     return formatError(error);
