@@ -8,9 +8,82 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 6
+
+Parameters:
+  AlarmEmail:
+    Default: "jane.doe@example.com"
+    Description: "Email address to notify of operational issues."
+    Type: String
 
 Resources:
+
+  ApiGwAccountConfig:
+    Type: "AWS::ApiGateway::Account"
+    Properties:
+      CloudWatchRoleArn: !GetAtt ApiGatewayLoggingRole.Arn
+
+  ApiGatewayLoggingRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - "apigateway.amazonaws.com"
+            Action: "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns:
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+
+  SecurityHubApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: security-hub-api-dev
+      StageName: dev
+      MethodSettings:
+        - LoggingLevel: INFO
+          ResourcePath: '/*' # allows for logging on any resource
+          HttpMethod: '*' # allows for logging on any method
+      TracingEnabled: true
+
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Description: Security Hub Xray integration Lambda execution role
+      Path: /
+      Policies:
+        - PolicyName: logs
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+        - PolicyName: sqs
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sqs:ReceiveMessage
+                  - sqs:SendMessage
+                  - sqs:DeleteMessage
+                  - sqs:GetQueueAttributes
+                Resource: !GetAtt XraySourceQueue.Arn
+
   AuthorizerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -18,32 +91,34 @@ Resources:
       CodeUri: authorizer/
       Handler: app.lambdaHandler
       Runtime: nodejs16.x
-      Timeout: 6
-      Architectures:
-        - x86_64
-      Events: # How do we trigger
+      Events:
         ProcessCallPayload:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /send
             Method: get
+            RestApiId:
+              Ref: SecurityHubApi
 
   ProcessorFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       FunctionName: processor
       CodeUri: processor/
-      Handler: app.lambdaHandler
+      Handler: app-alex.lambdaHandler
       Runtime: nodejs16.x
-      Timeout: 6
-      Architectures:
-        - x86_64
+      Role: !GetAtt LambdaRole.Arn
+      Environment:
+        Variables:
+          SQS_QUEUE_URL: !Ref XraySourceQueue
       Events: # Initiated by API call form API gateway
         ProcessCallPayload:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /send
             Method: post
+            RestApiId:
+              Ref: SecurityHubApi
 
   TransformerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -52,27 +127,68 @@ Resources:
       CodeUri: transformer/
       Handler: app.lambdaHandler
       Runtime: nodejs16.x
-      Timeout: 6
-      Architectures:
-        - x86_64
       Events: # Initiated by the message in SQS queue
         TransformCallPayload:
           Type: SQS # More info https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#sqs
           Properties:
-            Queue: arn:aws:sqs:us-west-2:012345678901:my-queue
+            Queue: !GetAtt XraySourceQueue.Arn
             BatchSize: 10
             Enabled: false
+
+  XraySourceQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: XraySourceQueue.fifo
+      FifoQueue: true
+      ContentBasedDeduplication: false
+      VisibilityTimeout: 120
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+            - "XrayDeadLetterQueue"
+            - "Arn"
+        maxReceiveCount: 5
+  XrayDeadLetterQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: DeadLetterQueue.fifo
+      FifoQueue: true
+      ContentBasedDeduplication: false
+  AlarmTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Endpoint:
+            Ref: "AlarmEmail"
+          Protocol: "email"
+  QueueDepthAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: "Alarm if queue depth increases to more than 10 messages."
+      Namespace: "AWS/SQS"
+      MetricName: "ApproximateNumberOfMessagesVisible"
+      Dimensions:
+        - Name: "QueueName"
+          Value:
+            Fn::GetAtt:
+              - "XraySourceQueue"
+              - "QueueName"
+      Statistic: "Sum"
+      Period: "300"
+      EvaluationPeriods: "1"
+      Threshold: "10"
+      ComparisonOperator: "GreaterThanThreshold"
+      AlarmActions:
+        - Ref: "AlarmTopic"
+      InsufficientDataActions:
+        - Ref: "AlarmTopic"
+
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  ProcessorApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/send/"
-  ProcessorFunction:
-    Description: "Processor Lambda Function ARN"
-    Value: !GetAtt ProcessorFunction.Arn
-  ProcessorFunctionIamRole:
-    Description: "Implicit IAM Role created for Processor function"
-    Value: !GetAtt ProcessorFunctionRole.Arn
+
+  ApiEndpoint:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${SecurityHubApi}.execute-api.${AWS::Region}.amazonaws.com/dev/send/"
