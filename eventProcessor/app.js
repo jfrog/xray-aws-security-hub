@@ -43,24 +43,26 @@ function createIssuesChunks(issues) {
   return _.chunk(issues, 10);
 }
 
-const asyncLambdaInvoke = async ({ functionName, issuesChunks }) => {
-  const FunctionName = `${functionName}`;
-  console.log(`invoking function: ${FunctionName}`);
+const asyncLambdaInvoke = async (issuesChunks) => {
   const result = await lambda
     .invoke({
-      FunctionName,
+      FunctionName: 'IssueProcessor',
       InvocationType: 'Event',
       Payload: JSON.stringify(issuesChunks),
     })
     .promise();
-  console.log(`${FunctionName} invoked`, JSON.stringify(result));
+  console.log('IssueProcessor invoked', JSON.stringify(result));
 };
 
 export async function lambdaHandler(event) {
   try {
     const issues = createIssues(event);
     const issuesChunks = createIssuesChunks(issues);
-    await asyncLambdaInvoke({ functionName: 'IssueProcessor', issuesChunks });
+    // eslint-disable-next-line no-restricted-syntax
+    for (const chunk of issuesChunks) {
+      // eslint-disable-next-line no-await-in-loop
+      await asyncLambdaInvoke(chunk);
+    }
     return formatResponse(issuesChunks);
   } catch (error) {
     return formatError(error);
