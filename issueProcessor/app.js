@@ -1,6 +1,5 @@
 // eslint-disable-next-line import/extensions
 import SQS from 'aws-sdk/clients/sqs.js';
-import _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 
 const sqs = new SQS();
@@ -34,31 +33,6 @@ const formatResponse = (body) => {
   console.log(JSON.stringify(response));
   return response;
 };
-
-function createIssuesList(event) {
-  let result = {};
-  const issuesArray = [];
-
-  const additionalFields = {
-    watch_name: event.watch_name,
-    policy_name: event.policy_name,
-  };
-
-  event.issues.forEach(injectFields);
-
-  function injectFields(issue) {
-    result = {
-      ...issue,
-      ...additionalFields,
-    };
-    issuesArray.push({
-      issue: JSON.stringify(result),
-    });
-  }
-  const lodashSpiltArray = _.chunk(issuesArray, 10);
-  console.log(JSON.stringify(lodashSpiltArray));
-  return lodashSpiltArray;
-}
 
 async function sendSQSmessage(issuesArray) {
   // const queueURL = process.env.SQS_QUEUE_URL;
@@ -94,8 +68,7 @@ async function sendSQSmessage(issuesArray) {
 export async function lambdaHandler(event) {
   let results;
   try {
-    const issues = createIssuesList(event);
-    results = await sendSQSmessage(issues);
+    results = await sendSQSmessage(event);
   } catch (error) {
     return formatError(error);
   }

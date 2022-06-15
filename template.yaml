@@ -8,7 +8,7 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 6
+    Timeout: 15
 
 Parameters:
   AlarmEmail:
@@ -83,6 +83,14 @@ Resources:
                   - sqs:DeleteMessage
                   - sqs:GetQueueAttributes
                 Resource: !GetAtt XraySourceQueue.Arn
+        - PolicyName: lambda
+          PolicyDocument:
+            Statement:
+                - Effect: Allow
+                  Action:
+                    - lambda:InvokeFunction
+                    - lambda:InvokeAsync
+                  Resource: !GetAtt IssueProcessorFunction.Arn
 
   AuthorizerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -100,17 +108,15 @@ Resources:
             RestApiId:
               Ref: SecurityHubApi
 
-  ProcessorFunction:
+  EventProcessorFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      FunctionName: processor
-      CodeUri: processor/
-      Handler: app-alex.lambdaHandler
+      Description: "Processes Xray payload as an event, splits the list of issues on chunks of 10 issues and invokes IssueProcessor Lambda."
+      FunctionName: EventProcessor
+      CodeUri: eventProcessor/
+      Handler: app.lambdaHandler
       Runtime: nodejs16.x
       Role: !GetAtt LambdaRole.Arn
-      Environment:
-        Variables:
-          SQS_QUEUE_URL: !Ref XraySourceQueue
       Events: # Initiated by API call form API gateway
         ProcessCallPayload:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -119,6 +125,19 @@ Resources:
             Method: post
             RestApiId:
               Ref: SecurityHubApi
+
+  IssueProcessorFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      Description: "Processes chunks of 10 issues and batch send messages to SQS queue."
+      FunctionName: IssueProcessor
+      CodeUri: issueProcessor/
+      Handler: app.lambdaHandler
+      Runtime: nodejs16.x
+      Role: !GetAtt LambdaRole.Arn # check the role
+      Environment:
+        Variables:
+          SQS_QUEUE_URL: !Ref XraySourceQueue
 
   TransformerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction

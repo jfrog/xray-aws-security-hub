@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "processor",
+  "name": "event_processor",
   "version": "1.0.0",
   "engines": {
     "node": ">=16.0.0"
