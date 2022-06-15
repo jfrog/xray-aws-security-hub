@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const sqs = new SQS();
 
-const formatError = function (error) {
+const formatError = (error) => {
   const response = {
     statusCode: error.statusCode,
     headers: {
@@ -19,7 +19,7 @@ const formatError = function (error) {
   return response;
 };
 
-const formatResponse = function (body) {
+const formatResponse = (body) => {
   const response = {
     statusCode: 200,
     headers: {
@@ -35,7 +35,7 @@ const formatResponse = function (body) {
   return response;
 };
 
-async function createIssuesList(event) {
+function createIssuesList(event) {
   let result = {};
   const issuesArray = [];
 
@@ -45,6 +45,7 @@ async function createIssuesList(event) {
   };
 
   event.issues.forEach(injectFields);
+
   function injectFields(issue) {
     result = {
       ...issue,
@@ -60,46 +61,43 @@ async function createIssuesList(event) {
 }
 
 async function sendSQSmessage(issuesArray) {
-  // let queueURL = process.env.SQS_QUEUE_URL;
+  // const queueURL = process.env.SQS_QUEUE_URL;
   const queueURL = 'https://sqs.us-west-1.amazonaws.com/096302395721/XraySourceQueue.fifo';
   const messageResponses = [];
 
-  for (const issue of issuesArray) {
-    const params = {
-      QueueUrl: queueURL,
-      Entries: [],
-    };
+  const params = {
+    QueueUrl: queueURL,
+    Entries: [],
+  };
 
-    for (const message of issue) {
-      const myuuid = uuidv4();
-      params.Entries.push({
-        Id: myuuid,
-        MessageAttributes: {
-          MessageType: {
-            DataType: 'String',
-            StringValue: 'Final test',
-          },
+  for (const issue of issuesArray) {
+    const myuuid = uuidv4();
+    params.Entries.push({
+      Id: myuuid,
+      MessageAttributes: {
+        MessageType: {
+          DataType: 'String',
+          StringValue: 'Final test - Daniel version',
         },
-        MessageDeduplicationId: Date.now().toString(),
-        MessageGroupId: 'XrayPayload',
-        MessageBody: JSON.stringify(message),
-      });
-    }
-    messageResponses.push({
-      message: JSON.stringify(await sqs.sendMessageBatch(params).promise()),
+      },
+      MessageDeduplicationId: Date.now().toString(),
+      MessageGroupId: 'XrayPayload',
+      MessageBody: JSON.stringify(issue),
     });
   }
+  messageResponses.push({
+    message: JSON.stringify(await sqs.sendMessageBatch(params).promise()),
+  });
   return messageResponses;
 }
 
 export async function lambdaHandler(event) {
-  let issuesArray;
-  let messagesSent;
+  let results;
   try {
-    issuesArray = await createIssuesList(event);
-    messagesSent = await sendSQSmessage(issuesArray);
+    const issues = createIssuesList(event);
+    results = await sendSQSmessage(issues);
   } catch (error) {
     return formatError(error);
   }
-  return formatResponse(messagesSent);
+  return formatResponse(results);
 }

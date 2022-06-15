@@ -19,6 +19,8 @@ module.exports = {
         },
     },
     rules: {
+        'no-console': 'off',
+        'import/prefer-default-export': 'off',
         'global-require': 'off',
         'import/no-dynamic-require': 'off',
         'import/no-extraneous-dependencies': 'off', // so we can import stuff from src/node_modules
