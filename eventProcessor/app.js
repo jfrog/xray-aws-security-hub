@@ -58,12 +58,13 @@ export async function lambdaHandler(event) {
   try {
     const issues = createIssues(event);
     const issuesChunks = createIssuesChunks(issues);
-    // eslint-disable-next-line no-restricted-syntax
+    const promises = [];
     for (const chunk of issuesChunks) {
-      // eslint-disable-next-line no-await-in-loop
-      await asyncLambdaInvoke(chunk);
+      promises.push(asyncLambdaInvoke(chunk));
     }
-    return formatResponse(issuesChunks);
+    await Promise.allSettled(promises);
+
+    return formatResponse(promises.length);
   } catch (error) {
     return formatError(error);
   }
