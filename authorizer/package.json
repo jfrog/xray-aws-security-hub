@@ -1,19 +1,32 @@
 {
-  "name": "hello_world",
+  "type": "module",
+  "name": "Xray Security Hub API Gateway Authorizer",
   "version": "1.0.0",
-  "description": "hello world sample for NodeJS",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "description": "API Gateway Authorizer for Xray Security Hub integration",
   "main": "app.js",
-  "repository": "https://github.com/awslabs/aws-sam-cli/tree/develop/samcli/local/init/templates/cookiecutter-aws-sam-hello-nodejs",
-  "author": "SAM CLI",
+  "repository": "https://git.jfrog.info/projects/PTRENG/repos/xray-aws-security-hub",
+  "author": "Alex Hung <alexh@jfrog.com>",
   "license": "MIT",
+  "module": "app",
+  "sourceType": "module",
   "dependencies": {
-    "axios": ">=0.21.1"
+    "@aws-sdk/client-secrets-manager": "^3.110.0",
+    "lodash": "^4.17.21"
   },
   "scripts": {
     "test": "mocha tests/unit"
   },
   "devDependencies": {
+    "@babel/core": "^7.18.5",
+    "@babel/eslint-parser": "^7.18.2",
     "chai": "^4.2.0",
+    "eslint": "^8.17.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
     "mocha": "^9.1.4"
   }
 }

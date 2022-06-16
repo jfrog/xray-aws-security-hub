@@ -1,24 +1,10 @@
 # Xray AWS Security Hub Integration
 
-## Testing
-
-### CloudFormation Templates
-
-Use [TaskCat](https://github.com/aws-ia/taskcat/) to test the entire CloudFormation stack
-
-```sh
-$ taskcat test run -n -l -t security-hub
-```
-
-
-
-# xray-aws-security-hub
-
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
 
 - hello-world - Code for the application's Lambda function.
 - events - Invocation events that you can use to invoke the function.
-- hello-world/tests - Unit tests for the application code. 
+- hello-world/tests - Unit tests for the application code.
 - template.yaml - A template that defines the application's AWS resources.
 
 The application uses several AWS resources, including Lambda functions and an API Gateway API. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
@@ -80,7 +66,7 @@ Test a single function by invoking it directly with a test event. An event is a 
 Run functions locally and invoke them with the `sam local invoke` command.
 
 ```bash
-xray-aws-security-hub$ sam local invoke HelloWorldFunction --event events/event.json
+xray-aws-security-hub$ sam local invoke HelloWorldFunction --event events/event.json -n env.json
 ```
 
 The SAM CLI can also emulate your application's API. Use the `sam local start-api` to run the API locally on port 3000.

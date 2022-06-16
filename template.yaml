@@ -4,19 +4,41 @@ Description: >
   xray-aws-security-hub
 
   Sample SAM Template for xray-aws-security-hub
-  
+
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
     Timeout: 15
 
 Parameters:
-  AlarmEmail:
-    Default: "jane.doe@example.com"
-    Description: "Email address to notify of operational issues."
+  DeploymentEnvironment:
+    Default: DEV
+    Description: Deployment environment for the app (e.g. DEV, STAGING, PROD)
     Type: String
 
+  ApiAuthToken:
+    Description: Authentication token for API endpoint. This will be stored in Secrets Manager. No requirements are applied to this token but we encourage you to apply good security practices. Leave blank to not use any authentication.
+    NoEcho: True
+    Type: String
+
+  AlarmEmail:
+    Default: jane.doe@example.com
+    Description: Email address to notify of operational issues.
+    Type: String
+
+Conditions:
+  HasAuthToken: !Not [!Equals [!Ref 'ApiAuthToken', '']]
+
 Resources:
+  SecurityHubAuthTokenSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: Xray Security Hub API Gateway auth token
+      Name: XraySecurityHubAuthToken
+      SecretString: !Ref ApiAuthToken
+      Tags:
+        - Key: Environment
+          Value: !Ref DeploymentEnvironment
 
   ApiGwAccountConfig:
     Type: AWS::ApiGateway::Account
@@ -27,40 +49,49 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
               Service:
                 - apigateway.amazonaws.com
-            Action: 'sts:AssumeRole'
-      Path: "/"
+            Action: sts:AssumeRole
+      Path: /
       ManagedPolicyArns:
         - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
 
   SecurityHubApi:
     Type: AWS::Serverless::Api
     Properties:
-      Name: security-hub-api-dev
-      StageName: dev
+      Auth:
+        ApiKeyRequired: False
+        Authorizers:
+          TokenAuthorizer:
+            FunctionArn: !GetAtt AuthorizerFunction.Arn
+            FunctionPayloadType: TOKEN
+            Identity:
+              Header: Authorization
+        DefaultAuthorizer: TokenAuthorizer
       MethodSettings:
         - LoggingLevel: INFO
           ResourcePath: '/*' # allows for logging on any resource
           HttpMethod: '*' # allows for logging on any method
+      Name: security-hub-api-dev
+      StageName: !Ref DeploymentEnvironment
       TracingEnabled: True
 
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
               Service:
                 - lambda.amazonaws.com
             Action:
-              - 'sts:AssumeRole'
+              - sts:AssumeRole
       Description: Security Hub Xray integration Lambda execution role
       Path: /
       Policies:
@@ -90,23 +121,35 @@ Resources:
                   Action:
                     - lambda:InvokeFunction
                     - lambda:InvokeAsync
-                  Resource: "*"
+                  Resource: '*'
+        - PolicyName: secretsmanager
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - secretsmanager:GetSecretValue
+                  - secretsmanager:DescribeSecret
+                  - secretsmanager:ListSecretVersionIds
+                Resource: !Ref SecurityHubAuthTokenSecret
+              - Effect: Allow
+                Action:
+                  - secretsmanager:ListSecrets
+                Resource: '*'
 
   AuthorizerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      FunctionName: authorizer
       CodeUri: authorizer/
-      Handler: app.lambdaHandler
+      Environment:
+        Variables:
+          SECRET_ID: XraySecurityHubAuthToken
+          HAS_AUTH_TOKEN: !If [HasAuthToken, 'true', 'false']
+      FunctionName: authorizer
+      Handler: app.handler
       Runtime: nodejs16.x
-      Events:
-        ProcessCallPayload:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /send
-            Method: get
-            RestApiId:
-              Ref: SecurityHubApi
+      Role: !GetAtt LambdaRole.Arn
+      Tags:
+        Environment: !Ref DeploymentEnvironment
 
   EventProcessorFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -163,45 +206,42 @@ Resources:
       ContentBasedDeduplication: False
       VisibilityTimeout: 120
       RedrivePolicy:
-        deadLetterTargetArn:
-          Fn::GetAtt:
-            - "XrayDeadLetterQueue"
-            - "Arn"
+        deadLetterTargetArn: !GetAtt XrayDeadLetterQueue.Arn
         maxReceiveCount: 5
+
   XrayDeadLetterQueue:
     Type: AWS::SQS::Queue
     Properties:
       QueueName: DeadLetterQueue.fifo
       FifoQueue: True
       ContentBasedDeduplication: False
+
   AlarmTopic:
     Type: AWS::SNS::Topic
     Properties:
       Subscription:
         - Endpoint:
-            Ref: "AlarmEmail"
-          Protocol: "email"
+            Ref: AlarmEmail
+          Protocol: email
+
   QueueDepthAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
-      AlarmDescription: "Alarm if queue depth increases to more than 10 messages."
-      Namespace: "AWS/SQS"
-      MetricName: "ApproximateNumberOfMessagesVisible"
+      AlarmDescription: Alarm if queue depth increases to more than 10 messages.
+      Namespace: AWS/SQS
+      MetricName: ApproximateNumberOfMessagesVisible
       Dimensions:
-        - Name: "QueueName"
-          Value:
-            Fn::GetAtt:
-              - "XraySourceQueue"
-              - "QueueName"
-      Statistic: "Sum"
-      Period: "300"
-      EvaluationPeriods: "1"
-      Threshold: "10"
-      ComparisonOperator: "GreaterThanThreshold"
+        - Name: QueueName
+          Value: !GetAtt XraySourceQueue.QueueName
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 10
+      ComparisonOperator: GreaterThanThreshold
       AlarmActions:
-        - Ref: "AlarmTopic"
+        - Ref: AlarmTopic
       InsufficientDataActions:
-        - Ref: "AlarmTopic"
+        - Ref: AlarmTopic
 
 
 Outputs:
@@ -211,4 +251,4 @@ Outputs:
 
   ApiEndpoint:
     Description: "API Gateway endpoint URL"
-    Value: !Sub "https://${SecurityHubApi}.execute-api.${AWS::Region}.amazonaws.com/dev/send/"
+    Value: !Sub "https://${SecurityHubApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${DeploymentEnvironment}/send/"
