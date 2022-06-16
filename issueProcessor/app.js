@@ -1,8 +1,7 @@
-// eslint-disable-next-line import/extensions
-import SQS from 'aws-sdk/clients/sqs.js';
+import { SendMessageBatchCommand, SQSClient } from '@aws-sdk/client-sqs';
 import { v4 as uuidv4 } from 'uuid';
 
-const sqs = new SQS();
+const sqsClient = new SQSClient({});
 
 const formatError = (error) => {
   const response = {
@@ -60,7 +59,7 @@ async function sendSQSmessage(event) {
     });
   }
   messageResponses.push({
-    message: JSON.stringify(await sqs.sendMessageBatch(params).promise()),
+    message: JSON.stringify(await sqsClient.send(new SendMessageBatchCommand(params))),
   });
   return messageResponses;
 }
