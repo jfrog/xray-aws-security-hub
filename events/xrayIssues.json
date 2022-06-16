@@ -1,5 +1,4 @@
 {
-  "body": {
     "created": "2021-05-28T19:37:50.075822379Z",
     "top_severity": "Medium",
     "watch_name": "SlackTest",
@@ -359,4 +358,3 @@
       }
     ]
   }
-}
