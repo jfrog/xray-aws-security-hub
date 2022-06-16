@@ -1,7 +1,8 @@
 import _ from 'lodash';
-import aws from 'aws-sdk';
+import { Lambda, InvokeCommand } from '@aws-sdk/client-lambda';
+import { fromUtf8 } from '@aws-sdk/util-utf8-node';
 
-const lambda = new aws.Lambda();
+const lambda = new Lambda({});
 
 const formatError = (error) => {
   const response = {
@@ -44,19 +45,19 @@ function createIssuesChunks(issues) {
 }
 
 const asyncLambdaInvoke = async (issuesChunks) => {
-  const result = await lambda
-    .invoke({
-      FunctionName: 'IssueProcessor',
-      InvocationType: 'Event',
-      Payload: JSON.stringify(issuesChunks),
-    })
-    .promise();
+  const command = new InvokeCommand({
+    FunctionName: 'IssueProcessor',
+    InvocationType: 'Event',
+    Payload: fromUtf8(JSON.stringify(issuesChunks)),
+  });
+  const result = await lambda.send(command);
   console.log('IssueProcessor invoked', JSON.stringify(result));
 };
 
 export async function lambdaHandler(event) {
+  const xrayEvent = JSON.parse(event.body);
   try {
-    const issues = createIssues(event);
+    const issues = createIssues(xrayEvent);
     const issuesChunks = createIssuesChunks(issues);
     const promises = [];
     for (const chunk of issuesChunks) {

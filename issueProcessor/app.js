@@ -53,7 +53,8 @@ async function sendSQSmessage(event) {
           StringValue: 'Final test - Daniel version',
         },
       },
-      MessageDeduplicationId: Date.now().toString(),
+      // MessageDeduplicationId: Date.now().toString(),
+      MessageDeduplicationId: myuuid,
       MessageGroupId: 'XrayPayload',
       MessageBody: JSON.stringify(issue),
     });
