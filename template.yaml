@@ -195,7 +195,6 @@ Resources:
           Properties:
             Queue: !GetAtt XraySourceQueue.Arn
             BatchSize: 10
-            MaximumBatchingWindowInSeconds: 1
             Enabled: True
 
   XraySourceQueue:
