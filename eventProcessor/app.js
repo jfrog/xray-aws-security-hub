@@ -20,7 +20,7 @@ const formatError = (error) => {
 
 const formatResponse = (body) => {
   const response = {
-    statusCode: 200,
+    statusCode: 202,
     headers: {
       'Content-Type': 'application/json',
     },
@@ -65,7 +65,7 @@ export async function lambdaHandler(event) {
     }
     await Promise.allSettled(promises);
 
-    return formatResponse(promises.length);
+    return formatResponse({ message: `Issues processed: ${issues.length}`});
   } catch (error) {
     return formatError(error);
   }

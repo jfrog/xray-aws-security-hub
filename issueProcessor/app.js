@@ -33,36 +33,24 @@ const formatResponse = (body) => {
   return response;
 };
 
-async function sendSQSmessage(event) {
-  // const queueURL = process.env.SQS_QUEUE_URL;
-  const queueURL = 'https://sqs.us-west-1.amazonaws.com/096302395721/XraySourceQueue.fifo';
+const sendSQSmessage = async (event) => {
   const messageResponses = [];
 
   const params = {
-    QueueUrl: queueURL,
+    QueueUrl: process.env.SQS_QUEUE_URL,
     Entries: [],
   };
 
   for (const issue of event) {
-    const myuuid = uuidv4();
+    const uuid = uuidv4();
     params.Entries.push({
-      Id: myuuid,
-      MessageAttributes: {
-        MessageType: {
-          DataType: 'String',
-          StringValue: 'Final test - Daniel version',
-        },
-      },
-      // MessageDeduplicationId: Date.now().toString(),
-      MessageDeduplicationId: myuuid,
+      Id: uuid,
+      MessageDeduplicationId: uuid,
       MessageGroupId: 'XrayPayload',
       MessageBody: JSON.stringify(issue),
     });
   }
-  messageResponses.push({
-    message: JSON.stringify(await sqsClient.send(new SendMessageBatchCommand(params))),
-  });
-  return messageResponses;
+  return await sqsClient.send(new SendMessageBatchCommand(params));
 }
 
 export async function lambdaHandler(event) {
