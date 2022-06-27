@@ -37,6 +37,7 @@ const formatResponse = (body) => {
 const createIssues = (event) => event.issues.map((issue) => ({
   watch_name: event.watch_name,
   policy_name: event.policy_name,
+  created: event.created,
   ...issue,
 }));
 
@@ -59,13 +60,14 @@ export async function lambdaHandler(event) {
   try {
     const issues = createIssues(xrayEvent);
     const issuesChunks = createIssuesChunks(issues);
+    console.log(JSON.stringify(issuesChunks));
     const promises = [];
     for (const chunk of issuesChunks) {
       promises.push(asyncLambdaInvoke(chunk));
     }
     await Promise.allSettled(promises);
 
-    return formatResponse({ message: `Issues processed: ${issues.length}`});
+    return formatResponse({ message: `Issues processed: ${issues.length}` });
   } catch (error) {
     return formatError(error);
   }

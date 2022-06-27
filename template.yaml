@@ -185,7 +185,7 @@ Resources:
   TransformerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      FunctionName: transformer
+      FunctionName: Transformer
       CodeUri: transformer/
       Handler: app.lambdaHandler
       Runtime: nodejs16.x
@@ -203,7 +203,8 @@ Resources:
       QueueName: XraySourceQueue.fifo
       FifoQueue: True
       ContentBasedDeduplication: False
-      VisibilityTimeout: 120
+      VisibilityTimeout: 120 # should be at least 6x of lambda timeout
+      ReceiveMessageWaitTimeSeconds:
       RedrivePolicy:
         deadLetterTargetArn: !GetAtt XrayDeadLetterQueue.Arn
         maxReceiveCount: 5

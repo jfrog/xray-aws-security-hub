@@ -1,0 +1,17 @@
+{
+  "Records": [
+    {
+      "messageId": "bd598edf-e0e6-4312-8cc6-08d0d48fad7a",
+      "receiptHandle": "AQEBRo1bXdNKBgNcJEnphM/CcCNAwf5fhJWfj6ItZ4XGx6n+O3ozOtxOteatYu5ilr2mByYROeehRJ2dhkeGVTdpGIP1LuiG0L4poYTDbNHY4Cp4rYZsK1O6yKPOtRR7a8u0pRPSDAlolp95INkaZc9y00fL94doQl/41HuL/kbl8qxBHxXdEEIdv0bS7droZ1HZ9b1LJWhTsDSs6795XaMeo1PuvwUhz4tVC8awtx7NWelGBcUx8jRZ1nmj8YMZu4QrtkpRYzGpshx1zonNSSM8zV+hF/LYaBWIUZfshMUcJVg=",
+      "body": "{\"watch_name\":\"slack_watch_test_bug\",\"policy_name\":\"slack_watch_test_bug\",\"created\":\"2021-09-16T20:54:59.332489963Z\",\"severity\":\"High\",\"type\":\"License\",\"summary\":\"Unknown 0\",\"description\":\"Unknown license 0\",\"impacted_artifacts\":[{\"name\":\"arborist-main.zip\",\"display_name\":\"@npmcli\/arborist:2.8.3\",\"path\":\"default\/npm-local\/\",\"pkg_type\":\"Npm\",\"sha256\":\"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\"sha1\":\"\",\"depth\":0,\"parent_sha\":\"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\"infected_files\":[{\"name\":\"package.json\",\"path\":\"arborist-main\/test\/fixtures\/bundle-metadep-duplication\/y\/\",\"sha256\":\"000000000000000000000000850edb90069d91e997cd0b25042111111111111111\",\"depth\":0,\"parent_sha\":\"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\"display_name\":\"@isaacs\/bundle-metadep-duplication-y:1.0.0\",\"pkg_type\":\"Npm\"},{\"name\":\"package.json\",\"path\":\"arborist-main\/test\/fixtures\/bundle-metadep-duplication\/z\/\",\"sha256\":\"000000000000000000000000850edb90069d91e997cd0b2504262222222222222\",\"depth\":0,\"parent_sha\":\"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\"display_name\":\"@isaacs\/bundle-metadep-duplication-y:1.0.0\",\"pkg_type\":\"Npm\"}]}]}",
+      "attributes": [
+        null
+      ],
+      "messageAttributes": {},
+      "md5OfBody": "a052b4332d5e96c0d658d5bad93dabe1",
+      "eventSource": "aws:sqs",
+      "eventSourceARN": "arn:aws:sqs:us-west-1:096302395721:XraySourceQueue.fifo",
+      "awsRegion": "us-west-1"
+    }
+  ]
+}
