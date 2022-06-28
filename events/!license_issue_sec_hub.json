@@ -1,0 +1,58 @@
+[
+  {
+    "CreatedAt": "2021-09-16T20:54:59.332489963Z",
+    "Description": "Unknown license 0",
+    "GeneratorId": "JFrog - Xray Policy slack_watch_test_bug",
+    "ProductArn": "arn:aws:securityhub:us-west-1:ASIARM3AR6FE2DP2NO7P:product/jfrog/xray",
+    "SchemaVersion": "2018-10-08",
+    "Severity":
+    {
+      "Label": "HIGH",
+      "Original": "High"
+    },
+    "Title": "Unknown 0",
+    "UpdatedAt": "2021-09-16T20:54:59.332489963Z",
+    "CompanyName": "jfrog",
+    "ProductFields":
+    {
+      "jfrog/xray/ViolationType": "license",
+      "jfrog/xray/Watch": "slack_watch_test_bug",
+      "jfrog/xray/Policy": "slack_watch_test_bug"
+    },
+    "ProductName": "xray",
+    "Id": "Unknown 0 61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+    "Resources":
+    {
+      "Type": "Other",
+      "Id": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+      "Details":
+      [
+        {
+          "Other":
+          {
+            "Name": "arborist-main.zip",
+            "DisplayName": "@npmcli/arborist:2.8.3",
+            "Path": "default/npm-local/",
+            "PackageType": "Npm"
+          }
+        }
+      ]
+    },
+    "Types": "Software and Configuration Checks/Vulnerabilities",
+    "Vulnerabilities":
+    {
+      "Id": "Unknown 0",
+      "VulnerablePackages":
+      [
+        {
+          "Name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+          "PackageManager": "Npm"
+        },
+        {
+          "Name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+          "PackageManager": "Npm"
+        }
+      ]
+    }
+  }
+]

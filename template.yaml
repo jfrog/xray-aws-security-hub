@@ -95,6 +95,17 @@ Resources:
       Description: Security Hub Xray integration Lambda execution role
       Path: /
       Policies:
+        - PolicyName: securityHub
+          PolicyDocument:
+            Statement:
+                - Effect: Allow
+                  Action:
+                    - securityhub:Get*
+                    - securityhub:List*
+                    - securityhub:Describe*
+                    - securityhub:BatchImportFindings
+                    - securityhub:BatchUpdateFindings
+                  Resource: '*'
         - PolicyName: logs
           PolicyDocument:
             Statement:
@@ -189,6 +200,7 @@ Resources:
       CodeUri: transformer/
       Handler: app.lambdaHandler
       Runtime: nodejs16.x
+      Role: !GetAtt LambdaRole.Arn # check the role
       Events: # Initiated by the message in SQS queue
         TransformCallPayload:
           Type: SQS # More info https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#sqs
@@ -204,7 +216,7 @@ Resources:
       FifoQueue: True
       ContentBasedDeduplication: False
       VisibilityTimeout: 120 # should be at least 6x of lambda timeout
-      ReceiveMessageWaitTimeSeconds:
+      ReceiveMessageWaitTimeSeconds: 1 # added for testing
       RedrivePolicy:
         deadLetterTargetArn: !GetAtt XrayDeadLetterQueue.Arn
         maxReceiveCount: 5

@@ -1,0 +1,43 @@
+[
+  {
+    "CreatedAt": "2022-05-23T17:09:33.323297746Z",
+    "Description": "Number of new versions 0",
+    "GeneratorId": "JFrog - Xray Policy Alex-OpRisk",
+    "ProductArn": "arn:aws:securityhub:us-west-1:ASIARM3AR6FE2DP2NO7P:product/jfrog/xray",
+    "SchemaVersion": "2018-10-08",
+    "Severity":
+    {
+      "Label": "HIGH",
+      "Original": "High"
+    },
+    "Title": "npm://@solid-soda/scripts:2.0.0-alpha.1",
+    "UpdatedAt": "2022-05-23T17:09:33.323297746Z",
+    "CompanyName": "jfrog",
+    "ProductFields":
+    {
+      "jfrog/xray/ViolationType": "operational risk",
+      "jfrog/xray/Watch": "AllOperationalRisk",
+      "jfrog/xray/Policy": "Alex-OpRisk"
+    },
+    "ProductName": "xray",
+    "Id": "npm://@solid-soda/scripts:2.0.0-alpha.1 57da294976fb253ed71cdbe9bb715caa829c38a4455dc4319533316b4d63772e",
+    "Resources":
+    {
+      "Type": "Other",
+      "Id": "57da294976fb253ed71cdbe9bb715caa829c38a4455dc4319533316b4d63772e",
+      "Details":
+      [
+        {
+          "Other":
+          {
+            "Name": "manifest.json",
+            "DisplayName": "dccscr/xray/router-rh:7.36.1-ubi8.6",
+            "Path": "default/jfrog-artifactory/dccscr/xray/router-rh/7.36.1-ubi8.6/",
+            "PackageType": "Docker"
+          }
+        }
+      ]
+    },
+    "Types": "Software and Configuration Checks/Vulnerabilities/?"
+  }
+]

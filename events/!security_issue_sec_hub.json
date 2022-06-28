@@ -1,0 +1,116 @@
+[
+  {
+    "CreatedAt": "2021-04-08T04:02:38.999Z",
+    "Description": "Bad dummy issue description 0",
+    "GeneratorId": "JFrog - Xray Policy slack_watch_test_bug",
+    "ProductArn": "arn:aws:securityhub:us-west-1:ASIARM3AR6FE2DP2NO7P:product/jfrog/xray",
+    "SchemaVersion": "2018-10-08",
+    "Severity":
+    {
+      "Label": "HIGH",
+      "Original": "High"
+    },
+    "Title": "Bad dummy issue summary 0",
+    "UpdatedAt": "2021-04-08T04:02:38.999Z",
+    "CompanyName": "jfrog",
+    "ProductFields":
+    {
+      "jfrog/xray/ViolationType": "security",
+      "jfrog/xray/Watch": "SlackTest",
+      "jfrog/xray/Policy": "slack_watch_test_bug"
+    },
+    "ProductName": "xray",
+    "Id": "CVE-2021-3483 10fd87ba58132673ac65ee8c11a01510509f93846bdb5f20300ba5981aa75eb0",
+    "Resources":
+    {
+      "Type": "Other",
+      "Id": "10fd87ba58132673ac65ee8c11a01510509f93846bdb5f20300ba5981aa75eb0",
+      "Details":
+      [
+        {
+          "Other":
+          {
+            "Name": "manifest.json",
+            "DisplayName": "artifactory-fluentd:1.11.2",
+            "Path": "default/integrations/artifactory-fluentd/1.11.2/",
+            "PackageType": "Docker"
+          }
+        }
+      ]
+    },
+    "SourceUrl": "<hostname>/ui/watchesNew/edit/SlackTest?activeTab=violations",
+    "Types": "Software and Configuration Checks/Vulnerabilities/CVE",
+    "Vulnerabilities":
+    {
+      "Id": "CVE-2021-3483",
+      "VulnerablePackages":
+      [
+        {
+          "Name": "debian:buster:linux-libc-dev:4.19.132-1",
+          "PackageManager": "Debian"
+        },
+        {
+          "Name": "debian:buster:linux-libc-dev:4.19.132-2",
+          "PackageManager": "Debian"
+        }
+      ]
+    }
+  },
+  {
+    "CreatedAt": "2021-04-08T04:02:38.999Z",
+    "Description": "Bad dummy issue description 0",
+    "GeneratorId": "JFrog - Xray Policy slack_watch_test_bug",
+    "ProductArn": "arn:aws:securityhub:us-west-1:ASIARM3AR6FE2DP2NO7P:product/jfrog/xray",
+    "SchemaVersion": "2018-10-08",
+    "Severity":
+    {
+      "Label": "HIGH",
+      "Original": "High"
+    },
+    "Title": "Bad dummy issue summary 0",
+    "UpdatedAt": "2021-04-08T04:02:38.999Z",
+    "CompanyName": "jfrog",
+    "ProductFields":
+    {
+      "jfrog/xray/ViolationType": "security",
+      "jfrog/xray/Watch": "SlackTest",
+      "jfrog/xray/Policy": "slack_watch_test_bug"
+    },
+    "ProductName": "xray",
+    "Id": "CVE-2021-3483 10fd87ba58132673ac65ee8c11a01510509f93846bdb5f20300ba5981aa75eb0",
+    "Resources":
+    {
+      "Type": "Other",
+      "Id": "10fd87ba58132673ac65ee8c11a01510509f93846bdb5f20300ba5981aa75eb0",
+      "Details":
+      [
+        {
+          "Other":
+          {
+            "Name": "manifest.json",
+            "DisplayName": "artifactory-fluentd:2.11.2",
+            "Path": "default/integrations/artifactory-fluentd/2.11.2/",
+            "PackageType": "Docker"
+          }
+        }
+      ]
+    },
+    "SourceUrl": "<hostname>/ui/watchesNew/edit/SlackTest?activeTab=violations",
+    "Types": "Software and Configuration Checks/Vulnerabilities/CVE",
+    "Vulnerabilities":
+    {
+      "Id": "CVE-2021-3483",
+      "VulnerablePackages":
+      [
+        {
+          "Name": "debian:buster:linux-libc-dev:4.19.132-1",
+          "PackageManager": "Debian"
+        },
+        {
+          "Name": "debian:buster:linux-libc-dev:4.19.132-1",
+          "PackageManager": "Debian"
+        }
+      ]
+    }
+  }
+]
