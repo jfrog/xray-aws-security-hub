@@ -1,14 +1,7 @@
 import { SecurityHubClient, BatchImportFindingsCommand } from '@aws-sdk/client-securityhub';
 
-const hubClient = new SecurityHubClient({});
-
+const hubClient = new SecurityHubClient();
 let response;
-
-// get the body from SQS message payload
-// Split by infected_files
-// Transform it to AWS sec hub format
-// defferenciate based on the type - Security, License or Operational risk
-// Send API call to sec hub in th eloop, one message per one array member
 
 const SEVERITY_LABEL_LOOKUP = {
   low: 'LOW',
@@ -18,7 +11,6 @@ const SEVERITY_LABEL_LOOKUP = {
 };
 
 const region = process.env.AWS_REGION;
-const accountId = process.env.AWS_ACCESS_KEY_ID;
 
 const severity = (body) => ({
   Label: SEVERITY_LABEL_LOOKUP[body.severity.toLowerCase()] || 'INFORMATIONAL',
@@ -28,24 +20,24 @@ const severity = (body) => ({
 const resources = (artifact) => ({
   Type: 'Other',
   Id: artifact.sha256,
-  Details: [{
+  Details: {
     Other: {
       Name: artifact.name,
       DisplayName: artifact.display_name,
       Path: artifact.path,
       PackageType: artifact.pkg_type,
     },
-  }],
+  },
 });
 
 const getTypes = (type) => {
   let types;
   if (type === 'security') {
-    types = 'Software and Configuration Checks/Vulnerabilities/CVE';
+    types = ['Software and Configuration Checks/Vulnerabilities/CVE'];
   } else if (type === 'license') {
-    types = 'Software and Configuration Checks/Vulnerabilities';
+    types = ['Software and Configuration Checks/Vulnerabilities'];
   } else if (type === 'operational risk') {
-    types = 'Software and Configuration Checks/Vulnerabilities/?';
+    types = ['Software and Configuration Checks/Vulnerabilities/?'];
   }
   return types;
 };
@@ -66,17 +58,16 @@ const vulnerabilities = (prefix, impactedArtifact) => ({
   VulnerablePackages: vulnerablePackages(impactedArtifact.infected_files),
 });
 
-const getCommonFields = (body, type) => ({
+const getCommonFields = (body, type, accountId, hostname) => ({
   AwsAccountId: accountId,
+  Region: region,
   CreatedAt: body.created,
   Description: body.description,
   GeneratorId: `JFrog - Xray Policy ${body.policy_name}`,
-  ProductArn: `arn:aws:securityhub:${region}:${accountId}:product/jfrog/xray`,
+  ProductArn: `arn:aws:securityhub:${region}:${accountId}:product/${accountId}/default`,
   SchemaVersion: '2018-10-08',
-  Severity: severity(body),
-  SourceUrl: `<hostname>/ui/watchesNew/edit/${body.watch_name}?activeTab=violations`,
+  SourceUrl: `${hostname}/ui/watchesNew/edit/${body.watch_name}?activeTab=violations`,
   Title: body.summary,
-  Types: getTypes(type),
   UpdatedAt: body.created,
   CompanyName: 'jfrog',
   ProductFields: productFields(body, type),
@@ -84,12 +75,21 @@ const getCommonFields = (body, type) => ({
 });
 
 const getVulnerabilitiesFields = (prefix, artifact) => ({
-  Vulnerabilities: vulnerabilities(prefix, artifact),
+  Vulnerabilities: [vulnerabilities(prefix, artifact)],
 });
 
 const getResourcesFields = (prefix, artifact) => ({
   Id: `${prefix} ${artifact.sha256}`,
-  Resources: resources(artifact),
+  Resources: [resources(artifact)],
+});
+
+const findingProviderFields = (body, type) => ({
+  Severity: severity(body),
+  Types: getTypes(type),
+});
+
+const getFindingProviderFields = (body, type) => ({
+  FindingProviderFields: findingProviderFields(body, type),
 });
 
 const getIdPrefix = (body, type) => {
@@ -102,16 +102,18 @@ const getIdPrefix = (body, type) => {
   return prefix;
 };
 
-function transformSecurity(body, type) {
+function transformSecurity(body, type, accountId, hostname) {
   const results = [];
   for (const impactedArtifact of body.impacted_artifacts) {
     const prefix = getIdPrefix(body, type);
-    const commonFields = getCommonFields(body, type);
+    const commonFields = getCommonFields(body, type, accountId, hostname);
     const resourcesFields = getResourcesFields(prefix, impactedArtifact);
+    const findingProvider = getFindingProviderFields(body, type);
     const vulnerabilitiesFields = getVulnerabilitiesFields(prefix, impactedArtifact);
     const result = {
       ...commonFields,
       ...resourcesFields,
+      ...findingProvider,
       ...vulnerabilitiesFields,
     };
 
@@ -120,16 +122,18 @@ function transformSecurity(body, type) {
   return results;
 }
 
-function transformLicense(body, type) {
+function transformLicense(body, type, accountId, hostname) {
   const results = [];
   for (const impactedArtifact of body.impacted_artifacts) {
     const prefix = getIdPrefix(body, type);
-    const commonFields = getCommonFields(body, type);
+    const commonFields = getCommonFields(body, type, accountId, hostname);
     const resourcesFields = getResourcesFields(prefix, impactedArtifact);
+    const findingProvider = getFindingProviderFields(body, type);
     const vulnerabilitiesFields = getVulnerabilitiesFields(prefix, impactedArtifact);
     const result = {
       ...commonFields,
       ...resourcesFields,
+      ...findingProvider,
       ...vulnerabilitiesFields,
     };
 
@@ -138,14 +142,16 @@ function transformLicense(body, type) {
   return results;
 }
 
-function transformOpRisk(body, type) {
+function transformOpRisk(body, type, accountId, hostname) {
   const results = [];
   for (const impactedArtifact of body.impacted_artifacts) {
     const prefix = getIdPrefix(body, type);
-    const commonFields = getCommonFields(body, type);
+    const commonFields = getCommonFields(body, type, accountId, hostname);
+    const findingProvider = getFindingProviderFields(body, type);
     const resourcesFields = getResourcesFields(prefix, impactedArtifact);
     const result = {
       ...commonFields,
+      ...findingProvider,
       ...resourcesFields,
     };
 
@@ -154,49 +160,45 @@ function transformOpRisk(body, type) {
   return results;
 }
 
-const sendIssueToHub = async (finding) => await hubClient.send(new BatchImportFindingsCommand(JSON.parse(finding)));
-
-export async function lambdaHandler(event) {
+export async function lambdaHandler(event, context) {
   try {
+    let accountId = context.invokedFunctionArn.split(':')[4];
+    const hostname = 'https://artifactoryinstance.com';
+    if (process.env.USE_LOCAL_ID === 'true') {
+      accountId = '096302395721';
+    }
     const parsedBody = JSON.parse(event.Records[0].body);
     let findings = [];
     const type = parsedBody.type.toLowerCase();
     switch (type) {
       case 'security':
-        findings = transformSecurity(parsedBody, type);
-        console.log('Security');
+        findings = transformSecurity(parsedBody, type, accountId, hostname);
+        console.log('Security issue');
         break;
       case 'license':
-        findings = transformLicense(parsedBody, type);
-        console.log('License');
+        findings = transformLicense(parsedBody, type, accountId, hostname);
+        console.log('License issue');
         break;
       case 'operational risk':
-        findings = transformOpRisk(parsedBody, type);
-        console.log('Operational_risk');
+        findings = transformOpRisk(parsedBody, type, accountId, hostname);
+        console.log('Operational risk');
         break;
       default:
         console.log(`Expected type field, got: ${parsedBody.type.toLowerCase()}`);
     }
-    console.log(`Body: ${JSON.stringify(parsedBody)}`);
     console.log(`Findings to send to Hub: ${JSON.stringify(findings)}`);
-
-    for (const finding in findings) {
-      // Query DynamoDB and see if Xray issue already exists. Import if not, otherwise Update.
-      console.log(`Here we send the message to Security Hub - ${finding}`);
-      // check if await will work here
-      const hubResponse = await sendIssueToHub(finding);
-      // const hubResponse = hubClient.send(new BatchImportFindingsCommand(JSON.parse(finding)));
-      console.log(hubResponse);
-    }
+    const hubResponse = await hubClient.send(new BatchImportFindingsCommand({ Findings: findings }));
 
     response = {
       statusCode: 200,
-      // body: event.Records[0].body,
+      body: hubResponse,
     };
   } catch (err) {
-    console.log(err);
-    return err;
+    response = {
+      statusCode: err.statusCode,
+      body: err,
+    };
+    return response;
   }
-
   return response;
 }

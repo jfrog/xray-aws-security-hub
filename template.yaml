@@ -201,6 +201,9 @@ Resources:
       Handler: app.lambdaHandler
       Runtime: nodejs16.x
       Role: !GetAtt LambdaRole.Arn # check the role
+      Environment:
+        Variables:
+          USE_LOCAL_ID: 'false'
       Events: # Initiated by the message in SQS queue
         TransformCallPayload:
           Type: SQS # More info https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#sqs

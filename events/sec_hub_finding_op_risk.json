@@ -1,0 +1,52 @@
+[
+  {
+    "AwsAccountId": "096302395721",
+    "CompanyName": "jfrog",
+    "CreatedAt": "2022-05-23T17:09:33.323297746Z",
+    "Description": "Number of new versions 0",
+    "FindingProviderFields":
+    {
+      "Severity":
+      {
+        "Label": "HIGH",
+        "Original": "High"
+      },
+      "Types":
+      [
+        "Software and Configuration Checks/Vulnerabilities/?"
+      ]
+    },
+    "GeneratorId": "JFrog - Xray Policy Alex-OpRisk",
+    "Id": "npm://@solid-soda/scripts:2.0.0-alpha.1 57da294976fb253ed71cdbe9bb715caa829c38a4455dc4319533316b4d63772e",
+    "ProductArn": "arn:aws:securityhub:us-west-1:096302395721:product/096302395721/default",
+    "ProductFields":
+    {
+      "jfrog/xray/Policy": "Alex-OpRisk",
+      "jfrog/xray/ViolationType": "operational risk",
+      "jfrog/xray/Watch": "AllOperationalRisk"
+    },
+    "ProductName": "xray",
+    "Region": "us-west-1",
+    "Resources":
+    [
+      {
+        "Details":
+        {
+          "Other":
+          {
+            "DisplayName": "dccscr/xray/router-rh:7.36.1-ubi8.6",
+            "Name": "manifest.json",
+            "PackageType": "Docker",
+            "Path": "default/jfrog-artifactory/dccscr/xray/router-rh/7.36.1-ubi8.6/"
+          }
+        },
+        "Id": "57da294976fb253ed71cdbe9bb715caa829c38a4455dc4319533316b4d63772e",
+        "Type": "Other"
+      }
+    ],
+    "SchemaVersion": "2018-10-08",
+    "SourceUrl": "https://artifactoryinstance.com/ui/watchesNew/edit/AllOperationalRisk?activeTab=violations",
+    "Title": "npm://@solid-soda/scripts:2.0.0-alpha.1",
+    "UpdatedAt": "2022-05-23T17:09:33.323297746Z"
+  }
+]
