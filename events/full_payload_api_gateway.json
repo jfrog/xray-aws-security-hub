@@ -1,0 +1,129 @@
+{
+  "resource": "/send",
+  "path": "/send/",
+  "httpMethod": "POST",
+  "headers": {
+    "Accept": "*/*",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Authorization": "password",
+    "Cache-Control": "no-cache",
+    "CloudFront-Forwarded-Proto": "https",
+    "CloudFront-Is-Desktop-Viewer": "true",
+    "CloudFront-Is-Mobile-Viewer": "false",
+    "CloudFront-Is-SmartTV-Viewer": "false",
+    "CloudFront-Is-Tablet-Viewer": "false",
+    "CloudFront-Viewer-Country": "US",
+    "Content-Type": "application/json",
+    "Host": "myy5m5iv6i.execute-api.us-west-1.amazonaws.com",
+    "Postman-Token": "691d9506-86c5-47a5-aa5e-10ba63be4de6",
+    "User-Agent": "PostmanRuntime/7.29.0",
+    "Via": "1.1 73d3ff0182f526d6384b20c342c6483a.cloudfront.net (CloudFront)",
+    "X-Amz-Cf-Id": "DBh_UGVB0v2zCypEKmQacQKcpGVqw12ShY3cGXioYStACVsQ55PAog==",
+    "X-Amzn-Trace-Id": "Root=1-62be2504-04f6239c221411573e11af7e",
+    "X-Forwarded-For": "165.225.242.111, 64.252.173.144",
+    "X-Forwarded-Port": "443",
+    "X-Forwarded-Proto": "https"
+  },
+  "multiValueHeaders": {
+    "Accept": [
+      "*/*"
+    ],
+    "Accept-Encoding": [
+      "gzip, deflate, br"
+    ],
+    "Authorization": [
+      "password"
+    ],
+    "Cache-Control": [
+      "no-cache"
+    ],
+    "CloudFront-Forwarded-Proto": [
+      "https"
+    ],
+    "CloudFront-Is-Desktop-Viewer": [
+      "true"
+    ],
+    "CloudFront-Is-Mobile-Viewer": [
+      "false"
+    ],
+    "CloudFront-Is-SmartTV-Viewer": [
+      "false"
+    ],
+    "CloudFront-Is-Tablet-Viewer": [
+      "false"
+    ],
+    "CloudFront-Viewer-Country": [
+      "US"
+    ],
+    "Content-Type": [
+      "application/json"
+    ],
+    "Host": [
+      "myy5m5iv6i.execute-api.us-west-1.amazonaws.com"
+    ],
+    "Postman-Token": [
+      "691d9506-86c5-47a5-aa5e-10ba63be4de6"
+    ],
+    "User-Agent": [
+      "PostmanRuntime/7.29.0"
+    ],
+    "Via": [
+      "1.1 73d3ff0182f526d6384b20c342c6483a.cloudfront.net (CloudFront)"
+    ],
+    "X-Amz-Cf-Id": [
+      "DBh_UGVB0v2zCypEKmQacQKcpGVqw12ShY3cGXioYStACVsQ55PAog=="
+    ],
+    "X-Amzn-Trace-Id": [
+      "Root=1-62be2504-04f6239c221411573e11af7e"
+    ],
+    "X-Forwarded-For": [
+      "165.225.242.111, 64.252.173.144"
+    ],
+    "X-Forwarded-Port": [
+      "443"
+    ],
+    "X-Forwarded-Proto": [
+      "https"
+    ]
+  },
+  "queryStringParameters": null,
+  "multiValueQueryStringParameters": null,
+  "pathParameters": null,
+  "stageVariables": null,
+  "requestContext": {
+    "resourceId": "liftp2",
+    "authorizer": {
+      "principalId": "user",
+      "integrationLatency": 1367
+    },
+    "resourcePath": "/send",
+    "httpMethod": "POST",
+    "extendedRequestId": "Ujq4tH46SK4FjuQ=",
+    "requestTime": "30/Jun/2022:22:34:44 +0000",
+    "path": "/DEV/send/",
+    "accountId": "096302395721",
+    "protocol": "HTTP/1.1",
+    "stage": "DEV",
+    "domainPrefix": "myy5m5iv6i",
+    "requestTimeEpoch": 1656628484392,
+    "requestId": "3d4949ba-e37d-41bb-ae2a-91195cd75495",
+    "identity": {
+      "cognitoIdentityPoolId": null,
+      "accountId": null,
+      "cognitoIdentityId": null,
+      "caller": null,
+      "sourceIp": "165.225.242.111",
+      "principalOrgId": null,
+      "accessKey": null,
+      "cognitoAuthenticationType": null,
+      "cognitoAuthenticationProvider": null,
+      "userArn": null,
+      "userAgent": "PostmanRuntime/7.29.0",
+      "user": null
+    },
+    "domainName": "myy5m5iv6i.execute-api.us-west-1.amazonaws.com",
+    "apiId": "myy5m5iv6i"
+  },
+  "body": "{\n  \"created\": \"2021-09-16T20:54:59.332489963Z\",\n  \"top_severity\": \"High\",\n  \"watch_name\": \"xray_sec_hub_test\",\n  \"policy_name\": \"xray_sec_hub_policy\",\n  \"issues\":\n  [\n    {\n      \"severity\": \"High\",\n      \"type\": \"License\",\n      \"summary\": \"Unknown 0\",\n      \"description\": \"Unknown license 0\",\n      \"impacted_artifacts\":\n      [\n        {\n          \"name\": \"arborist-main.zip\",\n          \"display_name\": \"@npmcli/arborist:2.8.3\",\n          \"path\": \"default/npm-local/\",\n          \"pkg_type\": \"Npm\",\n          \"sha256\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"sha1\": \"\",\n          \"depth\": 0,\n          \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"infected_files\":\n          [\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/y/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b25042111111111111111\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef01\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            },\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/z/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b2504262222222222222\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef02\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:2.0.0\",\n              \"pkg_type\": \"Npm\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"severity\": \"Medium\",\n      \"type\": \"License\",\n      \"summary\": \"Unknown 1\",\n      \"description\": \"Unknown license 1\",\n      \"impacted_artifacts\":\n      [\n        {\n          \"name\": \"arborist-main.zip\",\n          \"display_name\": \"@npmcli/arborist:2.8.3\",\n          \"path\": \"default/npm-local/\",\n          \"pkg_type\": \"Npm\",\n          \"sha256\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"sha1\": \"\",\n          \"depth\": 0,\n          \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"infected_files\":\n          [\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/y/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b25042333333333333333\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef03\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            },\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/z/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b25042644444444444444\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef04\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"severity\": \"Medium\",\n      \"type\": \"License\",\n      \"summary\": \"Unknown 2\",\n      \"description\": \"Unknown license 2\",\n      \"impacted_artifacts\":\n      [\n        {\n          \"name\": \"arborist-main.zip\",\n          \"display_name\": \"@npmcli/arborist:2.8.3\",\n          \"path\": \"default/npm-local/\",\n          \"pkg_type\": \"Npm\",\n          \"sha256\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"sha1\": \"\",\n          \"depth\": 0,\n          \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"infected_files\":\n          [\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/y/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b25042111111111111111\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            },\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/z/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b2504262222222222222\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"severity\": \"Medium\",\n      \"type\": \"License\",\n      \"summary\": \"Unknown 3\",\n      \"description\": \"Unknown license 3\",\n      \"impacted_artifacts\":\n      [\n        {\n          \"name\": \"arborist-main.zip\",\n          \"display_name\": \"@npmcli/arborist:2.8.3\",\n          \"path\": \"default/npm-local/\",\n          \"pkg_type\": \"Npm\",\n          \"sha256\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"sha1\": \"\",\n          \"depth\": 0,\n          \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"infected_files\":\n          [\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/y/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b25042111111111111111\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            },\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/z/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b2504262222222222222\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"severity\": \"Medium\",\n      \"type\": \"License\",\n      \"summary\": \"Unknown 4\",\n      \"description\": \"Unknown license 4\",\n      \"impacted_artifacts\":\n      [\n        {\n          \"name\": \"arborist-main.zip\",\n          \"display_name\": \"@npmcli/arborist:2.8.3\",\n          \"path\": \"default/npm-local/\",\n          \"pkg_type\": \"Npm\",\n          \"sha256\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"sha1\": \"\",\n          \"depth\": 0,\n          \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"infected_files\":\n          [\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/y/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b25042111111111111111\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            },\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/z/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b2504262222222222222\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"severity\": \"Medium\",\n      \"type\": \"License\",\n      \"summary\": \"Unknown 5\",\n      \"description\": \"Unknown license 5\",\n      \"impacted_artifacts\":\n      [\n        {\n          \"name\": \"arborist-main.zip\",\n          \"display_name\": \"@npmcli/arborist:2.8.3\",\n          \"path\": \"default/npm-local/\",\n          \"pkg_type\": \"Npm\",\n          \"sha256\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"sha1\": \"\",\n          \"depth\": 0,\n          \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"infected_files\":\n          [\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/y/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b25042111111111111111\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            },\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/z/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b2504262222222222222\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"severity\": \"Medium\",\n      \"type\": \"License\",\n      \"summary\": \"Unknown 6\",\n      \"description\": \"Unknown license 6\",\n      \"impacted_artifacts\":\n      [\n        {\n          \"name\": \"arborist-main.zip\",\n          \"display_name\": \"@npmcli/arborist:2.8.3\",\n          \"path\": \"default/npm-local/\",\n          \"pkg_type\": \"Npm\",\n          \"sha256\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"sha1\": \"\",\n          \"depth\": 0,\n          \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"infected_files\":\n          [\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/y/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b25042111111111111111\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            },\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/z/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b2504262222222222222\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"severity\": \"Medium\",\n      \"type\": \"License\",\n      \"summary\": \"Unknown 7\",\n      \"description\": \"Unknown license 7\",\n      \"impacted_artifacts\":\n      [\n        {\n          \"name\": \"arborist-main.zip\",\n          \"display_name\": \"@npmcli/arborist:2.8.3\",\n          \"path\": \"default/npm-local/\",\n          \"pkg_type\": \"Npm\",\n          \"sha256\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"sha1\": \"\",\n          \"depth\": 0,\n          \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"infected_files\":\n          [\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/y/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b25042111111111111111\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            },\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/z/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b2504262222222222222\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"severity\": \"Medium\",\n      \"type\": \"License\",\n      \"summary\": \"Unknown 8\",\n      \"description\": \"Unknown license 8\",\n      \"impacted_artifacts\":\n      [\n        {\n          \"name\": \"arborist-main.zip\",\n          \"display_name\": \"@npmcli/arborist:2.8.3\",\n          \"path\": \"default/npm-local/\",\n          \"pkg_type\": \"Npm\",\n          \"sha256\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"sha1\": \"\",\n          \"depth\": 0,\n          \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"infected_files\":\n          [\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/y/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b25042111111111111111\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            },\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/z/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b2504262222222222222\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"severity\": \"Medium\",\n      \"type\": \"License\",\n      \"summary\": \"Unknown 9\",\n      \"description\": \"Unknown license 9\",\n      \"impacted_artifacts\":\n      [\n        {\n          \"name\": \"arborist-main.zip\",\n          \"display_name\": \"@npmcli/arborist:2.8.3\",\n          \"path\": \"default/npm-local/\",\n          \"pkg_type\": \"Npm\",\n          \"sha256\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"sha1\": \"\",\n          \"depth\": 0,\n          \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"infected_files\":\n          [\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/y/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b25042111111111111111\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            },\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/z/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b2504262222222222222\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"severity\": \"Medium\",\n      \"type\": \"License\",\n      \"summary\": \"Unknown 10\",\n      \"description\": \"Unknown license 10\",\n      \"impacted_artifacts\":\n      [\n        {\n          \"name\": \"arborist-main.zip\",\n          \"display_name\": \"@npmcli/arborist:2.8.3\",\n          \"path\": \"default/npm-local/\",\n          \"pkg_type\": \"Npm\",\n          \"sha256\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"sha1\": \"\",\n          \"depth\": 0,\n          \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n          \"infected_files\":\n          [\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/y/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b25042111111111111111\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            },\n            {\n              \"name\": \"package.json\",\n              \"path\": \"arborist-main/test/fixtures/bundle-metadep-duplication/z/\",\n              \"sha256\": \"000000000000000000000000850edb90069d91e997cd0b2504262222222222222\",\n              \"depth\": 0,\n              \"parent_sha\": \"61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06\",\n              \"display_name\": \"@isaacs/bundle-metadep-duplication-y:1.0.0\",\n              \"pkg_type\": \"Npm\"\n            }\n          ]\n        }\n      ]\n    }\n  ]\n}",
+  "isBase64Encoded": false
+}

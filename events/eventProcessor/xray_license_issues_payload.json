@@ -1,8 +1,8 @@
 {
   "created": "2021-09-16T20:54:59.332489963Z",
   "top_severity": "High",
-  "watch_name": "slack_watch_test_bug",
-  "policy_name": "slack_watch_test_bug",
+  "watch_name": "xray_sec_hub_test",
+  "policy_name": "xray_sec_hub_policy",
   "issues":
   [
     {
@@ -28,7 +28,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef01",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             },
@@ -37,8 +37,8 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
-              "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef02",
+              "display_name": "@isaacs/bundle-metadep-duplication-y:2.0.0",
               "pkg_type": "Npm"
             }
           ]
@@ -66,18 +66,18 @@
             {
               "name": "package.json",
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
-              "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
+              "sha256": "000000000000000000000000850edb90069d91e997cd0b25042333333333333333",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef03",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             },
             {
               "name": "package.json",
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
-              "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
+              "sha256": "000000000000000000000000850edb90069d91e997cd0b25042644444444444444",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef04",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             }

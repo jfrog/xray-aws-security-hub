@@ -1,9 +1,23 @@
 [
   {
     "AwsAccountId": "096302395721",
-    "CompanyName": "jfrog",
+    "Region": "us-west-1",
     "CreatedAt": "2021-09-16T20:54:59.332489963Z",
     "Description": "Unknown license 0",
+    "GeneratorId": "JFrog - Xray Policy slack_watch_test_bug",
+    "ProductArn": "arn:aws:securityhub:us-west-1:096302395721:product/096302395721/default",
+    "SchemaVersion": "2018-10-08",
+    "SourceUrl": "https://165.225.242.111/ui/watchesNew/edit/slack_watch_test_bug?activeTab=violations",
+    "Title": "Unknown 0",
+    "UpdatedAt": "2021-09-16T20:54:59.332489963Z",
+    "CompanyName": "jfrog",
+    "ProductFields":
+    {
+      "jfrog/xray/ViolationType": "license",
+      "jfrog/xray/Watch": "slack_watch_test_bug",
+      "jfrog/xray/Policy": "slack_watch_test_bug"
+    },
+    "ProductName": "xray",
     "FindingProviderFields":
     {
       "Severity":
@@ -16,53 +30,22 @@
         "Software and Configuration Checks/Vulnerabilities"
       ]
     },
-    "GeneratorId": "JFrog - Xray Policy slack_watch_test_bug",
     "Id": "Unknown 0 61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
-    "ProductArn": "arn:aws:securityhub:us-west-1:096302395721:product/096302395721/default",
-    "ProductFields":
-    {
-      "jfrog/xray/Policy": "slack_watch_test_bug",
-      "jfrog/xray/ViolationType": "license",
-      "jfrog/xray/Watch": "slack_watch_test_bug"
-    },
-    "ProductName": "xray",
-    "Region": "us-west-1",
     "Resources":
     [
       {
+        "Type": "Other",
+        "Id": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
         "Details":
         {
           "Other":
           {
-            "DisplayName": "@npmcli/arborist:2.8.3",
             "Name": "arborist-main.zip",
-            "PackageType": "Npm",
-            "Path": "default/npm-local/"
+            "DisplayName": "@npmcli/arborist:2.8.3",
+            "Path": "default/npm-local/",
+            "PackageType": "Npm"
           }
-        },
-        "Id": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
-        "Type": "Other"
-      }
-    ],
-    "SchemaVersion": "2018-10-08",
-    "SourceUrl": "https://artifactoryinstance.com/ui/watchesNew/edit/slack_watch_test_bug?activeTab=violations",
-    "Title": "Unknown 0",
-    "UpdatedAt": "2021-09-16T20:54:59.332489963Z",
-    "Vulnerabilities":
-    [
-      {
-        "Id": "Unknown 0",
-        "VulnerablePackages":
-        [
-          {
-            "Name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
-            "PackageManager": "Npm"
-          },
-          {
-            "Name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
-            "PackageManager": "Npm"
-          }
-        ]
+        }
       }
     ]
   }

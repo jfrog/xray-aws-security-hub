@@ -1,11 +1,11 @@
 {
   "type": "module",
-  "name": "hello_world",
+  "name": "transformer",
   "version": "1.0.0",
-  "description": "hello world sample for NodeJS",
+  "description": "Transformer function for AWS Security Hub findings",
   "main": "app.js",
-  "repository": "https://github.com/awslabs/aws-sam-cli/tree/develop/samcli/local/init/templates/cookiecutter-aws-sam-hello-nodejs",
-  "author": "SAM CLI",
+  "repository": "https://git.jfrog.info/projects/PTRENG/repos/xray-aws-security-hub/browse/transformer",
+  "author": "JFrog",
   "license": "MIT",
   "dependencies": {
     "@aws-sdk/client-securityhub": "^3.118.1",

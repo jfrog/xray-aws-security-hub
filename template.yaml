@@ -80,7 +80,7 @@ Resources:
       StageName: !Ref DeploymentEnvironment
       TracingEnabled: True
 
-  LambdaRole:
+  AuthorizerRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -95,17 +95,77 @@ Resources:
       Description: Security Hub Xray integration Lambda execution role
       Path: /
       Policies:
-        - PolicyName: securityHub
+        - PolicyName: logs
           PolicyDocument:
             Statement:
-                - Effect: Allow
-                  Action:
-                    - securityhub:Get*
-                    - securityhub:List*
-                    - securityhub:Describe*
-                    - securityhub:BatchImportFindings
-                    - securityhub:BatchUpdateFindings
-                  Resource: '*'
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+        - PolicyName: secretsmanager
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - secretsmanager:GetSecretValue
+                  - secretsmanager:DescribeSecret
+                  - secretsmanager:ListSecretVersionIds
+                Resource: !Ref SecurityHubAuthTokenSecret
+              - Effect: Allow
+                Action:
+                  - secretsmanager:ListSecrets
+                Resource: '*'
+
+  EventProcessorRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Description: Security Hub Xray integration Lambda execution role
+      Path: /
+      Policies:
+        - PolicyName: logs
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+        - PolicyName: lambda
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                  - lambda:InvokeAsync
+                Resource: '*'
+
+  IssueProcessorRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Description: Security Hub Xray integration Lambda execution role
+      Path: /
+      Policies:
         - PolicyName: logs
           PolicyDocument:
             Statement:
@@ -125,27 +185,52 @@ Resources:
                   - sqs:DeleteMessage
                   - sqs:GetQueueAttributes
                 Resource: !GetAtt XraySourceQueue.Arn
-        - PolicyName: lambda
-          PolicyDocument:
-            Statement:
-                - Effect: Allow
-                  Action:
-                    - lambda:InvokeFunction
-                    - lambda:InvokeAsync
-                  Resource: '*'
-        - PolicyName: secretsmanager
+
+  TransformerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Description: Security Hub Xray integration Lambda execution role
+      Path: /
+      Policies:
+        - PolicyName: logs
           PolicyDocument:
             Statement:
               - Effect: Allow
                 Action:
-                  - secretsmanager:GetSecretValue
-                  - secretsmanager:DescribeSecret
-                  - secretsmanager:ListSecretVersionIds
-                Resource: !Ref SecurityHubAuthTokenSecret
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+        - PolicyName: sqs
+          PolicyDocument:
+            Statement:
               - Effect: Allow
                 Action:
-                  - secretsmanager:ListSecrets
-                Resource: '*'
+                  - sqs:ReceiveMessage
+                  - sqs:SendMessage
+                  - sqs:DeleteMessage
+                  - sqs:GetQueueAttributes
+                Resource: !GetAtt XraySourceQueue.Arn
+        - PolicyName: securityHub
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - securityhub:Get*
+                  - securityhub:List*
+                  - securityhub:Describe*
+                  - securityhub:BatchImportFindings
+                  - securityhub:BatchUpdateFindings
+                Resource: arn:aws:securityhub:*
 
   AuthorizerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -158,7 +243,7 @@ Resources:
       FunctionName: authorizer
       Handler: app.handler
       Runtime: nodejs16.x
-      Role: !GetAtt LambdaRole.Arn
+      Role: !GetAtt AuthorizerRole.Arn # access to secrets
       Tags:
         Environment: !Ref DeploymentEnvironment
 
@@ -170,7 +255,7 @@ Resources:
       CodeUri: eventProcessor/
       Handler: app.lambdaHandler
       Runtime: nodejs16.x
-      Role: !GetAtt LambdaRole.Arn
+      Role: !GetAtt EventProcessorRole.Arn # access to lambda, logs
       Events: # Initiated by API call form API gateway
         ProcessCallPayload:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -188,7 +273,7 @@ Resources:
       CodeUri: issueProcessor/
       Handler: app.lambdaHandler
       Runtime: nodejs16.x
-      Role: !GetAtt LambdaRole.Arn # check the role
+      Role: !GetAtt IssueProcessorRole.Arn # access to SQS, logs
       Environment:
         Variables:
           SQS_QUEUE_URL: !Ref XraySourceQueue
@@ -200,10 +285,11 @@ Resources:
       CodeUri: transformer/
       Handler: app.lambdaHandler
       Runtime: nodejs16.x
-      Role: !GetAtt LambdaRole.Arn # check the role
+      Role: !GetAtt TransformerRole.Arn # access to SQS, sec hub, logs
       Environment:
         Variables:
-          USE_LOCAL_ID: 'false'
+          USE_DEV_ACCOUNT_ID: 'false'
+          DEV_ACCOUNT_ID: ''
       Events: # Initiated by the message in SQS queue
         TransformCallPayload:
           Type: SQS # More info https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#sqs
@@ -257,7 +343,6 @@ Resources:
         - Ref: AlarmTopic
       InsufficientDataActions:
         - Ref: AlarmTopic
-
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

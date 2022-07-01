@@ -1,0 +1,17 @@
+{
+  "Records": [
+    {
+      "messageId": "bd598edf-e0e6-4312-8cc6-08d0d48fad7a",
+      "receiptHandle": "AQEBRo1bXdNKBgNcJEnphM/CcCNAwf5fhJWfj6ItZ4XGx6n+O3ozOtxOteatYu5ilr2mByYROeehRJ2dhkeGVTdpGIP1LuiG0L4poYTDbNHY4Cp4rYZsK1O6yKPOtRR7a8u0pRPSDAlolp95INkaZc9y00fL94doQl/41HuL/kbl8qxBHxXdEEIdv0bS7droZ1HZ9b1LJWhTsDSs6795XaMeo1PuvwUhz4tVC8awtx7NWelGBcUx8jRZ1nmj8YMZu4QrtkpRYzGpshx1zonNSSM8zV+hF/LYaBWIUZfshMUcJVg=",
+      "body": "{\"watch_name\":\"SlackTest\",\"policy_name\":\"slack_watch_test_bug\",\"host_name\":\"165.225.242.111\",\"severity\":\"High\",\"type\":\"security\",\"provider\":\"JFrog\",\"created\":\"2021-04-08T04:02:38.999Z\",\"summary\":\"Bad dummy issue summary 0\",\"description\":\"Bad dummy issue description 0\",\"impacted_artifacts\":[{\"name\":\"manifest.json\",\"display_name\":\"artifactory-fluentd:1.11.2\",\"path\":\"default/integrations/artifactory-fluentd/1.11.2/\",\"pkg_type\":\"Docker\",\"sha256\":\"10fd87ba58132673ac65ee8c11a01510509f93846bdb5f20300ba5981aa75eb0\",\"sha1\":\"\",\"depth\":2,\"parent_sha\":\"10fd87ba58132673ac65ee8c11a01510509f93846bdb5f20300ba5981aa75eb0\",\"infected_files\":[{\"name\":\"linux-libc-dev:4.19.132-1\",\"path\":\"\",\"sha256\":\"391e2df82c21b15e12cd8207d3257baf60b10c824c4001111111111111111111\",\"depth\":0,\"parent_sha\":\"c5b1980eb2a26b21e083b2930ec5cae78f473a19d8fc6affbe6b71792fbf6ae2\",\"display_name\":\"debian:buster:linux-libc-dev:4.19.132-1\",\"pkg_type\":\"Debian\"},{\"name\":\"linux-libc-dev:second-file\",\"path\":\"\",\"sha256\":\"391e2df82c21b15e12cd8207d3257baf60b10c824c4000000000000000000001\",\"depth\":0,\"parent_sha\":\"c5b1980eb2a26b21e083b2930ec5cae78f473a19d8fc6affbe6b71792fbf6ae2\",\"display_name\":\"debian:buster:linux-libc-dev:4.19.132-2\",\"pkg_type\":\"Debian\"}]},{\"name\":\"manifest.json\",\"display_name\":\"artifactory-fluentd:2.11.2\",\"path\":\"default/integrations/artifactory-fluentd/2.11.2/\",\"pkg_type\":\"Docker\",\"sha256\":\"10fd87ba58132673ac65ee8c11a01510509f93846bdb5f20300ba5981aa75eb1\",\"sha1\":\"\",\"depth\":2,\"parent_sha\":\"10fd87ba58132673ac65ee8c11a01510509f93846bdb5f20300ba5981aa75eb0\",\"infected_files\":[{\"name\":\"linux-libc-dev:4.19.132-1\",\"path\":\"\",\"sha256\":\"391e2df82c21b15e12cd8207d3257baf60b10c824c4001111111111111111112\",\"depth\":0,\"parent_sha\":\"c5b1980eb2a26b21e083b2930ec5cae78f473a19d8fc6affbe6b71792fbf6ae2\",\"display_name\":\"debian:buster:linux-libc-dev:4.19.132-1\",\"pkg_type\":\"Debian\"},{\"name\":\"linux-libc-dev:second-file\",\"path\":\"\",\"sha256\":\"391e2df82c21b15e12cd8207d3257baf60b10c824c4000000000000000000002\",\"depth\":0,\"parent_sha\":\"c5b1980eb2a26b21e083b2930ec5cae78f473a19d8fc6affbe6b71792fbf6ae2\",\"display_name\":\"debian:buster:linux-libc-dev:4.19.132-1\",\"pkg_type\":\"Debian\"}]}],\"cve\":\"CVE-2021-3483\"}",
+      "attributes": [
+        null
+      ],
+      "messageAttributes": {},
+      "md5OfBody": "a052b4332d5e96c0d658d5bad93dabe1",
+      "eventSource": "aws:sqs",
+      "eventSourceARN": "arn:aws:sqs:us-west-1:096302395721:XraySourceQueue.fifo",
+      "awsRegion": "us-west-1"
+    }
+  ]
+}

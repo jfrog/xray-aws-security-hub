@@ -1,9 +1,41 @@
 [
   {
     "AwsAccountId": "096302395721",
-    "CompanyName": "jfrog",
+    "Region": "us-west-1",
     "CreatedAt": "2021-04-08T04:02:38.999Z",
     "Description": "Bad dummy issue description 0",
+    "GeneratorId": "JFrog - Xray Policy slack_watch_test_bug",
+    "ProductArn": "arn:aws:securityhub:us-west-1:096302395721:product/096302395721/default",
+    "SchemaVersion": "2018-10-08",
+    "SourceUrl": "https://165.225.242.111/ui/watchesNew/edit/SlackTest?activeTab=violations",
+    "Title": "Bad dummy issue summary 0",
+    "UpdatedAt": "2021-04-08T04:02:38.999Z",
+    "CompanyName": "jfrog",
+    "ProductFields":
+    {
+      "jfrog/xray/ViolationType": "security",
+      "jfrog/xray/Watch": "SlackTest",
+      "jfrog/xray/Policy": "slack_watch_test_bug"
+    },
+    "ProductName": "xray",
+    "Id": "CVE-2021-3483 10fd87ba58132673ac65ee8c11a01510509f93846bdb5f20300ba5981aa75eb0",
+    "Resources":
+    [
+      {
+        "Type": "Other",
+        "Id": "10fd87ba58132673ac65ee8c11a01510509f93846bdb5f20300ba5981aa75eb0",
+        "Details":
+        {
+          "Other":
+          {
+            "Name": "manifest.json",
+            "DisplayName": "artifactory-fluentd:1.11.2",
+            "Path": "default/integrations/artifactory-fluentd/1.11.2/",
+            "PackageType": "Docker"
+          }
+        }
+      }
+    ],
     "FindingProviderFields":
     {
       "Severity":
@@ -16,38 +48,6 @@
         "Software and Configuration Checks/Vulnerabilities/CVE"
       ]
     },
-    "GeneratorId": "JFrog - Xray Policy slack_watch_test_bug",
-    "Id": "CVE-2021-3483 10fd87ba58132673ac65ee8c11a01510509f93846bdb5f20300ba5981aa75eb0",
-    "ProductArn": "arn:aws:securityhub:us-west-1:096302395721:product/096302395721/default",
-    "ProductFields":
-    {
-      "jfrog/xray/Policy": "slack_watch_test_bug",
-      "jfrog/xray/ViolationType": "security",
-      "jfrog/xray/Watch": "SlackTest"
-    },
-    "ProductName": "xray",
-    "Region": "us-west-1",
-    "Resources":
-    [
-      {
-        "Details":
-        {
-          "Other":
-          {
-            "DisplayName": "artifactory-fluentd:1.11.2",
-            "Name": "manifest.json",
-            "PackageType": "Docker",
-            "Path": "default/integrations/artifactory-fluentd/1.11.2/"
-          }
-        },
-        "Id": "10fd87ba58132673ac65ee8c11a01510509f93846bdb5f20300ba5981aa75eb0",
-        "Type": "Other"
-      }
-    ],
-    "SchemaVersion": "2018-10-08",
-    "SourceUrl": "https://artifactoryinstance.com/ui/watchesNew/edit/SlackTest?activeTab=violations",
-    "Title": "Bad dummy issue summary 0",
-    "UpdatedAt": "2021-04-08T04:02:38.999Z",
     "Vulnerabilities":
     [
       {
@@ -68,9 +68,41 @@
   },
   {
     "AwsAccountId": "096302395721",
-    "CompanyName": "jfrog",
+    "Region": "us-west-1",
     "CreatedAt": "2021-04-08T04:02:38.999Z",
     "Description": "Bad dummy issue description 0",
+    "GeneratorId": "JFrog - Xray Policy slack_watch_test_bug",
+    "ProductArn": "arn:aws:securityhub:us-west-1:096302395721:product/096302395721/default",
+    "SchemaVersion": "2018-10-08",
+    "SourceUrl": "https://165.225.242.111/ui/watchesNew/edit/SlackTest?activeTab=violations",
+    "Title": "Bad dummy issue summary 0",
+    "UpdatedAt": "2021-04-08T04:02:38.999Z",
+    "CompanyName": "jfrog",
+    "ProductFields":
+    {
+      "jfrog/xray/ViolationType": "security",
+      "jfrog/xray/Watch": "SlackTest",
+      "jfrog/xray/Policy": "slack_watch_test_bug"
+    },
+    "ProductName": "xray",
+    "Id": "CVE-2021-3483 10fd87ba58132673ac65ee8c11a01510509f93846bdb5f20300ba5981aa75eb1",
+    "Resources":
+    [
+      {
+        "Type": "Other",
+        "Id": "10fd87ba58132673ac65ee8c11a01510509f93846bdb5f20300ba5981aa75eb1",
+        "Details":
+        {
+          "Other":
+          {
+            "Name": "manifest.json",
+            "DisplayName": "artifactory-fluentd:2.11.2",
+            "Path": "default/integrations/artifactory-fluentd/2.11.2/",
+            "PackageType": "Docker"
+          }
+        }
+      }
+    ],
     "FindingProviderFields":
     {
       "Severity":
@@ -83,38 +115,6 @@
         "Software and Configuration Checks/Vulnerabilities/CVE"
       ]
     },
-    "GeneratorId": "JFrog - Xray Policy slack_watch_test_bug",
-    "Id": "CVE-2021-3483 10fd87ba58132673ac65ee8c11a01510509f93846bdb5f20300ba5981aa75eb1",
-    "ProductArn": "arn:aws:securityhub:us-west-1:096302395721:product/096302395721/default",
-    "ProductFields":
-    {
-      "jfrog/xray/Policy": "slack_watch_test_bug",
-      "jfrog/xray/ViolationType": "security",
-      "jfrog/xray/Watch": "SlackTest"
-    },
-    "ProductName": "xray",
-    "Region": "us-west-1",
-    "Resources":
-    [
-      {
-        "Details":
-        {
-          "Other":
-          {
-            "DisplayName": "artifactory-fluentd:2.11.2",
-            "Name": "manifest.json",
-            "PackageType": "Docker",
-            "Path": "default/integrations/artifactory-fluentd/2.11.2/"
-          }
-        },
-        "Id": "10fd87ba58132673ac65ee8c11a01510509f93846bdb5f20300ba5981aa75eb1",
-        "Type": "Other"
-      }
-    ],
-    "SchemaVersion": "2018-10-08",
-    "SourceUrl": "https://artifactoryinstance.com/ui/watchesNew/edit/SlackTest?activeTab=violations",
-    "Title": "Bad dummy issue summary 0",
-    "UpdatedAt": "2021-04-08T04:02:38.999Z",
     "Vulnerabilities":
     [
       {
