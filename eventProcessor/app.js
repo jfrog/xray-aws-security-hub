@@ -27,10 +27,8 @@ const asyncLambdaInvoke = async (issuesChunks) => {
   console.log('IssueProcessor invoked', JSON.stringify(result));
 };
 
-export async function lambdaHandler(event, context) {
+export async function lambdaHandler(event) {
   const xrayEvent = JSON.parse(event.body);
-  console.log(JSON.stringify(event)); // testing where we can get the hostname
-  console.log(JSON.stringify(context)); // testing where we can get the hostname
   const hostName = event.headers['X-Forwarded-For'];
   try {
     const issues = createIssues(xrayEvent, hostName);
