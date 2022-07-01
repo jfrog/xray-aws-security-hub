@@ -9,6 +9,12 @@ const SEVERITY_LABEL_LOOKUP = {
   critical: 'CRITICAL',
 };
 
+const TYPES_LOOKUP = {
+  security: 'Software and Configuration Checks/Vulnerabilities/CVE',
+  license: 'Software and Configuration Checks/Licenses/Compliance',
+  'operational risk': 'Software and Configuration Checks/Operational Risk',
+};
+
 const region = process.env.AWS_REGION;
 
 const getSeverity = (severity) => ({
@@ -28,18 +34,6 @@ const getResources = (artifact) => ({
     },
   },
 });
-
-const getTypes = (type) => {
-  let types;
-  if (type === 'security') {
-    types = ['Software and Configuration Checks/Vulnerabilities/CVE'];
-  } else if (type === 'license') {
-    types = ['Software and Configuration Checks/Licenses/Compliance'];
-  } else if (type === 'operational risk') {
-    types = ['Software and Configuration Checks/Operational Risk'];
-  }
-  return types;
-};
 
 const getProductFields = (body, type) => ({
   'jfrog/xray/ViolationType': type,
@@ -84,7 +78,7 @@ const getResourcesFields = (prefix, artifact) => ({
 
 const getSeverityAndTypes = (body, type) => ({
   Severity: getSeverity(body.severity),
-  Types: getTypes(type),
+  Types: TYPES_LOOKUP[type.toLowerCase()],
 });
 
 const getFindingProviderFields = (body, type) => ({
