@@ -34,8 +34,6 @@ const formatResponse = (body) => {
 };
 
 const sendSQSmessage = async (event) => {
-  const messageResponses = [];
-
   const params = {
     QueueUrl: process.env.SQS_QUEUE_URL,
     Entries: [],
@@ -51,7 +49,7 @@ const sendSQSmessage = async (event) => {
     });
   }
   return await sqsClient.send(new SendMessageBatchCommand(params));
-}
+};
 
 export async function lambdaHandler(event) {
   let results;

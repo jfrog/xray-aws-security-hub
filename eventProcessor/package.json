@@ -1,14 +1,14 @@
 {
   "type": "module",
-  "name": "event_processor",
+  "name": "eventProcessor",
   "version": "1.0.0",
   "engines": {
     "node": ">=16.0.0"
   },
   "description": "Xray API call processor, NodeJS",
   "main": "app.js",
-  "repository": "https://github.com/awslabs/aws-sam-cli/tree/develop/samcli/local/init/templates/cookiecutter-aws-sam-hello-nodejs",
-  "author": "SAM CLI",
+  "repository": "https://git.jfrog.info/projects/PTRENG/repos/xray-aws-security-hub/browse/eventProcessor",
+  "author": "JFrog",
   "license": "MIT",
   "module": "app",
   "sourceType": "module",

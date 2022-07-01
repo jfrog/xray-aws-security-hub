@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "Xray Security Hub API Gateway Authorizer",
+  "name": "authorizer",
   "version": "1.0.0",
   "engines": {
     "node": ">=16.0.0"

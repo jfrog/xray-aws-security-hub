@@ -1,0 +1,442 @@
+[
+  {
+    "watch_name": "slack_watch_test_bug",
+    "policy_name": "slack_watch_test_bug",
+    "host_name": "165.225.242.111",
+    "created": "2021-09-16T20:54:59.332489963Z",
+    "severity": "High",
+    "type": "License",
+    "summary": "Unknown 0",
+    "description": "Unknown license 0",
+    "impacted_artifacts":
+    [
+      {
+        "name": "arborist-main.zip",
+        "display_name": "@npmcli/arborist:2.8.3",
+        "path": "default/npm-local/",
+        "pkg_type": "Npm",
+        "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "sha1": "",
+        "depth": 0,
+        "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "infected_files":
+        [
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          },
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "watch_name": "slack_watch_test_bug",
+    "policy_name": "slack_watch_test_bug",
+    "host_name": "165.225.242.111",
+    "created": "2021-09-16T20:54:59.332489963Z",
+    "severity": "Medium",
+    "type": "License",
+    "summary": "Unknown 1",
+    "description": "Unknown license 1",
+    "impacted_artifacts":
+    [
+      {
+        "name": "arborist-main.zip",
+        "display_name": "@npmcli/arborist:2.8.3",
+        "path": "default/npm-local/",
+        "pkg_type": "Npm",
+        "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "sha1": "",
+        "depth": 0,
+        "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "infected_files":
+        [
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          },
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "watch_name": "slack_watch_test_bug",
+    "policy_name": "slack_watch_test_bug",
+    "host_name": "165.225.242.111",
+    "created": "2021-09-16T20:54:59.332489963Z",
+    "severity": "Medium",
+    "type": "License",
+    "summary": "Unknown 2",
+    "description": "Unknown license 2",
+    "impacted_artifacts":
+    [
+      {
+        "name": "arborist-main.zip",
+        "display_name": "@npmcli/arborist:2.8.3",
+        "path": "default/npm-local/",
+        "pkg_type": "Npm",
+        "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "sha1": "",
+        "depth": 0,
+        "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "infected_files":
+        [
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          },
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "watch_name": "slack_watch_test_bug",
+    "policy_name": "slack_watch_test_bug",
+    "host_name": "165.225.242.111",
+    "created": "2021-09-16T20:54:59.332489963Z",
+    "severity": "Medium",
+    "type": "License",
+    "summary": "Unknown 3",
+    "description": "Unknown license 3",
+    "impacted_artifacts":
+    [
+      {
+        "name": "arborist-main.zip",
+        "display_name": "@npmcli/arborist:2.8.3",
+        "path": "default/npm-local/",
+        "pkg_type": "Npm",
+        "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "sha1": "",
+        "depth": 0,
+        "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "infected_files":
+        [
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          },
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "watch_name": "slack_watch_test_bug",
+    "policy_name": "slack_watch_test_bug",
+    "host_name": "165.225.242.111",
+    "created": "2021-09-16T20:54:59.332489963Z",
+    "severity": "Medium",
+    "type": "License",
+    "summary": "Unknown 4",
+    "description": "Unknown license 4",
+    "impacted_artifacts":
+    [
+      {
+        "name": "arborist-main.zip",
+        "display_name": "@npmcli/arborist:2.8.3",
+        "path": "default/npm-local/",
+        "pkg_type": "Npm",
+        "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "sha1": "",
+        "depth": 0,
+        "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "infected_files":
+        [
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          },
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "watch_name": "slack_watch_test_bug",
+    "policy_name": "slack_watch_test_bug",
+    "host_name": "165.225.242.111",
+    "created": "2021-09-16T20:54:59.332489963Z",
+    "severity": "Medium",
+    "type": "License",
+    "summary": "Unknown 5",
+    "description": "Unknown license 5",
+    "impacted_artifacts":
+    [
+      {
+        "name": "arborist-main.zip",
+        "display_name": "@npmcli/arborist:2.8.3",
+        "path": "default/npm-local/",
+        "pkg_type": "Npm",
+        "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "sha1": "",
+        "depth": 0,
+        "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "infected_files":
+        [
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          },
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "watch_name": "slack_watch_test_bug",
+    "policy_name": "slack_watch_test_bug",
+    "host_name": "165.225.242.111",
+    "created": "2021-09-16T20:54:59.332489963Z",
+    "severity": "Medium",
+    "type": "License",
+    "summary": "Unknown 6",
+    "description": "Unknown license 6",
+    "impacted_artifacts":
+    [
+      {
+        "name": "arborist-main.zip",
+        "display_name": "@npmcli/arborist:2.8.3",
+        "path": "default/npm-local/",
+        "pkg_type": "Npm",
+        "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "sha1": "",
+        "depth": 0,
+        "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "infected_files":
+        [
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          },
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "watch_name": "slack_watch_test_bug",
+    "policy_name": "slack_watch_test_bug",
+    "host_name": "165.225.242.111",
+    "created": "2021-09-16T20:54:59.332489963Z",
+    "severity": "Medium",
+    "type": "License",
+    "summary": "Unknown 7",
+    "description": "Unknown license 7",
+    "impacted_artifacts":
+    [
+      {
+        "name": "arborist-main.zip",
+        "display_name": "@npmcli/arborist:2.8.3",
+        "path": "default/npm-local/",
+        "pkg_type": "Npm",
+        "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "sha1": "",
+        "depth": 0,
+        "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "infected_files":
+        [
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          },
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "watch_name": "slack_watch_test_bug",
+    "policy_name": "slack_watch_test_bug",
+    "host_name": "165.225.242.111",
+    "created": "2021-09-16T20:54:59.332489963Z",
+    "severity": "Medium",
+    "type": "License",
+    "summary": "Unknown 8",
+    "description": "Unknown license 8",
+    "impacted_artifacts":
+    [
+      {
+        "name": "arborist-main.zip",
+        "display_name": "@npmcli/arborist:2.8.3",
+        "path": "default/npm-local/",
+        "pkg_type": "Npm",
+        "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "sha1": "",
+        "depth": 0,
+        "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "infected_files":
+        [
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          },
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "watch_name": "slack_watch_test_bug",
+    "policy_name": "slack_watch_test_bug",
+    "host_name": "165.225.242.111",
+    "created": "2021-09-16T20:54:59.332489963Z",
+    "severity": "Medium",
+    "type": "License",
+    "summary": "Unknown 9",
+    "description": "Unknown license 9",
+    "impacted_artifacts":
+    [
+      {
+        "name": "arborist-main.zip",
+        "display_name": "@npmcli/arborist:2.8.3",
+        "path": "default/npm-local/",
+        "pkg_type": "Npm",
+        "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "sha1": "",
+        "depth": 0,
+        "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+        "infected_files":
+        [
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          },
+          {
+            "name": "package.json",
+            "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
+            "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
+            "depth": 0,
+            "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+            "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
+            "pkg_type": "Npm"
+          }
+        ]
+      }
+    ]
+  }
+]
