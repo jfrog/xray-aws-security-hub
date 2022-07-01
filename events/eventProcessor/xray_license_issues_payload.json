@@ -57,10 +57,10 @@
           "display_name": "@npmcli/arborist:2.8.3",
           "path": "default/npm-local/",
           "pkg_type": "Npm",
-          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef01",
           "sha1": "",
           "depth": 0,
-          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef01",
           "infected_files":
           [
             {
@@ -97,10 +97,10 @@
           "display_name": "@npmcli/arborist:2.8.3",
           "path": "default/npm-local/",
           "pkg_type": "Npm",
-          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef02",
           "sha1": "",
           "depth": 0,
-          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef02",
           "infected_files":
           [
             {
@@ -108,7 +108,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef03",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             },
@@ -117,7 +117,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef03",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             }
@@ -137,10 +137,10 @@
           "display_name": "@npmcli/arborist:2.8.3",
           "path": "default/npm-local/",
           "pkg_type": "Npm",
-          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef04",
           "sha1": "",
           "depth": 0,
-          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef04",
           "infected_files":
           [
             {
@@ -148,7 +148,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef04",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             },
@@ -157,7 +157,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef04",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             }
@@ -177,10 +177,10 @@
           "display_name": "@npmcli/arborist:2.8.3",
           "path": "default/npm-local/",
           "pkg_type": "Npm",
-          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef05",
           "sha1": "",
           "depth": 0,
-          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef05",
           "infected_files":
           [
             {
@@ -188,7 +188,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef05",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             },
@@ -197,7 +197,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef05",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             }
@@ -217,10 +217,10 @@
           "display_name": "@npmcli/arborist:2.8.3",
           "path": "default/npm-local/",
           "pkg_type": "Npm",
-          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef66",
           "sha1": "",
           "depth": 0,
-          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef66",
           "infected_files":
           [
             {
@@ -228,7 +228,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef66",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             },
@@ -237,7 +237,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef66",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             }
@@ -257,10 +257,10 @@
           "display_name": "@npmcli/arborist:2.8.3",
           "path": "default/npm-local/",
           "pkg_type": "Npm",
-          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef07",
           "sha1": "",
           "depth": 0,
-          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef07",
           "infected_files":
           [
             {
@@ -268,7 +268,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef07",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             },
@@ -277,7 +277,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef07",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             }
@@ -297,10 +297,10 @@
           "display_name": "@npmcli/arborist:2.8.3",
           "path": "default/npm-local/",
           "pkg_type": "Npm",
-          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef08",
           "sha1": "",
           "depth": 0,
-          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef08",
           "infected_files":
           [
             {
@@ -308,7 +308,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef08",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             },
@@ -317,7 +317,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef08",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             }
@@ -337,10 +337,10 @@
           "display_name": "@npmcli/arborist:2.8.3",
           "path": "default/npm-local/",
           "pkg_type": "Npm",
-          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef09",
           "sha1": "",
           "depth": 0,
-          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef09",
           "infected_files":
           [
             {
@@ -348,7 +348,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef09",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             },
@@ -357,7 +357,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef09",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             }
@@ -377,10 +377,10 @@
           "display_name": "@npmcli/arborist:2.8.3",
           "path": "default/npm-local/",
           "pkg_type": "Npm",
-          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef10",
           "sha1": "",
           "depth": 0,
-          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef10",
           "infected_files":
           [
             {
@@ -388,7 +388,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef10",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             },
@@ -397,7 +397,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef11",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             }
@@ -417,10 +417,10 @@
           "display_name": "@npmcli/arborist:2.8.3",
           "path": "default/npm-local/",
           "pkg_type": "Npm",
-          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "sha256": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef12",
           "sha1": "",
           "depth": 0,
-          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+          "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef12",
           "infected_files":
           [
             {
@@ -428,7 +428,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/y/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b25042111111111111111",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef12",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             },
@@ -437,7 +437,7 @@
               "path": "arborist-main/test/fixtures/bundle-metadep-duplication/z/",
               "sha256": "000000000000000000000000850edb90069d91e997cd0b2504262222222222222",
               "depth": 0,
-              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef06",
+              "parent_sha": "61ecc1d5362cac99c2bde12b97b8ca40a0cc1409b2dcb0cec732e35f3f69ef12",
               "display_name": "@isaacs/bundle-metadep-duplication-y:1.0.0",
               "pkg_type": "Npm"
             }

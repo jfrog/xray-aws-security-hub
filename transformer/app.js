@@ -1,7 +1,6 @@
 import { SecurityHubClient, BatchImportFindingsCommand } from '@aws-sdk/client-securityhub';
 
 const hubClient = new SecurityHubClient();
-let response;
 
 const SEVERITY_LABEL_LOOKUP = {
   low: 'LOW',
@@ -30,26 +29,36 @@ const getResources = (artifact) => ({
   },
 });
 
-const getTypes = (type) => (type === 'security' ? ['Software and Configuration Checks/Vulnerabilities/CVE'] : ['Software and Configuration Checks/Vulnerabilities']);
+const getTypes = (type) => {
+  let types;
+  if (type === 'security') {
+    types = ['Software and Configuration Checks/Vulnerabilities/CVE'];
+  } else if (type === 'license') {
+    types = ['Software and Configuration Checks/Licenses/Compliance'];
+  } else if (type === 'operational risk') {
+    types = ['Software and Configuration Checks/Operational Risk'];
+  }
+  return types;
+};
 
-const productFields = (body, type) => ({
+const getProductFields = (body, type) => ({
   'jfrog/xray/ViolationType': type,
   'jfrog/xray/Watch': body.watch_name,
   'jfrog/xray/Policy': body.policy_name,
 });
 
-const vulnerablePackages = (infectedFiles) => infectedFiles.map((infectedFile) => ({
+const getVulnerablePackages = (infectedFiles) => infectedFiles.map((infectedFile) => ({
   Name: infectedFile.display_name,
   PackageManager: infectedFile.pkg_type,
 }));
 
-const vulnerabilities = (prefix, impactedArtifact) => ({
+const getVulnerabilities = (prefix, impactedArtifact) => ({
   Id: prefix,
-  VulnerablePackages: vulnerablePackages(impactedArtifact.infected_files),
+  VulnerablePackages: getVulnerablePackages(impactedArtifact.infected_files),
 });
 
 const getVulnerabilitiesFields = (prefix, artifact) => ({
-  Vulnerabilities: [vulnerabilities(prefix, artifact)],
+  Vulnerabilities: [getVulnerabilities(prefix, artifact)],
 });
 
 const getCommonFields = (body, type, accountId) => ({
@@ -64,7 +73,7 @@ const getCommonFields = (body, type, accountId) => ({
   Title: body.summary,
   UpdatedAt: body.created,
   CompanyName: 'jfrog',
-  ProductFields: productFields(body, type),
+  ProductFields: getProductFields(body, type),
   ProductName: 'xray',
 });
 
@@ -73,67 +82,49 @@ const getResourcesFields = (prefix, artifact) => ({
   Resources: [getResources(artifact)],
 });
 
-const findingProviderFields = (body, type) => ({
+const getSeverityAndTypes = (body, type) => ({
   Severity: getSeverity(body.severity),
   Types: getTypes(type),
 });
 
 const getFindingProviderFields = (body, type) => ({
-  FindingProviderFields: findingProviderFields(body, type),
+  FindingProviderFields: getSeverityAndTypes(body, type),
 });
 
 const getIdPrefix = (body, type) => (type === 'security' ? body.cve : body.summary);
 
 function transformIssue(body, type, accountId) {
-  const results = [];
-  for (const impactedArtifact of body.impacted_artifacts) {
+  return body.impacted_artifacts.map((impactedArtifact) => {
+    let result;
     const prefix = getIdPrefix(body, type);
-    const commonFields = getCommonFields(body, type, accountId);
-    const resourcesFields = getResourcesFields(prefix, impactedArtifact);
-    const findingProvider = getFindingProviderFields(body, type);
     if (type === 'security') {
-      const vulnerabilitiesFields = getVulnerabilitiesFields(prefix, impactedArtifact);
-      const result = {
-        ...commonFields,
-        ...resourcesFields,
-        ...findingProvider,
-        ...vulnerabilitiesFields,
+      console.log(`${type} issue`);
+      result = {
+        ...getCommonFields(body, type, accountId),
+        ...getResourcesFields(prefix, impactedArtifact),
+        ...getFindingProviderFields(body, type),
+        ...getVulnerabilitiesFields(prefix, impactedArtifact),
       };
-      results.push(result);
     } else {
-      const result = {
-        ...commonFields,
-        ...findingProvider,
-        ...resourcesFields,
+      console.log(`${type} issue`);
+      result = {
+        ...getCommonFields(body, type, accountId),
+        ...getResourcesFields(prefix, impactedArtifact),
+        ...getFindingProviderFields(body, type),
       };
-      results.push(result);
     }
-  }
-  return results;
+    return result;
+  });
 }
 
 export async function lambdaHandler(event, context) {
+  let response;
   try {
     const accountId = process.env.USE_DEV_ACCOUNT_ID === 'true' ? process.env.DEV_ACCOUNT_ID : context.invokedFunctionArn.split(':')[4];
     const parsedBody = JSON.parse(event.Records[0].body);
     let findings = [];
     const type = parsedBody.type.toLowerCase();
-    switch (type) {
-      case 'security':
-        findings = transformIssue(parsedBody, type, accountId);
-        console.log('Security issue');
-        break;
-      case 'license':
-        findings = transformIssue(parsedBody, type, accountId);
-        console.log('License issue');
-        break;
-      case 'operational risk':
-        findings = transformIssue(parsedBody, type, accountId);
-        console.log('Operational risk');
-        break;
-      default:
-        console.log(`Expected type field, got: ${parsedBody.type.toLowerCase()}`);
-    }
+    findings = transformIssue(parsedBody, type, accountId);
     console.log(`Findings to send to Hub: ${JSON.stringify(findings)}`);
     const hubResponse = await hubClient.send(new BatchImportFindingsCommand({ Findings: findings }));
     console.log(`Security Hub response: ${JSON.stringify(hubResponse)}`);
