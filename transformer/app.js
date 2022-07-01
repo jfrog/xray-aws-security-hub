@@ -1,4 +1,4 @@
-import { SecurityHubClient, BatchImportFindingsCommand } from '@aws-sdk/client-securityhub';
+import {BatchImportFindingsCommand, SecurityHubClient} from '@aws-sdk/client-securityhub';
 
 const hubClient = new SecurityHubClient();
 
@@ -89,25 +89,15 @@ const getIdPrefix = (body, type) => (type === 'security' ? body.cve : body.summa
 
 function transformIssue(body, type, accountId) {
   return body.impacted_artifacts.map((impactedArtifact) => {
-    let result;
     const prefix = getIdPrefix(body, type);
-    if (type === 'security') {
-      console.log(`${type} issue`);
-      result = {
-        ...getCommonFields(body, type, accountId),
-        ...getResourcesFields(prefix, impactedArtifact),
-        ...getFindingProviderFields(body, type),
-        ...getVulnerabilitiesFields(prefix, impactedArtifact),
-      };
-    } else {
-      console.log(`${type} issue`);
-      result = {
-        ...getCommonFields(body, type, accountId),
-        ...getResourcesFields(prefix, impactedArtifact),
-        ...getFindingProviderFields(body, type),
-      };
-    }
-    return result;
+    const vulnerabilitiesFields = type === 'security' ? getVulnerabilitiesFields(prefix, impactedArtifact) : null;
+    console.log(`${type} issue`);
+    return {
+      ...getCommonFields(body, type, accountId),
+      ...getResourcesFields(prefix, impactedArtifact),
+      ...getFindingProviderFields(body, type),
+      ...vulnerabilitiesFields,
+    };
   });
 }
 
