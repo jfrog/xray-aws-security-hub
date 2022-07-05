@@ -2,9 +2,12 @@
 
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
 
-- hello-world - Code for the application's Lambda function.
-- events - Invocation events that you can use to invoke the function.
-- hello-world/tests - Unit tests for the application code.
+- authorizer - Code for the application's Lambda function for API Gateway authorizer.
+- eventProcessor - Code for the application's Lambda function for processing Xray webhook event.
+- issueProcessor - Code for the application's Lambda function for processing Xray webhook issues in each event.
+- transformer - Code for the application's Lambda function for transforming Xray webhook issue into ASFF finding and import them into Security Hub.
+- events - Invocation events that you can use to invoke the functions.
+- envs - Environment variable files for testing the functions.
 - template.yaml - A template that defines the application's AWS resources.
 
 The application uses several AWS resources, including Lambda functions and an API Gateway API. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
@@ -24,7 +27,7 @@ The AWS Toolkit is an open source plug-in for popular IDEs that uses the SAM CLI
 * [VS Code](https://docs.aws.amazon.com/toolkit-for-vscode/latest/userguide/welcome.html)
 * [Visual Studio](https://docs.aws.amazon.com/toolkit-for-visual-studio/latest/user-guide/welcome.html)
 
-## Deploy the sample application
+## Deploy the application
 
 The Serverless Application Model Command Line Interface (SAM CLI) is an extension of the AWS CLI that adds functionality for building and testing Lambda applications. It uses Docker to run your functions in an Amazon Linux environment that matches Lambda. It can also emulate your application's build environment and API.
 
@@ -56,39 +59,40 @@ You can find your API Gateway Endpoint URL in the output values displayed after 
 Build your application with the `sam build` command.
 
 ```bash
-xray-aws-security-hub$ sam build
+$ sam build
 ```
 
-The SAM CLI installs dependencies defined in `hello-world/package.json`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
+The SAM CLI installs dependencies defined in each Lambda's `package.json`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
 
 Test a single function by invoking it directly with a test event. An event is a JSON document that represents the input that the function receives from the event source. Test events are included in the `events` folder in this project.
 
-Run functions locally and invoke them with the `sam local invoke` command.
+Run functions locally and invoke them with the `sam local invoke` command. e.g.
 
 ```bash
-xray-aws-security-hub$ sam local invoke HelloWorldFunction --event events/event.json -n env.json
+$ sam local invoke eventProcessor --event events/eventProcessor/xray_security_issues_payload.json -n envs/test.json --region us-west-2
 ```
+
+The region must match the region for the SQS queue (defined in event json file).
 
 The SAM CLI can also emulate your application's API. Use the `sam local start-api` to run the API locally on port 3000.
 
 ```bash
-xray-aws-security-hub$ sam local start-api
-xray-aws-security-hub$ curl http://localhost:3000/
+$ sam local start-api
+$ curl http://localhost:3000/
 ```
 
 The SAM CLI reads the application template to determine the API's routes and the functions that they invoke. The `Events` property on each function's definition includes the route and method for each path.
 
 ```yaml
-      Events:
-        HelloWorld:
-          Type: Api
-          Properties:
-            Path: /hello
-            Method: get
+EventProcessorFunction:
+  Properties:
+    Events:
+      ProcessCallPayload:
+        Type: Api
+        Properties:
+          Path: /send
+          Method: post
 ```
-
-## Add a resource to your application
-The application template uses AWS Serverless Application Model (AWS SAM) to define application resources. AWS SAM is an extension of AWS CloudFormation with a simpler syntax for configuring common serverless application resources such as functions, triggers, and APIs. For resources not included in [the SAM specification](https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md), you can use standard [AWS CloudFormation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html) resource types.
 
 ## Fetch, tail, and filter Lambda function logs
 
@@ -97,20 +101,10 @@ To simplify troubleshooting, SAM CLI has a command called `sam logs`. `sam logs`
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
 ```bash
-xray-aws-security-hub$ sam logs -n HelloWorldFunction --stack-name xray-aws-security-hub --tail
+$ sam logs -n eventProcessor --stack-name xray-aws-security-hub --tail
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
-
-## Unit tests
-
-Tests are defined in the `hello-world/tests` folder in this project. Use NPM to install the [Mocha test framework](https://mochajs.org/) and run unit tests.
-
-```bash
-xray-aws-security-hub$ cd hello-world
-hello-world$ npm install
-hello-world$ npm run test
-```
 
 ## Cleanup
 

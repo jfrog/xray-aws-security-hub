@@ -26,7 +26,21 @@ Parameters:
     Description: Email address to notify of operational issues.
     Type: String
 
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: jfrog-xray-security-hub-integration
+    Description: JFrog Xray Security Hub integration
+    Author: JFrog
+    SpdxLicenseId: Apache-2.0
+    LicenseUrl: LICENSE.txt
+    ReadmeUrl: README.md
+    Labels: ['jfrog', 'xray', 'devops', 'security', 'license', 'operational risk']
+    HomePageUrl: https://github.com/jfrog/xray-aws-security-hub
+    SemanticVersion: 0.1.0
+    SourceCodeUrl: https://github.com/jfrog/xray-aws-security-hub
+
 Conditions:
+  IsDebugEnv: !Equals [!Ref 'DeploymentEnvironment', 'DEV']
   HasAuthToken: !Not [!Equals [!Ref 'ApiAuthToken', '']]
 
 Resources:
@@ -73,12 +87,13 @@ Resources:
               Header: Authorization
         DefaultAuthorizer: TokenAuthorizer
       MethodSettings:
-        - LoggingLevel: INFO
+        - DataTraceEnabled: !If [IsDebugEnv, True, False]
+          LoggingLevel: !If [IsDebugEnv, 'ERROR', 'INFO']
           ResourcePath: '/*' # allows for logging on any resource
           HttpMethod: '*' # allows for logging on any method
       Name: security-hub-api-dev
       StageName: !Ref DeploymentEnvironment
-      TracingEnabled: True
+      TracingEnabled: !If [IsDebugEnv, True, False]
 
   AuthorizerRole:
     Type: AWS::IAM::Role
