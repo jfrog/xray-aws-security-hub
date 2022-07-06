@@ -1,9 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: >
-  xray-aws-security-hub
-
-  Sample SAM Template for xray-aws-security-hub
+Description: SAM Template for xray-aws-security-hub
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -34,7 +31,7 @@ Metadata:
     SpdxLicenseId: Apache-2.0
     LicenseUrl: LICENSE.txt
     ReadmeUrl: README.md
-    Labels: ['jfrog', 'xray', 'devops', 'security', 'license', 'operational risk']
+    Labels: ['jfrog', 'xray', 'devops', 'security', 'license', 'operational_risk', 'serverless', 'securityhub']
     HomePageUrl: https://github.com/jfrog/xray-aws-security-hub
     SemanticVersion: 0.1.0
     SourceCodeUrl: https://github.com/jfrog/xray-aws-security-hub
@@ -51,6 +48,8 @@ Resources:
       Name: XraySecurityHubAuthToken
       SecretString: !Ref ApiAuthToken
       Tags:
+        - Key: App
+          Value: xray-aws-security-hub
         - Key: Environment
           Value: !Ref DeploymentEnvironment
 
@@ -73,6 +72,11 @@ Resources:
       Path: /
       ManagedPolicyArns:
         - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+      Tags:
+        - Key: App
+          Value: xray-aws-security-hub
+        - Key: Environment
+          Value: !Ref DeploymentEnvironment
 
   SecurityHubApi:
     Type: AWS::Serverless::Api
@@ -132,6 +136,11 @@ Resources:
                 Action:
                   - secretsmanager:ListSecrets
                 Resource: '*'
+      Tags:
+        - Key: App
+          Value: xray-aws-security-hub
+        - Key: Environment
+          Value: !Ref DeploymentEnvironment
 
   EventProcessorRole:
     Type: AWS::IAM::Role
@@ -165,6 +174,11 @@ Resources:
                   - lambda:InvokeFunction
                   - lambda:InvokeAsync
                 Resource: '*'
+      Tags:
+        - Key: App
+          Value: xray-aws-security-hub
+        - Key: Environment
+          Value: !Ref DeploymentEnvironment
 
   IssueProcessorRole:
     Type: AWS::IAM::Role
@@ -200,6 +214,11 @@ Resources:
                   - sqs:DeleteMessage
                   - sqs:GetQueueAttributes
                 Resource: !GetAtt XraySourceQueue.Arn
+      Tags:
+        - Key: App
+          Value: xray-aws-security-hub
+        - Key: Environment
+          Value: !Ref DeploymentEnvironment
 
   TransformerRole:
     Type: AWS::IAM::Role
@@ -246,6 +265,11 @@ Resources:
                   - securityhub:BatchImportFindings
                   - securityhub:BatchUpdateFindings
                 Resource: arn:aws:securityhub:*
+      Tags:
+        - Key: App
+          Value: xray-aws-security-hub
+        - Key: Environment
+          Value: !Ref DeploymentEnvironment
 
   AuthorizerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -260,6 +284,7 @@ Resources:
       Runtime: nodejs16.x
       Role: !GetAtt AuthorizerRole.Arn # access to secrets
       Tags:
+        App: xray-aws-security-hub
         Environment: !Ref DeploymentEnvironment
 
   EventProcessorFunction:
@@ -279,6 +304,9 @@ Resources:
             Method: post
             RestApiId:
               Ref: SecurityHubApi
+      Tags:
+        App: xray-aws-security-hub
+        Environment: !Ref DeploymentEnvironment
 
   IssueProcessorFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -292,6 +320,9 @@ Resources:
       Environment:
         Variables:
           SQS_QUEUE_URL: !Ref XraySourceQueue
+      Tags:
+        App: xray-aws-security-hub
+        Environment: !Ref DeploymentEnvironment
 
   TransformerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -312,6 +343,9 @@ Resources:
             Queue: !GetAtt XraySourceQueue.Arn
             BatchSize: 10
             Enabled: True
+      Tags:
+        App: xray-aws-security-hub
+        Environment: !Ref DeploymentEnvironment
 
   XraySourceQueue:
     Type: AWS::SQS::Queue
@@ -324,6 +358,11 @@ Resources:
       RedrivePolicy:
         deadLetterTargetArn: !GetAtt XrayDeadLetterQueue.Arn
         maxReceiveCount: 5
+      Tags:
+        - Key: App
+          Value: xray-aws-security-hub
+        - Key: Environment
+          Value: !Ref DeploymentEnvironment
 
   XrayDeadLetterQueue:
     Type: AWS::SQS::Queue
@@ -331,6 +370,11 @@ Resources:
       QueueName: DeadLetterQueue.fifo
       FifoQueue: True
       ContentBasedDeduplication: False
+      Tags:
+        - Key: App
+          Value: xray-aws-security-hub
+        - Key: Environment
+          Value: !Ref DeploymentEnvironment
 
   AlarmTopic:
     Type: AWS::SNS::Topic
@@ -339,6 +383,11 @@ Resources:
         - Endpoint:
             Ref: AlarmEmail
           Protocol: email
+      Tags:
+        - Key: App
+          Value: xray-aws-security-hub
+        - Key: Environment
+          Value: !Ref DeploymentEnvironment
 
   QueueDepthAlarm:
     Type: AWS::CloudWatch::Alarm
