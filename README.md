@@ -54,6 +54,16 @@ The first command will build the source of your application. The second command 
 
 You can find your API Gateway Endpoint URL in the output values displayed after deployment.
 
+## Package and Publish the application
+
+Use the SAM CLI to first package this application then [publish it to Serverless Application Repository](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-template-publishing-applications.html#serverless-sam-template-publishing-applications-prerequisites)
+
+```bash
+sam build
+sam package --output-template-file packaged.yaml --s3-bucket jfrog-xray-aws-security-hub --region us-west-1
+sam publish --template packaged.yaml --region us-west-1
+```
+
 ## Use the SAM CLI to build and test locally
 
 Build your application with the `sam build` command.

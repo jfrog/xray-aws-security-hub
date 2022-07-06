@@ -184,6 +184,9 @@ Temporary Items
 
 **/.aws-sam
 
+packaged.yaml
+samconfig.toml
+
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db
