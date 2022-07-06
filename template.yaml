@@ -53,11 +53,6 @@ Resources:
         - Key: Environment
           Value: !Ref DeploymentEnvironment
 
-  ApiGwAccountConfig:
-    Type: AWS::ApiGateway::Account
-    Properties:
-      CloudWatchRoleArn: !GetAtt ApiGatewayLoggingRole.Arn
-
   ApiGatewayLoggingRole:
     Type: AWS::IAM::Role
     Properties:
