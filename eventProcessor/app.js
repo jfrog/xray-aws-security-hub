@@ -29,7 +29,8 @@ const asyncLambdaInvoke = async (issuesChunks) => {
 
 export async function lambdaHandler(event) {
   const xrayEvent = JSON.parse(event.body);
-  const hostName = event.headers['X-Forwarded-For'];
+  console.debug(`Event body: ${event.body}`);
+  const hostName = event.headers.Hostname; // must be set as a custom header in Xray Webhook
   try {
     const issues = createIssues(xrayEvent, hostName);
     const issuesChunks = createIssuesChunks(issues);
