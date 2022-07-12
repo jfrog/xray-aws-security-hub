@@ -1,7 +1,9 @@
 {
   "AuthorizerFunction": {
-    "SECRET_ID": "XraySecurityHubAuthToken",
-    "HAS_AUTH_TOKEN": "false"
+    "HAS_AUTH_TOKEN": "true",
+    "MAX_LOG_LEVEL": "info",
+    "NODE_ENV": "development",
+    "SECRET_ID": "XraySecurityHubAuthToken"
   },
   "IssueProcessorFunction": {
     "SQS_QUEUE_URL": "https://sqs.us-west-2.amazonaws.com/096302395721/XraySourceQueue.fifo"
