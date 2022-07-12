@@ -1,0 +1,23 @@
+{
+  "type": "module",
+  "name": "xray-aws-security-hub",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "description": "JFrog Xray AWS Security Hub Integration",
+  "main": "app.js",
+  "repository": "https://git.jfrog.info/projects/PTRENG/repos/xray-aws-security-hub",
+  "author": "JFrog",
+  "license": "MIT",
+  "module": "app",
+  "sourceType": "module",
+  "devDependencies": {
+    "@babel/core": "^7.18.5",
+    "@babel/eslint-parser": "^7.18.2",
+    "eslint": "^8.17.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0"
+  }
+}
