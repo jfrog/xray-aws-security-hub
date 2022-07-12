@@ -4,17 +4,10 @@ import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
 
 const ddbClient = new DynamoDBClient();
 const hubClient = new SecurityHubClient();
-const marshallOptions = {
-  convertEmptyValues: false, // false, by default.
-  removeUndefinedValues: false, // false, by default.
-  convertClassInstanceToMap: false, // false, by default.
-};
 
-const unmarshallOptions = {
-  wrapNumbers: false, // false, by default.
+const translateConfig = {
+  convertEmptyValues: false, removeUndefinedValues: false, convertClassInstanceToMap: false, wrapNumbers: false,
 };
-
-const translateConfig = { marshallOptions, unmarshallOptions };
 
 const ddbDocClient = DynamoDBDocumentClient.from(ddbClient, translateConfig);
 
@@ -26,9 +19,9 @@ const SEVERITY_LABEL_LOOKUP = {
 };
 
 const TYPES_LOOKUP = {
-  security: ['Software and Configuration Checks/Vulnerabilities/CVE'],
-  license: ['Software and Configuration Checks/Licenses/Compliance'],
-  'operational risk': ['Software and Configuration Checks/Operational Risk'],
+  security: 'Software and Configuration Checks/Vulnerabilities/CVE',
+  license: 'Software and Configuration Checks/Licenses/Compliance',
+  'operational risk': 'Software and Configuration Checks/Operational Risk',
 };
 
 const region = process.env.AWS_REGION;
@@ -94,7 +87,7 @@ const getResourcesFields = (prefix, artifact) => ({
 
 const getSeverityAndTypes = (body, type) => ({
   Severity: getSeverity(body.severity),
-  Types: TYPES_LOOKUP[type.toLowerCase()],
+  Types: [TYPES_LOOKUP[type.toLowerCase()]],
 });
 
 const getFindingProviderFields = (body, type) => ({
@@ -103,16 +96,16 @@ const getFindingProviderFields = (body, type) => ({
 
 const getIdPrefix = (body, type) => (type === 'security' && body.cve ? body.cve : body.summary);
 
-function transformIssue(body, accountId) {
-  const type = body.type.toLowerCase();
-  return body.impacted_artifacts.map((impactedArtifact) => {
-    const prefix = getIdPrefix(body, type);
+function transformIssue(issue, accountId) {
+  const type = issue.type.toLowerCase();
+  return issue.impacted_artifacts.map((impactedArtifact) => {
+    const prefix = getIdPrefix(issue, type);
     const vulnerabilitiesFields = type === 'security' ? getVulnerabilitiesFields(prefix, impactedArtifact) : null;
     console.log(`${type} issue`);
     return {
-      ...getCommonFields(body, type, accountId),
+      ...getCommonFields(issue, type, accountId),
       ...getResourcesFields(prefix, impactedArtifact),
-      ...getFindingProviderFields(body, type),
+      ...getFindingProviderFields(issue, type),
       ...vulnerabilitiesFields,
     };
   });
@@ -128,11 +121,11 @@ const generateUpdatePayload = (existingFindingsToUpdate) => existingFindingsToUp
   },
 }));
 
-const writeParams = (id, timestamp) => ({
+const writeParams = (id) => ({
   TableName: 'xray-findings',
   Item: {
     ID: id,
-    TIMESTAMP: timestamp,
+    TIMESTAMP: new Date().getTime().toString(),
   },
 });
 
@@ -140,22 +133,21 @@ const writeFindingsToDB = async (findingsCollection) => {
   const promises = [];
   findingsCollection.map(async (finding) => {
     const id = finding.Id;
-    const timestamp = new Date().getTime().toString();
     try {
-      promises.push(ddbClient.send(new PutCommand(writeParams(id, timestamp))));
+      promises.push(ddbClient.send(new PutCommand(writeParams(id))));
       console.log(`Writing ID to DB: ${finding.Id}`);
     } catch (err) {
-      console.error(err);
+      console.error(`Error when writing to DB: ${err}`);
     }
   });
   const results = await Promise.allSettled(promises);
   const resultsFulfilled = results.filter((result) => (result.status === 'fulfilled')).map((result) => result.status);
-  const resultsFailed = results.filter((result) => (result.status !== 'fulfilled')).map((result) => result.message);
+  const resultsFailed = results.filter((result) => (result.status === 'rejected')).map((result) => result.message);
   return {
     SuccessCount: resultsFulfilled.length,
     SuccessfulRecords: resultsFulfilled,
-    FailedRecords: resultsFailed.length,
-    FailedCount: resultsFailed,
+    FailedCount: resultsFailed.length,
+    FailedRecords: resultsFailed,
   };
 };
 
@@ -183,13 +175,13 @@ const sendUpdateCommand = async (updateBody) => {
   const results = await Promise.allSettled(promises);
   console.debug(`Unfiltered results (promises): ${JSON.stringify(results)}`);
   const resultsFulfilled = results.filter((result) => (result.status === 'fulfilled')).map((result) => result.value.ProcessedFindings);
-  const resultsFailed = results.filter((result) => (result.status !== 'fulfilled')).map((result) => result.value.ProcessedFindings);
+  const resultsFailed = results.filter((result) => (result.status === 'rejected')).map((result) => result.value.ProcessedFindings);
   console.debug(`resultsFulfilled: ${JSON.stringify(resultsFulfilled)}`);
   return {
     SuccessCount: resultsFulfilled.length,
     SuccessfulFindings: resultsFulfilled,
-    FailedFindings: resultsFailed.length,
-    FailedCount: resultsFailed,
+    FailedCount: resultsFailed.length,
+    FailedFindings: resultsFailed,
   };
 };
 
@@ -199,20 +191,27 @@ export async function lambdaHandler(event, context) {
   try {
     const accountId = process.env.USE_DEV_ACCOUNT_ID === 'true' ? process.env.DEV_ACCOUNT_ID : context.invokedFunctionArn.split(':')[4];
     const findingsCollection = event.Records.map((sqsEvent) => {
-      const parsedBody = JSON.parse(sqsEvent.body);
-      return transformIssue(parsedBody, accountId);
-    });
-    console.debug(`Complete findings list: ${JSON.stringify(findingsCollection.flat())}`);
-    const completeIdsCollection = findingsCollection.flat().map((finding) => finding.Id);
+      const issue = JSON.parse(sqsEvent.body);
+      return transformIssue(issue, accountId);
+    }).flat();
+
+    console.debug(`Complete findings list: ${JSON.stringify(findingsCollection)}`);
+
+    const completeIdsCollection = findingsCollection.map((finding) => finding.Id);
     console.debug(`Unfiltered finding IDs collection: ${JSON.stringify(completeIdsCollection)}`);
+
     const existingFindingIDsInDB = await verifyFindingIds(completeIdsCollection);
     console.debug(`Existing finding IDs in the DB: ${JSON.stringify(existingFindingIDsInDB)}`);
+
     const newFindingIDs = completeIdsCollection.filter((id) => !existingFindingIDsInDB.includes(id));
     console.debug(`New findings to import (IDs only): ${JSON.stringify(newFindingIDs)}`);
-    const existingFindingsToUpdate = findingsCollection.flat().filter((item) => existingFindingIDsInDB.includes(item.Id));
-    const newFindingsToImport = findingsCollection.flat().filter((item) => !existingFindingIDsInDB.includes(item.Id));
+
+    const existingFindingsToUpdate = findingsCollection.filter((item) => existingFindingIDsInDB.includes(item.Id));
     console.debug(`Findings to update: ${JSON.stringify(existingFindingsToUpdate)}`);
+
+    const newFindingsToImport = findingsCollection.filter((item) => !existingFindingIDsInDB.includes(item.Id));
     console.debug(`Findings to import: ${JSON.stringify(newFindingsToImport)}`);
+
     let hubUpdateResponse;
     if (existingFindingsToUpdate.length > 0) {
       const updateFindingsPayload = generateUpdatePayload(existingFindingsToUpdate);
