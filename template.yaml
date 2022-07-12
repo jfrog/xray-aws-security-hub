@@ -292,6 +292,7 @@ Resources:
       Environment:
         Variables:
           HAS_AUTH_TOKEN: !If [HasAuthToken, 'true', 'false']
+          MAX_LOG_LEVEL: !If [IsDebugEnv, 'debug', 'info']
           NODE_ENV: !If [IsDebugEnv, 'development', 'production']
           SECRET_ID: XraySecurityHubAuthToken
       FunctionName: authorizer
@@ -353,9 +354,9 @@ Resources:
       Role: !GetAtt TransformerRole.Arn # access to SQS, sec hub, logs
       Environment:
         Variables:
+          USE_DEV_ACCOUNT_ID: 'false'
           DEV_ACCOUNT_ID: ''
           NODE_ENV: !If [IsDebugEnv, 'development', 'production']
-          USE_DEV_ACCOUNT_ID: 'false'
       Events: # Initiated by the message in SQS queue
         TransformCallPayload:
           Type: SQS # More info https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#sqs
