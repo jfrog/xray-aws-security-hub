@@ -26,7 +26,6 @@ module.exports = {
         'max-classes-per-file': 'off',
         'max-len': 'off', // allow code to have an unlimited length
         'newline-per-chained-call': 'off', // method chaining for the win!
-        'no-console': 'off',
         'no-plusplus': 'off',
         'no-return-await': 'off', // While technically redundant, 'return await' helps to indicate the presence of an async function, and can be necessary to catch errors in the right place.
         'no-underscore-dangle': 'off', // some people like to denote a private variable using _ as the start of the name

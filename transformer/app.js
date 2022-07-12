@@ -1,6 +1,9 @@
 import { BatchImportFindingsCommand, BatchUpdateFindingsCommand, SecurityHubClient } from '@aws-sdk/client-securityhub';
 import { PutCommand, DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
+import { getLogger } from './logger.js'; // eslint-disable-line import/extensions
+
+const logger = getLogger();
 
 const ddbClient = new DynamoDBClient();
 const hubClient = new SecurityHubClient();
@@ -104,7 +107,7 @@ function transformIssue(issue, accountId) {
   return issue.impacted_artifacts.map((impactedArtifact) => {
     const prefix = getIdPrefix(issue, type);
     const vulnerabilitiesFields = type === 'security' ? getVulnerabilitiesFields(prefix, impactedArtifact) : null;
-    console.log(`${type} issue`);
+    logger.debug(`${type} issue`);
     return {
       ...getCommonFields(issue, type, accountId),
       ...getResourcesFields(prefix, impactedArtifact),
@@ -138,9 +141,9 @@ const writeFindingsToDB = async (findingsCollection) => {
     const id = finding.Id;
     try {
       promises.push(ddbClient.send(new PutCommand(writeParams(id))));
-      console.log(`Writing ID to DB: ${finding.Id}`);
+      logger.debug(`Writing ID to DB: ${finding.Id}`);
     } catch (err) {
-      console.error(`Error when writing to DB: ${err}`);
+      logger.error(`Error when writing to DB: ${err}`);
     }
   });
   const results = await Promise.allSettled(promises);
@@ -168,7 +171,7 @@ const verifyFindingIds = async (ids) => {
   const promises = ids.map((id) => ddbDocClient.send(new QueryCommand(queryParams(id))));
   const results = await Promise.allSettled(promises);
   return results.filter((result) => (result.status === 'fulfilled' && result.value.Count > 0)).map((result) => {
-    console.debug(JSON.stringify(result.value.Items[0].ID.S));
+    logger.debug(JSON.stringify(result.value.Items[0].ID.S));
     return result.value.Items[0].ID.S;
   });
 };
@@ -176,10 +179,10 @@ const verifyFindingIds = async (ids) => {
 const sendUpdateCommand = async (updateBody) => {
   const promises = updateBody.map((body) => hubClient.send(new BatchUpdateFindingsCommand(body)));
   const results = await Promise.allSettled(promises);
-  console.debug(`Unfiltered results (promises): ${JSON.stringify(results)}`);
+  logger.debug(`Unfiltered results (promises): ${JSON.stringify(results)}`);
   const resultsFulfilled = results.filter((result) => (result.status === 'fulfilled')).map((result) => result.value.ProcessedFindings);
   const resultsFailed = results.filter((result) => (result.status === 'rejected')).map((result) => result.value.ProcessedFindings);
-  console.debug(`resultsFulfilled: ${JSON.stringify(resultsFulfilled)}`);
+  logger.debug(`resultsFulfilled: ${JSON.stringify(resultsFulfilled)}`);
   return {
     SuccessCount: resultsFulfilled.length,
     SuccessfulFindings: resultsFulfilled,
@@ -190,7 +193,7 @@ const sendUpdateCommand = async (updateBody) => {
 
 export async function lambdaHandler(event, context) {
   let response;
-  console.debug(`Lambda triggered by SQS message: ${JSON.stringify(event)}`);
+  logger.debug(`Lambda triggered by SQS message: ${JSON.stringify(event)}`);
   try {
     const accountId = process.env.USE_DEV_ACCOUNT_ID === 'true' ? process.env.DEV_ACCOUNT_ID : context.invokedFunctionArn.split(':')[4];
     const findingsCollection = event.Records.map((sqsEvent) => {
@@ -198,36 +201,36 @@ export async function lambdaHandler(event, context) {
       return transformIssue(issue, accountId);
     }).flat();
 
-    console.debug(`Complete findings list: ${JSON.stringify(findingsCollection)}`);
+    logger.debug(`Complete findings list: ${JSON.stringify(findingsCollection)}`);
 
     const completeIdsCollection = findingsCollection.map((finding) => finding.Id);
-    console.debug(`Unfiltered finding IDs collection: ${JSON.stringify(completeIdsCollection)}`);
+    logger.debug(`Unfiltered finding IDs collection: ${JSON.stringify(completeIdsCollection)}`);
 
     const existingFindingIDsInDB = await verifyFindingIds(completeIdsCollection);
-    console.debug(`Existing finding IDs in the DB: ${JSON.stringify(existingFindingIDsInDB)}`);
+    logger.debug(`Existing finding IDs in the DB: ${JSON.stringify(existingFindingIDsInDB)}`);
 
     const newFindingIDs = completeIdsCollection.filter((id) => !existingFindingIDsInDB.includes(id));
-    console.debug(`New findings to import (IDs only): ${JSON.stringify(newFindingIDs)}`);
+    logger.debug(`New findings to import (IDs only): ${JSON.stringify(newFindingIDs)}`);
 
     const existingFindingsToUpdate = findingsCollection.filter((item) => existingFindingIDsInDB.includes(item.Id));
-    console.debug(`Findings to update: ${JSON.stringify(existingFindingsToUpdate)}`);
+    logger.debug(`Findings to update: ${JSON.stringify(existingFindingsToUpdate)}`);
 
     const newFindingsToImport = findingsCollection.filter((item) => !existingFindingIDsInDB.includes(item.Id));
-    console.debug(`Findings to import: ${JSON.stringify(newFindingsToImport)}`);
+    logger.debug(`Findings to import: ${JSON.stringify(newFindingsToImport)}`);
 
     let hubUpdateResponse;
     if (existingFindingsToUpdate.length > 0) {
       const updateFindingsPayload = generateUpdatePayload(existingFindingsToUpdate);
-      console.debug(`Update payload: ${JSON.stringify(updateFindingsPayload)}`);
+      logger.debug(`Update payload: ${JSON.stringify(updateFindingsPayload)}`);
       hubUpdateResponse = await sendUpdateCommand(updateFindingsPayload);
-      console.debug(`Security Hub update response: ${JSON.stringify(hubUpdateResponse)}`);
+      logger.debug(`Security Hub update response: ${JSON.stringify(hubUpdateResponse)}`);
     }
     let hubImportResponse;
     if (newFindingsToImport.length > 0) {
       hubImportResponse = await hubClient.send(new BatchImportFindingsCommand({ Findings: newFindingsToImport }));
       const dbResponse = await writeFindingsToDB(newFindingsToImport);
-      console.debug(`DB response: ${JSON.stringify(dbResponse)}`);
-      console.debug(`Security Hub import response: ${JSON.stringify(hubImportResponse)}`);
+      logger.debug(`DB response: ${JSON.stringify(dbResponse)}`);
+      logger.debug(`Security Hub import response: ${JSON.stringify(hubImportResponse)}`);
     }
 
     response = {
