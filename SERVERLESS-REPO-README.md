@@ -3,7 +3,7 @@
 This application listens for JFrog Xray event, transforms Xray issues into security findings, and sends them to AWS Security Hub.
 
 The following parameters can be customized for your need:
-- **DeploymentEnvironment** - an optional field to specify deployment environment (e.g. DEV, STAGE, or PROD). 'DEV' will enable additional logging to CloudWatch. Default to 'DEV'.
+- **DeploymentEnvironment** - an optional field to specify deployment environment (e.g. dev, stage, or prod). Default to 'prod'. 'dev' should only be used for development purpose and will enable additional logging to CloudWatch. 
 - **ApiAuthToken** - an optional field for providing additional security between Xray and this application. When set, the value will be stored in Secret Manager and used to verify Xray webhook requests. This value needs to be set as custom HTTP Authorization header in Xray webhook (see below). If not set, no authentication will be performed.
 - **NotificationEmail** - an optional field for email address. When set, an alert email notification will be sent to this address when the Xray Dead Letter Queue has more than 10 messages.
 

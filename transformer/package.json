@@ -4,12 +4,11 @@
   "version": "1.0.0",
   "description": "Transformer function for AWS Security Hub findings",
   "main": "app.js",
-  "repository": "https://git.jfrog.info/projects/PTRENG/repos/xray-aws-security-hub/browse/transformer",
+  "repository": "https://github.com/jfrog/xray-aws-security-hub/tree/main/transformer",
   "author": "JFrog",
   "license": "MIT",
   "dependencies": {
-    "@aws-sdk/client-securityhub": "^3.118.1",
-    "axios": ">=0.21.1"
+    "@aws-sdk/client-securityhub": "^3.118.1"
   },
   "scripts": {
     "test": "mocha tests/unit"
