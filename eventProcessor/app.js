@@ -1,6 +1,9 @@
 import _ from 'lodash';
 import { Lambda, InvokeCommand } from '@aws-sdk/client-lambda';
 import { fromUtf8 } from '@aws-sdk/util-utf8-node';
+import { getLogger } from './logger.js'; // eslint-disable-line import/extensions
+
+const logger = getLogger();
 
 const lambda = new Lambda({});
 let response;
@@ -17,14 +20,13 @@ function createIssuesChunks(issues) {
   return _.chunk(issues, 10);
 }
 
-const asyncLambdaInvoke = async (issuesChunks) => {
+const lambdaInvoke = (issuesChunks) => {
   const command = new InvokeCommand({
     FunctionName: 'IssueProcessor',
     InvocationType: 'Event',
     Payload: fromUtf8(JSON.stringify(issuesChunks)),
   });
-  const result = await lambda.send(command);
-  console.log('IssueProcessor invoked', JSON.stringify(result));
+  return lambda.send(command);
 };
 
 export async function lambdaHandler(event) {
@@ -37,12 +39,10 @@ export async function lambdaHandler(event) {
   try {
     const issues = createIssues(xrayEvent, hostName);
     const issuesChunks = createIssuesChunks(issues);
-    console.log(JSON.stringify(issuesChunks));
-    const promises = [];
-    for (const chunk of issuesChunks) {
-      promises.push(asyncLambdaInvoke(chunk));
-    }
-    await Promise.allSettled(promises);
+    logger.debug(JSON.stringify(issuesChunks));
+    const promises = issuesChunks.map((chunk) => lambdaInvoke(chunk));
+    const results = await Promise.allSettled(promises);
+    logger.debug('IssueProcessor invoked', JSON.stringify(results));
 
     response = {
       statusCode: 202,
