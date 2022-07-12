@@ -7,7 +7,7 @@
   },
   "description": "Transformer function for AWS Security Hub findings",
   "main": "app.js",
-  "repository": "https://git.jfrog.info/projects/PTRENG/repos/xray-aws-security-hub/browse/transformer",
+  "repository": "https://github.com/jfrog/xray-aws-security-hub/tree/main/transformer",
   "author": "JFrog",
   "license": "MIT",
   "dependencies": {

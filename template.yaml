@@ -9,18 +9,22 @@ Globals:
 
 Parameters:
   DeploymentEnvironment:
-    Default: DEV
-    Description: Deployment environment for the app (e.g. DEV, STAGING, PROD)
+    Default: prod
+    Description: Deployment environment for the app (e.g. dev, stage, prod). 'dev' should only be used for development purpose and will enable additional logging to CloudWatch.
+    AllowedValues:
+      - dev
+      - stage
+      - prod
     Type: String
 
   ApiAuthToken:
-    Description: Authentication token for API endpoint. This will be stored in Secrets Manager. No requirements are applied to this token but we encourage you to apply good security practices. Leave blank to not use any authentication.
+    Description: Authentication token for API endpoint. This will be stored in Secrets Manager. No requirements are applied to this token but we encourage you to apply good security practices. Leave blank to not use any authentication. When set, the value will be stored in Secret Manager and used to verify Xray webhook requests. This value needs to be set as custom HTTP Authorization header in Xray webhook (see below).
     NoEcho: True
     Type: String
 
   NotificationEmail:
     Default: jane.doe@example.com
-    Description: Email address to notify of operational issues.
+    Description: Email address to notify of operational issues. When set, an alert email notification will be sent to this address when the Xray Dead Letter Queue has more than 10 messages.
     Type: String
 
 Metadata:
@@ -33,11 +37,11 @@ Metadata:
     ReadmeUrl: SERVERLESS-REPO-README.md
     Labels: ['jfrog', 'xray', 'devops', 'security', 'license', 'operational_risk', 'serverless', 'securityhub']
     HomePageUrl: https://github.com/jfrog/xray-aws-security-hub
-    SemanticVersion: 0.1.0
+    SemanticVersion: 1.0.0
     SourceCodeUrl: https://github.com/jfrog/xray-aws-security-hub
 
 Conditions:
-  IsDebugEnv: !Equals [!Ref 'DeploymentEnvironment', 'DEV']
+  IsDebugEnv: !Equals [!Ref 'DeploymentEnvironment', 'dev']
   HasAuthToken: !Not [!Equals [!Ref 'ApiAuthToken', '']]
   HasNotificationEmail: !Not [!Equals [!Ref 'NotificationEmail', '']]
 
@@ -283,11 +287,13 @@ Resources:
   AuthorizerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
+      FunctionName: Authorizer
       CodeUri: authorizer/
       Environment:
         Variables:
-          SECRET_ID: XraySecurityHubAuthToken
           HAS_AUTH_TOKEN: !If [HasAuthToken, 'true', 'false']
+          NODE_ENV: !If [IsDebugEnv, 'development', 'production']
+          SECRET_ID: XraySecurityHubAuthToken
       FunctionName: authorizer
       Handler: app.handler
       Runtime: nodejs16.x
@@ -302,6 +308,9 @@ Resources:
       Description: "Processes Xray payload as an event, splits the list of issues on chunks of 10 issues and invokes IssueProcessor Lambda."
       FunctionName: EventProcessor
       CodeUri: eventProcessor/
+      Environment:
+        Variables:
+          NODE_ENV: !If [IsDebugEnv, 'development', 'production']
       Handler: app.lambdaHandler
       Runtime: nodejs16.x
       Role: !GetAtt EventProcessorRole.Arn # access to lambda, logs
@@ -328,6 +337,7 @@ Resources:
       Role: !GetAtt IssueProcessorRole.Arn # access to SQS, logs
       Environment:
         Variables:
+          NODE_ENV: !If [IsDebugEnv, 'development', 'production']
           SQS_QUEUE_URL: !Ref XraySourceQueue
       Tags:
         App: xray-aws-security-hub
@@ -343,8 +353,9 @@ Resources:
       Role: !GetAtt TransformerRole.Arn # access to SQS, sec hub, logs
       Environment:
         Variables:
-          USE_DEV_ACCOUNT_ID: 'false'
           DEV_ACCOUNT_ID: ''
+          NODE_ENV: !If [IsDebugEnv, 'development', 'production']
+          USE_DEV_ACCOUNT_ID: 'false'
       Events: # Initiated by the message in SQS queue
         TransformCallPayload:
           Type: SQS # More info https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#sqs
