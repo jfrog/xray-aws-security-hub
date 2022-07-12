@@ -5,9 +5,9 @@
   "engines": {
     "node": ">=16.0.0"
   },
-  "description": "Xray API call processor, NodeJS",
+  "description": "Xray webhook event processor",
   "main": "app.js",
-  "repository": "https://git.jfrog.info/projects/PTRENG/repos/xray-aws-security-hub/browse/eventProcessor",
+  "repository": "https://github.com/jfrog/xray-aws-security-hub/tree/main/eventProcessor",
   "author": "JFrog",
   "license": "MIT",
   "module": "app",
@@ -15,7 +15,6 @@
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.110.0",
     "@aws-sdk/util-utf8-node": "^3.109.0",
-    "aws-sdk": "^2.1152.0",
     "lodash": "^4.17.21",
     "uuid": "^8.3.2"
   },
