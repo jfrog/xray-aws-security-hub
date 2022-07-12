@@ -6,7 +6,10 @@ const ddbClient = new DynamoDBClient();
 const hubClient = new SecurityHubClient();
 
 const translateConfig = {
-  convertEmptyValues: false, removeUndefinedValues: false, convertClassInstanceToMap: false, wrapNumbers: false,
+  convertEmptyValues: false,
+  removeUndefinedValues: false,
+  convertClassInstanceToMap: false,
+  wrapNumbers: false,
 };
 
 const ddbDocClient = DynamoDBDocumentClient.from(ddbClient, translateConfig);
