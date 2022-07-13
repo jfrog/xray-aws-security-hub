@@ -8,7 +8,7 @@
     {
       "severity": "High",
       "type": "License",
-      "summary": "Unknown 0",
+      "summary": "License issue 0License issue 0License issue 0License issue 0License issue 0License issue 0License issue 0License issue 0License issue 0License issue 0License issue 0License issue 0License issue 0License issue 0License issue 0License issue 0License issue 0License issue 0",
       "description": "Unknown license 0",
       "impacted_artifacts":
       [
@@ -48,7 +48,7 @@
     {
       "severity": "Medium",
       "type": "License",
-      "summary": "Unknown 1",
+      "summary": "License issue 1",
       "description": "Unknown license 1",
       "impacted_artifacts":
       [
@@ -88,7 +88,7 @@
     {
       "severity": "Medium",
       "type": "License",
-      "summary": "Unknown 2",
+      "summary": "License issue 2",
       "description": "Unknown license 2",
       "impacted_artifacts":
       [
@@ -128,7 +128,7 @@
     {
       "severity": "Medium",
       "type": "License",
-      "summary": "Unknown 3",
+      "summary": "License issue 3",
       "description": "Unknown license 3",
       "impacted_artifacts":
       [
@@ -168,7 +168,7 @@
     {
       "severity": "Medium",
       "type": "License",
-      "summary": "Unknown 4",
+      "summary": "License issue 4",
       "description": "Unknown license 4",
       "impacted_artifacts":
       [
@@ -208,7 +208,7 @@
     {
       "severity": "Medium",
       "type": "License",
-      "summary": "Unknown 5",
+      "summary": "License issue 5",
       "description": "Unknown license 5",
       "impacted_artifacts":
       [
@@ -248,7 +248,7 @@
     {
       "severity": "Medium",
       "type": "License",
-      "summary": "Unknown 6",
+      "summary": "License issue 6",
       "description": "Unknown license 6",
       "impacted_artifacts":
       [
@@ -288,7 +288,7 @@
     {
       "severity": "Medium",
       "type": "License",
-      "summary": "Unknown 7",
+      "summary": "License issue 7",
       "description": "Unknown license 7",
       "impacted_artifacts":
       [
@@ -328,7 +328,7 @@
     {
       "severity": "Medium",
       "type": "License",
-      "summary": "Unknown 8",
+      "summary": "License issue 8",
       "description": "Unknown license 8",
       "impacted_artifacts":
       [
@@ -368,7 +368,7 @@
     {
       "severity": "Medium",
       "type": "License",
-      "summary": "Unknown 9",
+      "summary": "License issue 9",
       "description": "Unknown license 9",
       "impacted_artifacts":
       [
@@ -408,7 +408,7 @@
     {
       "severity": "Medium",
       "type": "License",
-      "summary": "Unknown 10",
+      "summary": "License issue 10",
       "description": "Unknown license 10",
       "impacted_artifacts":
       [

@@ -5,7 +5,7 @@ Description: SAM Template for xray-aws-security-hub
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 15
+    Timeout: 20
 
 Parameters:
   DeploymentEnvironment:
@@ -57,6 +57,11 @@ Resources:
           Value: xray-aws-security-hub
         - Key: Environment
           Value: !Ref DeploymentEnvironment
+
+  ApiGwAccountConfig:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn: !GetAtt ApiGatewayLoggingRole.Arn
 
   ApiGatewayLoggingRole:
     Type: AWS::IAM::Role
@@ -265,6 +270,14 @@ Resources:
                   - securityhub:BatchImportFindings
                   - securityhub:BatchUpdateFindings
                 Resource: arn:aws:securityhub:*
+        - PolicyName: dynamoDB
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                  - dynamodb:Query
+                Resource: !GetAtt DynamoDBTable.Arn
       Tags:
         - Key: App
           Value: xray-aws-security-hub
@@ -416,6 +429,28 @@ Resources:
         - Ref: AlarmTopic
       InsufficientDataActions:
         - Ref: AlarmTopic
+
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    Properties:
+      TableName: xray-findings
+      AttributeDefinitions:
+        - AttributeName: ID
+          AttributeType: S
+        - AttributeName: TIMESTAMP
+          AttributeType: S
+      KeySchema:
+        - AttributeName: ID
+          KeyType: HASH
+        - AttributeName: TIMESTAMP
+          KeyType: RANGE
+      BillingMode: PAY_PER_REQUEST
+      Tags:
+        - Key: App
+          Value: xray-aws-security-hub
+        - Key: Environment
+          Value: !Ref DeploymentEnvironment
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
