@@ -56,7 +56,19 @@ You can find your API Gateway Endpoint URL in the output values displayed after 
 
 ## Package and Publish the application
 
-Use the SAM CLI to first package this application then [publish it to Serverless Application Repository](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-template-publishing-applications.html#serverless-sam-template-publishing-applications-prerequisites)
+Create a new S3 bucket (`jfrog-xray-aws-security-hub`) to store the SAM build artifact:
+
+```bash
+aws cloudformation create-stack --stack-name xray-aws-security-hub-bucket --template-body file://cfts/serverless-application-repository-s3.yml --region us-west-1
+```
+
+You can use `--parameters` option to override the S3 bucket name:
+
+```bash
+aws cloudformation create-stack --stack-name xray-aws-security-hub-bucket --template-body file://cfts/serverless-application-repository-s3.yml --region us-west-1 --parameters ParameterKey=S3BucketName,ParameterValue=some-other-bucket-name
+```
+
+Use the SAM CLI to first build and package this application then [publish it to Serverless Application Repository](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-template-publishing-applications.html#serverless-sam-template-publishing-applications-prerequisites)
 
 ```bash
 sam build
