@@ -29,7 +29,11 @@ const asyncLambdaInvoke = async (issuesChunks) => {
 
 export async function lambdaHandler(event) {
   const xrayEvent = JSON.parse(event.body);
-  const hostName = event.headers['X-Forwarded-For'];
+  console.debug(`Event body: ${event.body}`);
+  const hostName = event.headers.Hostname || 'hostname-was-not-set';
+  if (hostName === 'hostname-was-not-set') {
+    console.warn('Hostname was not set in the Xray Webhook header!');
+  }
   try {
     const issues = createIssues(xrayEvent, hostName);
     const issuesChunks = createIssuesChunks(issues);

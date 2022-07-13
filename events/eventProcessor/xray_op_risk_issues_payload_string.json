@@ -12,6 +12,7 @@
     "CloudFront-Viewer-Country": "US",
     "Content-Type": "application/json",
     "Host": "myy5m5iv6i.execute-api.us-west-1.amazonaws.com",
+    "Hostname": "partnerenttest.jfrog.io",
     "Postman-Token": "691d9506-86c5-47a5-aa5e-10ba63be4de6",
     "User-Agent": "PostmanRuntime/7.29.0",
     "Via": "1.1 73d3ff0182f526d6384b20c342c6483a.cloudfront.net (CloudFront)",
