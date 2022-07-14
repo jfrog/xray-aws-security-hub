@@ -1,15 +1,23 @@
 {
   "AuthorizerFunction": {
     "HAS_AUTH_TOKEN": "true",
-    "MAX_LOG_LEVEL": "info",
+    "MAX_LOG_LEVEL": "debug",
     "NODE_ENV": "development",
     "SECRET_ID": "XraySecurityHubAuthToken"
   },
+  "EventProcessorFunction": {
+    "MAX_LOG_LEVEL": "info",
+    "NODE_ENV": "development"
+  },
   "IssueProcessorFunction": {
+    "MAX_LOG_LEVEL": "info",
+    "NODE_ENV": "development",
     "SQS_QUEUE_URL": "https://sqs.us-west-2.amazonaws.com/096302395721/XraySourceQueue.fifo"
   },
   "TransformerFunction": {
-    "USE_DEV_ACCOUNT_ID": "true",
-    "DEV_ACCOUNT_ID": "096302395721"
+    "DEV_ACCOUNT_ID": "096302395721",
+    "MAX_LOG_LEVEL": "info",
+    "NODE_ENV": "development",
+    "USE_DEV_ACCOUNT_ID": "true"
   }
 }

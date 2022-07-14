@@ -4,7 +4,7 @@ import { getLogger } from './logger.js'; // eslint-disable-line import/extension
 
 const logger = getLogger();
 
-const sqsClient = new SQSClient({});
+const sqsClient = new SQSClient();
 
 const formatError = (error) => {
   const response = {
@@ -32,7 +32,7 @@ const formatResponse = (body) => {
     },
     body,
   };
-  logger.debug(JSON.stringify(response));
+  logger.debug(response);
   return response;
 };
 
@@ -54,11 +54,12 @@ const sendSQSmessage = async (event) => {
 };
 
 export async function lambdaHandler(event) {
-  let results;
+  logger.debug('event', { event });
   try {
-    results = await sendSQSmessage(event);
+    const results = await sendSQSmessage(event);
+    logger.debug('sendSQSmessage results:', { results });
+    return formatResponse(results);
   } catch (error) {
     return formatError(error);
   }
-  return formatResponse(results);
 }

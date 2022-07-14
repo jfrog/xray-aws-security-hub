@@ -311,6 +311,7 @@ Resources:
       CodeUri: eventProcessor/
       Environment:
         Variables:
+          MAX_LOG_LEVEL: !If [IsDebugEnv, 'debug', 'info']
           NODE_ENV: !If [IsDebugEnv, 'development', 'production']
       Handler: app.lambdaHandler
       Runtime: nodejs16.x
@@ -338,6 +339,7 @@ Resources:
       Role: !GetAtt IssueProcessorRole.Arn # access to SQS, logs
       Environment:
         Variables:
+          MAX_LOG_LEVEL: !If [IsDebugEnv, 'debug', 'info']
           NODE_ENV: !If [IsDebugEnv, 'development', 'production']
           SQS_QUEUE_URL: !Ref XraySourceQueue
       Tags:
@@ -354,9 +356,10 @@ Resources:
       Role: !GetAtt TransformerRole.Arn # access to SQS, sec hub, logs
       Environment:
         Variables:
-          USE_DEV_ACCOUNT_ID: 'false'
           DEV_ACCOUNT_ID: ''
+          MAX_LOG_LEVEL: !If [IsDebugEnv, 'debug', 'info']
           NODE_ENV: !If [IsDebugEnv, 'development', 'production']
+          USE_DEV_ACCOUNT_ID: 'false'
       Events: # Initiated by the message in SQS queue
         TransformCallPayload:
           Type: SQS # More info https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#sqs
