@@ -16,7 +16,8 @@
     "@aws-sdk/client-lambda": "^3.110.0",
     "@aws-sdk/util-utf8-node": "^3.109.0",
     "lodash": "^4.17.21",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "winston": "^3.8.1"
   },
   "scripts": {
     "test": "mocha tests/unit"

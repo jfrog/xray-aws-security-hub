@@ -6,7 +6,6 @@ import { getLogger } from './logger.js'; // eslint-disable-line import/extension
 const logger = getLogger();
 
 const lambda = new Lambda({});
-let response;
 
 const createIssues = (event, hostName) => event.issues.map((issue) => ({
   watch_name: event.watch_name,
@@ -15,10 +14,6 @@ const createIssues = (event, hostName) => event.issues.map((issue) => ({
   host_name: hostName,
   ...issue,
 }));
-
-function createIssuesChunks(issues) {
-  return _.chunk(issues, 10);
-}
 
 const lambdaInvoke = (issuesChunks) => {
   const command = new InvokeCommand({
@@ -29,20 +24,26 @@ const lambdaInvoke = (issuesChunks) => {
   return lambda.send(command);
 };
 
+const HOSTNAME_NOT_SET = 'hostname-was-not-set';
+const ASFF_BATCH_SIZE = 10;
+
 export async function lambdaHandler(event) {
   const xrayEvent = JSON.parse(event.body);
-  console.debug(`Event body: ${event.body}`);
-  const hostName = event.headers.Hostname || 'hostname-was-not-set';
-  if (hostName === 'hostname-was-not-set') {
-    console.warn('Hostname was not set in the Xray Webhook header!');
+  logger.debug(`Event body: ${event.body}`);
+
+  const hostName = event.headers.Hostname || HOSTNAME_NOT_SET;
+  if (hostName === HOSTNAME_NOT_SET) {
+    logger.warn('Hostname was not set in the Xray Webhook header!');
   }
+
+  let response;
   try {
     const issues = createIssues(xrayEvent, hostName);
-    const issuesChunks = createIssuesChunks(issues);
-    logger.debug(JSON.stringify(issuesChunks));
+    const issuesChunks = _.chunk(issues, ASFF_BATCH_SIZE);
+    logger.debug(issuesChunks);
     const promises = issuesChunks.map((chunk) => lambdaInvoke(chunk));
     const results = await Promise.allSettled(promises);
-    logger.debug('IssueProcessor invoked', JSON.stringify(results));
+    logger.debug('IssueProcessor invoked', { results });
 
     response = {
       statusCode: 202,
@@ -53,6 +54,7 @@ export async function lambdaHandler(event) {
       isBase64Encoded: false,
     };
   } catch (err) {
+    logger.error(err);
     response = {
       statusCode: err.statusCode,
       body: err,
