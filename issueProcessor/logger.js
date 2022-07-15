@@ -1,7 +1,7 @@
 import * as winston from 'winston';
 
-const isDevelopment = process.env.NODE_ENV === 'development';
-const MAX_LEVEL = process.env.MAX_LOG_LEVEL || (isDevelopment ? 'debug' : 'info');
+const IS_DEVELOPMENT = process.env.NODE_ENV === 'development';
+const MAX_LEVEL = process.env.MAX_LOG_LEVEL || (IS_DEVELOPMENT ? 'debug' : 'info');
 
 export function getLogger(level = MAX_LEVEL) {
   const logger = winston.createLogger({
