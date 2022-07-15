@@ -292,9 +292,9 @@ Resources:
       Environment:
         Variables:
           HAS_AUTH_TOKEN: !If [HasAuthToken, 'true', 'false']
+          MAX_LOG_LEVEL: !If [IsDebugEnv, 'debug', 'info']
           NODE_ENV: !If [IsDebugEnv, 'development', 'production']
           SECRET_ID: XraySecurityHubAuthToken
-      FunctionName: authorizer
       Handler: app.handler
       Runtime: nodejs16.x
       Role: !GetAtt AuthorizerRole.Arn # access to secrets
@@ -310,6 +310,7 @@ Resources:
       CodeUri: eventProcessor/
       Environment:
         Variables:
+          MAX_LOG_LEVEL: !If [IsDebugEnv, 'debug', 'info']
           NODE_ENV: !If [IsDebugEnv, 'development', 'production']
       Handler: app.lambdaHandler
       Runtime: nodejs16.x
@@ -337,6 +338,7 @@ Resources:
       Role: !GetAtt IssueProcessorRole.Arn # access to SQS, logs
       Environment:
         Variables:
+          MAX_LOG_LEVEL: !If [IsDebugEnv, 'debug', 'info']
           NODE_ENV: !If [IsDebugEnv, 'development', 'production']
           SQS_QUEUE_URL: !Ref XraySourceQueue
       Tags:
@@ -354,6 +356,7 @@ Resources:
       Environment:
         Variables:
           DEV_ACCOUNT_ID: ''
+          MAX_LOG_LEVEL: !If [IsDebugEnv, 'debug', 'info']
           NODE_ENV: !If [IsDebugEnv, 'development', 'production']
           USE_DEV_ACCOUNT_ID: 'false'
       Events: # Initiated by the message in SQS queue

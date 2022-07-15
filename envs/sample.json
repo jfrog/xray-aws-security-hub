@@ -1,0 +1,23 @@
+{
+  "AuthorizerFunction": {
+    "HAS_AUTH_TOKEN": "true",
+    "MAX_LOG_LEVEL": "info",
+    "NODE_ENV": "development",
+    "SECRET_ID": "<secret manageer key id>"
+  },
+  "EventProcessorFunction": {
+    "MAX_LOG_LEVEL": "info",
+    "NODE_ENV": "development"
+  },
+  "IssueProcessorFunction": {
+    "MAX_LOG_LEVEL": "info",
+    "NODE_ENV": "development",
+    "SQS_QUEUE_URL": "https://sqs.us-west-2.amazonaws.com/<account id>/<queue name>"
+  },
+  "TransformerFunction": {
+    "DEV_ACCOUNT_ID": "<account id>",
+    "MAX_LOG_LEVEL": "info",
+    "NODE_ENV": "development",
+    "USE_DEV_ACCOUNT_ID": "true"
+  }
+}

@@ -1,7 +1,10 @@
 import { SendMessageBatchCommand, SQSClient } from '@aws-sdk/client-sqs';
 import { v4 as uuidv4 } from 'uuid';
+import { getLogger } from './logger.js';
 
-const sqsClient = new SQSClient({});
+const logger = getLogger();
+
+const sqsClient = new SQSClient();
 
 const formatError = (error) => {
   const response = {
@@ -13,7 +16,7 @@ const formatError = (error) => {
     isBase64Encoded: false,
     body: `${error.code}: ${error.message}`,
   };
-  console.error(response);
+  logger.debug('formatError', { response });
   return response;
 };
 
@@ -29,34 +32,34 @@ const formatResponse = (body) => {
     },
     body,
   };
-  console.log(JSON.stringify(response));
+  logger.debug('formatResponse', { response });
   return response;
 };
 
 const sendSQSmessage = async (event) => {
   const params = {
     QueueUrl: process.env.SQS_QUEUE_URL,
-    Entries: [],
+    Entries: event.map((issue) => {
+      const uuid = uuidv4();
+      return {
+        Id: uuid,
+        MessageDeduplicationId: uuid,
+        MessageGroupId: 'XrayPayload',
+        MessageBody: JSON.stringify(issue),
+      };
+    }),
   };
 
-  for (const issue of event) {
-    const uuid = uuidv4();
-    params.Entries.push({
-      Id: uuid,
-      MessageDeduplicationId: uuid,
-      MessageGroupId: 'XrayPayload',
-      MessageBody: JSON.stringify(issue),
-    });
-  }
   return await sqsClient.send(new SendMessageBatchCommand(params));
 };
 
 export async function lambdaHandler(event) {
-  let results;
+  logger.debug('event', { event });
   try {
-    results = await sendSQSmessage(event);
+    const results = await sendSQSmessage(event);
+    logger.debug('sendSQSmessage results:', { results });
+    return formatResponse(results);
   } catch (error) {
     return formatError(error);
   }
-  return formatResponse(results);
 }
