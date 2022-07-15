@@ -1,7 +1,7 @@
 import { BatchImportFindingsCommand, BatchUpdateFindingsCommand, SecurityHubClient } from '@aws-sdk/client-securityhub';
 import { PutCommand, DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
-import { getLogger } from './logger.js'; // eslint-disable-line import/extensions
+import { getLogger } from './logger.js';
 
 const logger = getLogger();
 
