@@ -82,7 +82,9 @@ Run functions locally and invoke them with the `sam local invoke` command. e.g.
 $ sam local invoke eventProcessor --event events/eventProcessor/xray_security_issues_payload.json -n envs/test.json --region us-west-2
 ```
 
-The region must match the region for the SQS queue (defined in event json file).
+The region must match the region for the SQS queue (defined in env var json file).
+
+For security reason, only a sample env var file (`envs/sample.json`) is provided in this repo. Make your own copy from it and fill in appropriate values for your test environment.
 
 The SAM CLI can also emulate your application's API. Use the `sam local start-api` to run the API locally on port 3000.
 
