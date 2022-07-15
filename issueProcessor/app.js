@@ -16,7 +16,7 @@ const formatError = (error) => {
     isBase64Encoded: false,
     body: `${error.code}: ${error.message}`,
   };
-  logger.error(response);
+  logger.debug('formatError', { response });
   return response;
 };
 
@@ -32,7 +32,7 @@ const formatResponse = (body) => {
     },
     body,
   };
-  logger.debug(response);
+  logger.debug('formatResponse', { response });
   return response;
 };
 

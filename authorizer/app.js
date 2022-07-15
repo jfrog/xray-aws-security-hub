@@ -49,7 +49,7 @@ export async function handler(event) {
     logger.error('event.authorizationToken not match secret token');
     return buildResponse(false, event.methodArn);
   } catch (err) {
-    logger.error(err);
+    logger.error('failed to authorize request', { err });
     return buildResponse(false, event.methodArn);
   }
 }

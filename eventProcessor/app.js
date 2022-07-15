@@ -54,7 +54,7 @@ export async function lambdaHandler(event) {
       isBase64Encoded: false,
     };
   } catch (err) {
-    logger.error(err);
+    logger.error('failed to process Xray event', { err });
     response = {
       statusCode: err.statusCode,
       body: err,
