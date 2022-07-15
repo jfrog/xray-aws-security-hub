@@ -19,14 +19,14 @@ module.exports = {
         },
     },
     rules: {
-        'import/prefer-default-export': 'off',
-        'global-require': 'off',
+        'import/extensions': 'off',
         'import/no-dynamic-require': 'off',
         'import/no-extraneous-dependencies': 'off', // so we can import stuff from src/node_modules
+        'import/prefer-default-export': 'off',
+        'global-require': 'off',
         'max-classes-per-file': 'off',
         'max-len': 'off', // allow code to have an unlimited length
         'newline-per-chained-call': 'off', // method chaining for the win!
-        'no-console': 'off',
         'no-plusplus': 'off',
         'no-return-await': 'off', // While technically redundant, 'return await' helps to indicate the presence of an async function, and can be necessary to catch errors in the right place.
         'no-underscore-dangle': 'off', // some people like to denote a private variable using _ as the start of the name
