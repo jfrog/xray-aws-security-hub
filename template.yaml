@@ -295,7 +295,6 @@ Resources:
           MAX_LOG_LEVEL: !If [IsDebugEnv, 'debug', 'info']
           NODE_ENV: !If [IsDebugEnv, 'development', 'production']
           SECRET_ID: XraySecurityHubAuthToken
-      FunctionName: authorizer
       Handler: app.handler
       Runtime: nodejs16.x
       Role: !GetAtt AuthorizerRole.Arn # access to secrets
