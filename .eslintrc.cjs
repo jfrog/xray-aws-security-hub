@@ -19,10 +19,11 @@ module.exports = {
         },
     },
     rules: {
-        'import/prefer-default-export': 'off',
-        'global-require': 'off',
+        'import/extensions': 'off',
         'import/no-dynamic-require': 'off',
         'import/no-extraneous-dependencies': 'off', // so we can import stuff from src/node_modules
+        'import/prefer-default-export': 'off',
+        'global-require': 'off',
         'max-classes-per-file': 'off',
         'max-len': 'off', // allow code to have an unlimited length
         'newline-per-chained-call': 'off', // method chaining for the win!

@@ -1,6 +1,6 @@
 import { SendMessageBatchCommand, SQSClient } from '@aws-sdk/client-sqs';
 import { v4 as uuidv4 } from 'uuid';
-import { getLogger } from './logger.js'; // eslint-disable-line import/extensions
+import { getLogger } from './logger.js';
 
 const logger = getLogger();
 

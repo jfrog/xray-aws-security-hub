@@ -1,7 +1,7 @@
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 import _ from 'lodash';
 
-import { getLogger } from './logger.js'; // eslint-disable-line import/extensions
+import { getLogger } from './logger.js';
 
 const logger = getLogger();
 

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Lambda, InvokeCommand } from '@aws-sdk/client-lambda';
 import { fromUtf8 } from '@aws-sdk/util-utf8-node';
-import { getLogger } from './logger.js'; // eslint-disable-line import/extensions
+import { getLogger } from './logger.js';
 
 const logger = getLogger();
 
