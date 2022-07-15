@@ -52,6 +52,8 @@ The first command will build the source of your application. The second command 
 * **Allow SAM CLI IAM role creation**: Many AWS SAM templates, including this example, create AWS IAM roles required for the AWS Lambda function(s) included to access AWS services. By default, these are scoped down to minimum required permissions. To deploy an AWS CloudFormation stack which creates or modifies IAM roles, the `CAPABILITY_IAM` value for `capabilities` must be provided. If permission isn't provided through this prompt, to deploy this example you must explicitly pass `--capabilities CAPABILITY_IAM` to the `sam deploy` command.
 * **Save arguments to samconfig.toml**: If set to yes, your choices will be saved to a configuration file inside the project, so that in the future you can just re-run `sam deploy` without parameters to deploy changes to your application.
 
+**Beware** that when `DeploymentEnvironment` parameter is set to `dev`, full HTTP requests/responses data are sent to CloudWatch Logs. This include the API authorization token (if set). You can manually switch this off with API Gateway Stage's 'Log full requests/responses data' setting.
+
 You can find your API Gateway Endpoint URL in the output values displayed after deployment.
 
 ## Package and Publish the application
