@@ -4,9 +4,11 @@ import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { getLogger } from './logger.js';
 
 const logger = getLogger();
+const region = process.env.AWS_REGION;
+const securityHubRegion = process.env.SECURITY_HUB_REGION || region;
 
 const ddbClient = new DynamoDBClient();
-const hubClient = new SecurityHubClient();
+const hubClient = new SecurityHubClient({ region: securityHubRegion });
 
 const translateConfig = {
   convertEmptyValues: false,
@@ -29,8 +31,6 @@ const TYPES_LOOKUP = {
   license: 'Software and Configuration Checks/Licenses/Compliance',
   'operational risk': 'Software and Configuration Checks/Operational Risk',
 };
-
-const region = process.env.AWS_REGION;
 
 const getSeverity = (severity) => ({
   Label: SEVERITY_LABEL_LOOKUP[severity.toLowerCase()] || 'INFORMATIONAL',
@@ -128,10 +128,12 @@ const generateUpdatePayload = (existingFindingsToUpdate) => existingFindingsToUp
   },
 }));
 
+const xrayFindingsTable = process.env.XRAY_FINDINGS_TABLE;
+
 const writeFindingsToDB = async (findingsCollection) => {
   const promises = findingsCollection.map((finding) => {
     const params = {
-      TableName: 'xray-findings',
+      TableName: xrayFindingsTable,
       Item: {
         ID: finding.Id,
         TIMESTAMP: new Date().getTime().toString(),
@@ -153,7 +155,7 @@ const writeFindingsToDB = async (findingsCollection) => {
 };
 
 const queryParams = (id) => ({
-  TableName: 'xray-findings',
+  TableName: xrayFindingsTable,
   ProjectionExpression: 'ID',
   KeyConditionExpression: 'ID = :id',
   Limit: 1,
