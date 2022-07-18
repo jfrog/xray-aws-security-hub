@@ -10,7 +10,7 @@ Globals:
 Parameters:
   DeploymentEnvironment:
     Default: prod
-    Description: Deployment environment for the app (e.g. dev, stage, prod). 'dev' should only be used for development purpose and will enable additional logging to CloudWatch.
+    Description: Deployment environment for the app (e.g. dev, stage, prod). 'dev' should only be used for development purpose and will enable additional logging (including API token as part of HTTP request log) to CloudWatch.
     AllowedValues:
       - dev
       - stage
@@ -97,7 +97,7 @@ Resources:
         DefaultAuthorizer: TokenAuthorizer
       MethodSettings:
         - DataTraceEnabled: !If [IsDebugEnv, True, False]
-          LoggingLevel: !If [IsDebugEnv, 'ERROR', 'INFO']
+          LoggingLevel: !If [IsDebugEnv, 'INFO', 'ERROR']
           ResourcePath: '/*' # allows for logging on any resource
           HttpMethod: '*' # allows for logging on any method
       Name: security-hub-api-dev
