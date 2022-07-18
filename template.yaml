@@ -27,6 +27,34 @@ Parameters:
     Description: Email address to notify of operational issues. When set, an alert email notification will be sent to this address when the Xray Dead Letter Queue has more than 10 messages.
     Type: String
 
+  SecurityHubRegion:
+    Description: The region, where Security Hub is enabled. Will be used to import and update findings.
+    AllowedValues:
+      - af-south-1
+      - ap-east-1
+      - ap-southeast-3
+      - ap-south-1
+      - ap-northeast-3
+      - ap-northeast-2
+      - ap-southeast-1
+      - ap-southeast-2
+      - ap-northeast-1
+      - ca-central-1
+      - cn-north-1
+      - cn-northwest-1
+      - eu-central-1
+      - eu-west-1
+      - eu-west-2
+      - eu-south-1
+      - eu-west-3
+      - eu-north-1
+      - me-south-1
+      - sa-east-1
+      - us-east-2
+      - us-west-1
+      - us-west-2
+    Type: String
+
 Metadata:
   AWS::ServerlessRepo::Application:
     Name: jfrog-xray-security-hub-integration
@@ -359,6 +387,8 @@ Resources:
           MAX_LOG_LEVEL: !If [IsDebugEnv, 'debug', 'info']
           NODE_ENV: !If [IsDebugEnv, 'development', 'production']
           USE_DEV_ACCOUNT_ID: 'false'
+          SECURITY_HUB_REGION: !Ref SecurityHubRegion
+          XRAY_FINDINGS_TABLE: !Ref DynamoDBTable
       Events: # Initiated by the message in SQS queue
         TransformCallPayload:
           Type: SQS # More info https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#sqs
@@ -437,7 +467,7 @@ Resources:
     Type: AWS::DynamoDB::Table
     DeletionPolicy: Retain
     Properties:
-      TableName: xray-findings
+      TableName: !Sub "xray-findings-${DeploymentEnvironment}"
       AttributeDefinitions:
         - AttributeName: ID
           AttributeType: S
