@@ -4,11 +4,11 @@ import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { getLogger } from './logger.js';
 
 const logger = getLogger();
-const region = process.env.AWS_REGION;
-const securityHubRegion = process.env.SECURITY_HUB_REGION || region;
+const REGION = process.env.AWS_REGION;
+const SECURITY_HUB_REGION = process.env.SECURITY_HUB_REGION || REGION;
 
 const ddbClient = new DynamoDBClient();
-const hubClient = new SecurityHubClient({ region: securityHubRegion });
+const hubClient = new SecurityHubClient({ region: SECURITY_HUB_REGION });
 
 const translateConfig = {
   convertEmptyValues: false,
@@ -72,11 +72,11 @@ const getVulnerabilitiesFields = (prefix, artifact) => ({
 
 const getCommonFields = (body, type, accountId) => ({
   AwsAccountId: accountId,
-  Region: region,
+  Region: REGION,
   CreatedAt: body.created,
   Description: body.description,
   GeneratorId: `JFrog - Xray Policy ${body.policy_name}`,
-  ProductArn: `arn:aws:securityhub:${region}:${accountId}:product/${accountId}/default`,
+  ProductArn: `arn:aws:securityhub:${REGION}:${accountId}:product/${accountId}/default`,
   SchemaVersion: '2018-10-08',
   SourceUrl: `https://${body.host_name}/ui/watchesNew/edit/${body.watch_name}?activeTab=violations`,
   Title: `${body.summary.length > 256 ? `${(body.summary).substring(0, 251)}...` : body.summary}`,
@@ -128,12 +128,12 @@ const generateUpdatePayload = (existingFindingsToUpdate) => existingFindingsToUp
   },
 }));
 
-const xrayFindingsTable = process.env.XRAY_FINDINGS_TABLE;
+const XRAY_FINDINGS_TABLE = process.env.XRAY_FINDINGS_TABLE || `xray-findings-${REGION}`;
 
 const writeFindingsToDB = async (findingsCollection) => {
   const promises = findingsCollection.map((finding) => {
     const params = {
-      TableName: xrayFindingsTable,
+      TableName: XRAY_FINDINGS_TABLE,
       Item: {
         ID: finding.Id,
         TIMESTAMP: new Date().getTime().toString(),
@@ -155,7 +155,7 @@ const writeFindingsToDB = async (findingsCollection) => {
 };
 
 const queryParams = (id) => ({
-  TableName: xrayFindingsTable,
+  TableName: XRAY_FINDINGS_TABLE,
   ProjectionExpression: 'ID',
   KeyConditionExpression: 'ID = :id',
   Limit: 1,
