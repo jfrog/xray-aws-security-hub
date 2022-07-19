@@ -229,13 +229,15 @@ export async function lambdaHandler(event, context) {
         hubImportResponse = await hubClient.send(new BatchImportFindingsCommand({ Findings: newFindingsToImport }));
         logger.debug('Security Hub import response', { hubImportResponse });
       } catch (e) {
-        logger.debug(`Error while importing findings ${e}`);
+        logger.error('Error while importing findings', { e });
+        throw e;
       }
       try {
         const dbResponse = await writeFindingsToDB(newFindingsToImport);
         logger.debug('DB response', { dbResponse });
       } catch (e) {
-        logger.debug(`Error while importing findings ${e}`);
+        logger.error('Error while importing findings', { e });
+        throw e;
       }
     }
 
