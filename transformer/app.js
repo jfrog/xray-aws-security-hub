@@ -72,11 +72,11 @@ const getVulnerabilitiesFields = (prefix, artifact) => ({
 
 const getCommonFields = (body, type, accountId) => ({
   AwsAccountId: accountId,
-  Region: REGION,
+  Region: SECURITY_HUB_REGION,
   CreatedAt: body.created,
   Description: body.description,
   GeneratorId: `JFrog - Xray Policy ${body.policy_name}`,
-  ProductArn: `arn:aws:securityhub:${REGION}:${accountId}:product/${accountId}/default`,
+  ProductArn: `arn:aws:securityhub:${SECURITY_HUB_REGION}:${accountId}:product/${accountId}/default`,
   SchemaVersion: '2018-10-08',
   SourceUrl: `https://${body.host_name}/ui/watchesNew/edit/${body.watch_name}?activeTab=violations`,
   Title: `${body.summary.length > 256 ? `${(body.summary).substring(0, 251)}...` : body.summary}`,
@@ -225,11 +225,20 @@ export async function lambdaHandler(event, context) {
 
     let hubImportResponse;
     if (newFindingsToImport.length > 0) {
-      hubImportResponse = await hubClient.send(new BatchImportFindingsCommand({ Findings: newFindingsToImport }));
-      logger.debug('Security Hub import response', { hubImportResponse });
-
-      const dbResponse = await writeFindingsToDB(newFindingsToImport);
-      logger.debug('DB response', { dbResponse });
+      try {
+        hubImportResponse = await hubClient.send(new BatchImportFindingsCommand({ Findings: newFindingsToImport }));
+        logger.debug('Security Hub import response', { hubImportResponse });
+      } catch (e) {
+        logger.error('Error while importing findings', { e });
+        throw e;
+      }
+      try {
+        const dbResponse = await writeFindingsToDB(newFindingsToImport);
+        logger.debug('DB response', { dbResponse });
+      } catch (e) {
+        logger.error('Error while importing findings', { e });
+        throw e;
+      }
     }
 
     response = {
