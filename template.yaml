@@ -306,6 +306,18 @@ Resources:
                   - dynamodb:PutItem
                   - dynamodb:Query
                 Resource: !GetAtt DynamoDBTable.Arn
+        - PolicyName: s3bucket
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:Put*
+                  - s3:Get*
+                Resource:
+                  - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - !Ref S3Bucket
       Tags:
         - Key: App
           Value: xray-aws-security-hub
@@ -465,7 +477,7 @@ Resources:
 
   DynamoDBTable:
     Type: AWS::DynamoDB::Table
-    DeletionPolicy: Retain
+    #DeletionPolicy: Retain
     Properties:
       TableName: !Sub "xray-findings-${DeploymentEnvironment}"
       AttributeDefinitions:
@@ -479,6 +491,31 @@ Resources:
         - AttributeName: TIMESTAMP
           KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
+      Tags:
+        - Key: App
+          Value: xray-aws-security-hub
+        - Key: Environment
+          Value: !Ref DeploymentEnvironment
+
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    #DeletionPolicy: Retain
+    #UpdateReplacePolicy: Retain
+    Properties:
+      BucketName: !Sub "jfrog-xray-aws-failed-findings-${DeploymentEnvironment}-${AWS::Region}"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      LifecycleConfiguration:
+        Rules:
+          - Id: GlacierRule
+            Prefix: glacier
+            Status: Enabled
+            ExpirationInDays: 365
+            Transitions:
+              - TransitionInDays: 30
+                StorageClass: STANDARD_IA
       Tags:
         - Key: App
           Value: xray-aws-security-hub
