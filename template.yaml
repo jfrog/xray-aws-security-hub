@@ -313,6 +313,8 @@ Resources:
                 Action:
                   - s3:Put*
                   - s3:Get*
+                  - s3:List*
+                  - s3:Delete*
                 Resource:
                   - !Join
                     - ''
@@ -401,6 +403,7 @@ Resources:
           USE_DEV_ACCOUNT_ID: 'false'
           SECURITY_HUB_REGION: !Ref SecurityHubRegion
           XRAY_FINDINGS_TABLE: !Ref DynamoDBTable
+          S3_BUCKET_NAME: !Ref S3Bucket
       Events: # Initiated by the message in SQS queue
         TransformCallPayload:
           Type: SQS # More info https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#sqs
@@ -477,7 +480,7 @@ Resources:
 
   DynamoDBTable:
     Type: AWS::DynamoDB::Table
-    #DeletionPolicy: Retain
+    DeletionPolicy: Retain
     Properties:
       TableName: !Sub "xray-findings-${DeploymentEnvironment}"
       AttributeDefinitions:
@@ -499,8 +502,8 @@ Resources:
 
   S3Bucket:
     Type: AWS::S3::Bucket
-    #DeletionPolicy: Retain
-    #UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       BucketName: !Sub "jfrog-xray-aws-failed-findings-${DeploymentEnvironment}-${AWS::Region}"
       BucketEncryption:
@@ -521,6 +524,26 @@ Resources:
           Value: xray-aws-security-hub
         - Key: Environment
           Value: !Ref DeploymentEnvironment
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3Bucket
+      PolicyDocument:
+        Statement:
+          - Action:
+              - 's3:GetObject'
+              - 's3:PutObject'
+            Effect: Allow
+            Principal:
+              AWS:
+                - !GetAtt TransformerRole.Arn
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref S3Bucket
+                  - '/*'
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

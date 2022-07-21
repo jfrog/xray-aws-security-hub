@@ -1,6 +1,7 @@
 import { BatchImportFindingsCommand, BatchUpdateFindingsCommand, SecurityHubClient } from '@aws-sdk/client-securityhub';
 import { PutCommand, DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { getLogger } from './logger.js';
 
 const logger = getLogger();
@@ -9,6 +10,7 @@ const SECURITY_HUB_REGION = process.env.SECURITY_HUB_REGION || REGION;
 
 const ddbClient = new DynamoDBClient();
 const hubClient = new SecurityHubClient({ region: SECURITY_HUB_REGION });
+const s3client = new S3Client();
 
 const translateConfig = {
   convertEmptyValues: false,
@@ -81,9 +83,9 @@ const getCommonFields = (body, type, accountId) => ({
   SourceUrl: `https://${body.host_name}/ui/watchesNew/edit/${body.watch_name}?activeTab=violations`,
   Title: `${body.summary.length > 256 ? `${(body.summary).substring(0, 251)}...` : body.summary}`,
   UpdatedAt: body.created,
-  CompanyName: 'jfrog',
+  CompanyName: 'JFrog',
   ProductFields: getProductFields(body, type),
-  ProductName: 'xray',
+  ProductName: 'JFrog Xray',
 });
 
 const getResourcesFields = (prefix, artifact) => ({
@@ -190,6 +192,22 @@ const sendUpdateCommand = async (updateBody) => {
   };
 };
 
+const putFindingsIntos3bucket = async (failedFindings) => {
+  const bucketParams = {
+    Bucket: process.env.S3_BUCKET_NAME,
+    Key: `Failed_finding_${new Date().getTime().toString()}.json`,
+    Body: JSON.stringify(failedFindings),
+  };
+  let data;
+  try {
+    data = await s3client.send(new PutObjectCommand(bucketParams));
+    logger.info(`Failed findings uploaded to s3://${bucketParams.bucketParams.Bucket}/${bucketParams.bucketParams.Key}`);
+  } catch (err) {
+    logger.debug('Error', { err });
+  }
+  return data;
+};
+
 export async function lambdaHandler(event, context) {
   let response;
   logger.debug('Lambda triggered by SQS message', { event });
@@ -221,22 +239,35 @@ export async function lambdaHandler(event, context) {
 
       hubUpdateResponse = await sendUpdateCommand(updateFindingsPayload);
       logger.debug('Security Hub update response', { hubUpdateResponse });
+      logger.info(`Updated findings ${hubUpdateResponse.SuccessCount}`);
     }
 
     let hubImportResponse;
+    let failedFindingsIDs;
     if (newFindingsToImport.length > 0) {
       try {
         hubImportResponse = await hubClient.send(new BatchImportFindingsCommand({ Findings: newFindingsToImport }));
         logger.debug('Security Hub import response', { hubImportResponse });
+
+        if (hubImportResponse.FailedCount > 0) {
+          failedFindingsIDs = hubImportResponse.FailedFindings.map((finding) => finding.Id);
+          logger.debug('Failed findings IDs', { failedFindingsIDs });
+        }
+        logger.debug('Security Hub response', { hubImportResponse });
+        const failedFindings = newFindingsToImport.filter((item) => failedFindingsIDs.includes(item.Id));
+        const s3response = await putFindingsIntos3bucket(failedFindings);
+        logger.debug('s3 response', { s3response });
       } catch (e) {
         logger.error('Error while importing findings', { e });
         throw e;
       }
       try {
-        const dbResponse = await writeFindingsToDB(newFindingsToImport);
+        const successfulFindings = newFindingsToImport.filter((item) => !failedFindingsIDs.includes(item.Id));
+        logger.debug('Successfully imported findings, write IDs to DB', { successfulFindings });
+        const dbResponse = await writeFindingsToDB(successfulFindings);
         logger.debug('DB response', { dbResponse });
       } catch (e) {
-        logger.error('Error while importing findings', { e });
+        logger.error('Error while writing findings IDs to DynamoDB', { e });
         throw e;
       }
     }
