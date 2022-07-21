@@ -72,13 +72,13 @@ const getVulnerabilitiesFields = (prefix, artifact) => ({
   Vulnerabilities: [getVulnerabilities(prefix, artifact)],
 });
 
-const getCommonFields = (body, type, accountId) => ({
+const getCommonFields = (body, type, accountId, xrayArn) => ({
   AwsAccountId: accountId,
   Region: SECURITY_HUB_REGION,
   CreatedAt: body.created,
   Description: body.description,
   GeneratorId: `JFrog - Xray Policy ${body.policy_name}`,
-  ProductArn: `arn:aws:securityhub:${SECURITY_HUB_REGION}:${accountId}:product/${accountId}/default`,
+  ProductArn: xrayArn,
   SchemaVersion: '2018-10-08',
   SourceUrl: `https://${body.host_name}/ui/watchesNew/edit/${body.watch_name}?activeTab=violations`,
   Title: `${body.summary.length > 256 ? `${(body.summary).substring(0, 251)}...` : body.summary}`,
@@ -104,7 +104,7 @@ const getFindingProviderFields = (body, type) => ({
 
 const getIdPrefix = (body, type) => (type === 'security' && body.cve ? body.cve : body.summary);
 
-function transformIssue(issue, accountId) {
+function transformIssue(issue, accountId, xrayArn) {
   const type = issue.type.toLowerCase();
   logger.debug(`${type} issue`);
 
@@ -112,7 +112,7 @@ function transformIssue(issue, accountId) {
     const prefix = getIdPrefix(issue, type);
     const vulnerabilitiesFields = type === 'security' ? getVulnerabilitiesFields(prefix, impactedArtifact) : null;
     return {
-      ...getCommonFields(issue, type, accountId),
+      ...getCommonFields(issue, type, accountId, xrayArn),
       ...getResourcesFields(prefix, impactedArtifact),
       ...getFindingProviderFields(issue, type),
       ...vulnerabilitiesFields,
@@ -213,9 +213,12 @@ export async function lambdaHandler(event, context) {
   logger.debug('Lambda triggered by SQS message', { event });
   try {
     const accountId = process.env.USE_DEV_ACCOUNT_ID === 'true' ? process.env.DEV_ACCOUNT_ID : context.invokedFunctionArn.split(':')[4];
+    const xrayArn = process.env.USE_DEV_ACCOUNT_ID === 'true'
+      ? `arn:aws:securityhub:${SECURITY_HUB_REGION}:${accountId}:product/${accountId}/default`
+      : `arn:aws:securityhub:${SECURITY_HUB_REGION}::product/jfrog/jfrog-xray`;
     const findingsCollection = event.Records.map((sqsEvent) => {
       const issue = JSON.parse(sqsEvent.body);
-      return transformIssue(issue, accountId);
+      return transformIssue(issue, accountId, xrayArn);
     }).flat();
 
     logger.debug('Complete findings list', { findingsCollection });
