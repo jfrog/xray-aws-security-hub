@@ -73,6 +73,15 @@ Conditions:
   HasAuthToken: !Not [!Equals [!Ref 'ApiAuthToken', '']]
   HasNotificationEmail: !Not [!Equals [!Ref 'NotificationEmail', '']]
 
+Mappings:
+  HeapIOAppId:
+    dev:
+      APP_HEAPIO_APP_ID: 1303266293
+    stage:
+      APP_HEAPIO_APP_ID: 2142228165
+    prod:
+      APP_HEAPIO_APP_ID: 251985503
+
 Resources:
   SecurityHubAuthTokenSecret:
     Type: AWS::SecretsManager::Secret
@@ -404,6 +413,7 @@ Resources:
           SECURITY_HUB_REGION: !Ref SecurityHubRegion
           XRAY_FINDINGS_TABLE: !Ref DynamoDBTable
           S3_BUCKET_NAME: !Ref S3Bucket
+          APP_HEAPIO_APP_ID: !FindInMap [HeapIOAppId, !Ref DeploymentEnvironment, APP_HEAPIO_APP_ID]
       Events: # Initiated by the message in SQS queue
         TransformCallPayload:
           Type: SQS # More info https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#sqs
