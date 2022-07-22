@@ -46,3 +46,4 @@ packaged.yaml
 samconfig.toml
 
 envs/
+/.idea/

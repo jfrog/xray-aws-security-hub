@@ -306,6 +306,20 @@ Resources:
                   - dynamodb:PutItem
                   - dynamodb:Query
                 Resource: !GetAtt DynamoDBTable.Arn
+        - PolicyName: s3bucket
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:Put*
+                  - s3:Get*
+                  - s3:List*
+                  - s3:Delete*
+                Resource:
+                  - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - !Ref S3Bucket
       Tags:
         - Key: App
           Value: xray-aws-security-hub
@@ -389,6 +403,7 @@ Resources:
           USE_DEV_ACCOUNT_ID: 'false'
           SECURITY_HUB_REGION: !Ref SecurityHubRegion
           XRAY_FINDINGS_TABLE: !Ref DynamoDBTable
+          S3_BUCKET_NAME: !Ref S3Bucket
       Events: # Initiated by the message in SQS queue
         TransformCallPayload:
           Type: SQS # More info https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#sqs
@@ -484,6 +499,51 @@ Resources:
           Value: xray-aws-security-hub
         - Key: Environment
           Value: !Ref DeploymentEnvironment
+
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName: !Sub "jfrog-xray-aws-failed-findings-${DeploymentEnvironment}-${AWS::Region}"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      LifecycleConfiguration:
+        Rules:
+          - Id: StandardIARule
+            Prefix: standardIA
+            Status: Enabled
+            ExpirationInDays: 365
+            Transitions:
+              - TransitionInDays: 30
+                StorageClass: STANDARD_IA
+      Tags:
+        - Key: App
+          Value: xray-aws-security-hub
+        - Key: Environment
+          Value: !Ref DeploymentEnvironment
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3Bucket
+      PolicyDocument:
+        Statement:
+          - Action:
+              - 's3:GetObject'
+              - 's3:PutObject'
+            Effect: Allow
+            Principal:
+              AWS:
+                - !GetAtt TransformerRole.Arn
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref S3Bucket
+                  - '/*'
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
