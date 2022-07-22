@@ -522,8 +522,8 @@ Resources:
               SSEAlgorithm: AES256
       LifecycleConfiguration:
         Rules:
-          - Id: GlacierRule
-            Prefix: glacier
+          - Id: StandardIARule
+            Prefix: standardIA
             Status: Enabled
             ExpirationInDays: 365
             Transitions:

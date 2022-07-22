@@ -203,7 +203,7 @@ const putFindingsIntos3bucket = async (failedFindings) => {
     data = await s3client.send(new PutObjectCommand(bucketParams));
     logger.info(`Failed findings uploaded to s3://${bucketParams.bucketParams.Bucket}/${bucketParams.bucketParams.Key}`);
   } catch (err) {
-    logger.debug('Error', { err });
+    logger.debug('Error while uploading failed findings to s3 bucket', { err });
   }
   return data;
 };
