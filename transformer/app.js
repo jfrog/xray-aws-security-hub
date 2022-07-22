@@ -208,6 +208,26 @@ const putFindingsIntos3bucket = async (failedFindings) => {
   return data;
 };
 
+function sendCallHomeData() {
+  if (!process.env.APP_HEAPIO_APP_ID) {
+    logger.warn('Missing APP_HEAPIO_APP_ID env var. No data sent.');
+    return;
+  }
+// TODO: compose body
+  // JPD url
+  // AWS region
+  // Number of Xray issues received
+  // Number of Security Hub Findings successfully imported/updated
+  // Number of Security Hub Findings failed to import/update
+  const body = {
+    app_id: APP_HEAPIO_APP_ID,
+    identity: payload.identity,
+    properties: payload.properties,
+  };
+// TODO: send API call
+}
+
+
 export async function lambdaHandler(event, context) {
   let response;
   logger.debug('Lambda triggered by SQS message', { event });
@@ -274,6 +294,8 @@ export async function lambdaHandler(event, context) {
         throw e;
       }
     }
+
+    const callHome = sendCallHomeData();
 
     response = {
       statusCode: 200,
