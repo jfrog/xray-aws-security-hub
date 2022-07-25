@@ -282,8 +282,8 @@ export async function lambdaHandler(event, context) {
     }
 
     let hubImportResponse;
-    let failedFindingsIDs;
     let successfulFindings;
+    let failedFindingsIDs = [];
     if (newFindingsToImport.length > 0) {
       try {
         hubImportResponse = await hubClient.send(new BatchImportFindingsCommand({ Findings: newFindingsToImport }));
@@ -293,10 +293,12 @@ export async function lambdaHandler(event, context) {
           failedFindingsIDs = hubImportResponse.FailedFindings.map((finding) => finding.Id);
           logger.debug('Failed findings IDs', { failedFindingsIDs });
         }
-        logger.debug('Security Hub response', { hubImportResponse });
+
         const failedFindings = newFindingsToImport.filter((item) => failedFindingsIDs.includes(item.Id));
-        const s3response = await putFindingsIntos3bucket(failedFindings);
-        logger.debug('s3 response', { s3response });
+        if (failedFindings.length > 0) {
+          const s3response = await putFindingsIntos3bucket(failedFindings);
+          logger.debug('s3 response', { s3response });
+        }
       } catch (e) {
         logger.error('Error while importing findings', { e });
         throw e;
