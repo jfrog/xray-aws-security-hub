@@ -229,6 +229,7 @@ const sendCallHomeData = async (callHomePayload) => {
     const body = {
       app_id: APP_HEAPIO_APP_ID,
       identity: callHomePayload.jpd_url,
+      event: 'transform-issue-and-send-to-security-hub',
       properties: callHomePayload,
     };
 
@@ -271,7 +272,7 @@ export async function lambdaHandler(event, context) {
     const newFindingsToImport = findingsCollection.filter((item) => !existingFindingIDsInDB.includes(item.Id));
     logger.debug('Findings to import', { newFindingsToImport });
 
-    let hubUpdateResponse;
+    let hubUpdateResponse = {};
     if (existingFindingsToUpdate.length > 0) {
       const updateFindingsPayload = generateUpdatePayload(existingFindingsToUpdate);
       logger.debug('Update payload', { updateFindingsPayload });
@@ -282,7 +283,7 @@ export async function lambdaHandler(event, context) {
     }
 
     let hubImportResponse;
-    let successfulFindings;
+    let successfulFindings = [];
     let failedFindingsIDs = [];
     if (newFindingsToImport.length > 0) {
       try {
@@ -314,7 +315,8 @@ export async function lambdaHandler(event, context) {
       }
     }
 
-    const callHomePayload = {
+    try {
+      const callHomePayload = {
         integration: 'xray-aws-security-hub',
         region: SECURITY_HUB_REGION,
         xray_issues_received: event.Records.length,
@@ -323,12 +325,11 @@ export async function lambdaHandler(event, context) {
         xray_issues_import_failed: failedFindingsIDs.length,
         action: 'transform-issue-and-send-to-security-hub',
         jpd_url: `https://${issue.host_name}`
-    }
-    try {
+      }
       await sendCallHomeData(callHomePayload);
       logger.info(`HeapIO request has been sent.`);
     } catch (e) {
-      logger.info(`Error while sending infor to HeapIO. ${e}`);
+      logger.info(`Error while sending info to HeapIO. ${e}`);
     }
 
     response = {
