@@ -73,6 +73,10 @@ const getVulnerabilitiesFields = (prefix, artifact) => ({
   Vulnerabilities: [getVulnerabilities(prefix, artifact)],
 });
 
+const getSummarySubstring = (body) => {
+  return body.summary.length > 256 ? (body.summary).substring(0, 125) + '...' : body.summary;
+}
+
 const getCommonFields = (body, type, accountId, xrayArn) => ({
   AwsAccountId: accountId,
   Region: SECURITY_HUB_REGION,
@@ -82,7 +86,7 @@ const getCommonFields = (body, type, accountId, xrayArn) => ({
   ProductArn: xrayArn,
   SchemaVersion: '2018-10-08',
   SourceUrl: `https://${body.host_name}/ui/watchesNew/edit/${body.watch_name}?activeTab=violations`,
-  Title: `${body.summary.length > 256 ? `${(body.summary).substring(0, 251)}...` : body.summary}`,
+  Title: getSummarySubstring(body),
   UpdatedAt: body.created,
   CompanyName: 'JFrog',
   ProductFields: getProductFields(body, type),
@@ -103,7 +107,7 @@ const getFindingProviderFields = (body, type) => ({
   FindingProviderFields: getSeverityAndTypes(body, type),
 });
 
-const getIdPrefix = (body, type) => (type === 'security' && body.cve ? body.cve : body.summary);
+const getIdPrefix = (body, type) => (type === 'security' && body.cve ? body.cve : getSummarySubstring(body));
 
 function transformIssue(issue, accountId, xrayArn) {
   const type = issue.type.toLowerCase();
