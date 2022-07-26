@@ -1,10 +1,12 @@
 import { SendMessageBatchCommand, SQSClient } from '@aws-sdk/client-sqs';
 import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
 import { getLogger } from './logger.js';
 
 const logger = getLogger();
-
 const sqsClient = new SQSClient();
+const REGION = process.env.AWS_REGION;
+const SECURITY_HUB_REGION = process.env.SECURITY_HUB_REGION || REGION;
 
 const formatError = (error) => {
   const response = {
@@ -53,11 +55,60 @@ const sendSQSmessage = async (event) => {
   return await sqsClient.send(new SendMessageBatchCommand(params));
 };
 
+const axiosClient = axios.create({
+  baseURL: 'https://heapanalytics.com/api',
+  headers: {
+    'Content-Type': 'application/json',
+    accept: 'application/json',
+  }
+});
+
+const sendCallHomeData = async (callHomePayload) => {
+  const APP_HEAPIO_APP_ID = process.env.APP_HEAPIO_APP_ID
+  let response;
+  if (!APP_HEAPIO_APP_ID) {
+    logger.warn('Missing APP_HEAPIO_APP_ID env var. No data sent.');
+    return;
+  }
+
+  try {
+    const body = {
+      app_id: APP_HEAPIO_APP_ID,
+      identity: callHomePayload.jpd_url,
+      event: 'send-issue-to-sqs-security-hub',
+      properties: callHomePayload,
+    };
+
+    logger.info('Sending data to Heap.io, path: /track', { body });
+
+    response = await axiosClient.post('/track', body);
+  } catch (e) {
+    logger.error('Failed to send data to Heap.io', { error: e.toJSON() });
+  }
+  return response;
+}
+
 export async function lambdaHandler(event) {
   logger.debug('event', { event });
   try {
     const results = await sendSQSmessage(event);
     logger.debug('sendSQSmessage results:', { results });
+
+    try {
+      const callHomePayload = {
+        integration: 'xray-aws-security-hub',
+        region: SECURITY_HUB_REGION,
+        xray_issues_received: event.length,
+        number_of_messages_sent: results.Successful.length,
+        action: 'send-issue-to-sqs-security-hub',
+        jpd_url: `https://${event[0].host_name}`
+      }
+      await sendCallHomeData(callHomePayload);
+      logger.info(`HeapIO request has been sent.`);
+    } catch (e) {
+      logger.info(`Error while sending info to HeapIO. ${e}`);
+    }
+
     return formatResponse(results);
   } catch (error) {
     return formatError(error);
