@@ -18,7 +18,7 @@ Parameters:
     Type: String
 
   ApiAuthToken:
-    Description: Authentication token for API endpoint. This will be stored in Secrets Manager. No requirements are applied to this token but we encourage you to apply good security practices. Leave blank to not use any authentication. When set, the value will be stored in Secret Manager and used to verify Xray webhook requests. This value needs to be set as custom HTTP Authorization header in Xray webhook (see below).
+    Description: Authentication token for API endpoint. This will be stored in Secrets Manager and used to verify Xray webhook requests. No requirements are applied to this token but we encourage you to apply good security practices. Leave blank to not use any authentication. This value needs to be set as custom HTTP Authorization header in Xray webhook.
     NoEcho: True
     Type: String
 
@@ -29,6 +29,7 @@ Parameters:
 
   SecurityHubRegion:
     Description: The region, where Security Hub is enabled. Will be used to import and update findings.
+    Default: us-east-1
     AllowedValues:
       - af-south-1
       - ap-east-1
