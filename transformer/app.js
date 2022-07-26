@@ -237,7 +237,7 @@ const sendCallHomeData = async (callHomePayload) => {
 
     response = await axiosClient.post('/track', body);
   } catch (e) {
-    logger.error('Failed to send data to Heap.io', { error: e.toJSON() });
+    logger.error('Failed to send data to Heap.io', { e });
   }
   return response;
 }
@@ -245,7 +245,7 @@ const sendCallHomeData = async (callHomePayload) => {
 
 export async function lambdaHandler(event, context) {
   let response;
-  let issue;
+  let issue = {};
   let accountId;
   logger.debug('Lambda triggered by SQS message', { event });
   try {
@@ -329,7 +329,7 @@ export async function lambdaHandler(event, context) {
       await sendCallHomeData(callHomePayload);
       logger.info(`HeapIO request has been sent.`);
     } catch (e) {
-      logger.info(`Error while sending info to HeapIO. ${e}`);
+      logger.warn(`Error while sending info to HeapIO. ${e}`);
     }
 
     response = {
