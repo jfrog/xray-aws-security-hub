@@ -371,7 +371,7 @@ Resources:
         ProcessCallPayload:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /send
+            Path: /
             Method: post
             RestApiId:
               Ref: SecurityHubApi
@@ -565,4 +565,4 @@ Outputs:
 
   ApiEndpoint:
     Description: "API Gateway endpoint URL"
-    Value: !Sub "https://${SecurityHubApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${DeploymentEnvironment}/send/"
+    Value: !Sub "https://${SecurityHubApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${DeploymentEnvironment}"
