@@ -85,8 +85,8 @@ export async function lambdaHandler(event) {
         integration: 'xray-aws-security-hub',
         region: SECURITY_HUB_REGION,
         xray_issues_received: event.length,
-        number_of_messages_sent: results.filter((result) => (result.status === 'fulfilled')).length,
-        number_of_failed_messages: results.filter((result) => (result.status === 'rejected')).length,
+        messages_sent_to_issue_processor: results.filter((result) => (result.status === 'fulfilled')).length,
+        failed_messages: results.filter((result) => (result.status === 'rejected')).length,
         action: 'process-xray-payload-security-hub',
         jpd_url: `https://${hostName}`
       }

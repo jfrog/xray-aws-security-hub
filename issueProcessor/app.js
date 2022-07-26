@@ -99,7 +99,7 @@ export async function lambdaHandler(event) {
         integration: 'xray-aws-security-hub',
         region: SECURITY_HUB_REGION,
         xray_issues_received: event.length,
-        number_of_messages_sent: results.Successful.length,
+        messages_sent_to_sqs: results.Successful.length,
         action: 'send-issue-to-sqs-security-hub',
         jpd_url: `https://${event[0].host_name}`
       }
