@@ -2,6 +2,7 @@ import { BatchImportFindingsCommand, BatchUpdateFindingsCommand, SecurityHubClie
 import { PutCommand, DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import axios from 'axios';
 import { getLogger } from './logger.js';
 
 const logger = getLogger();
@@ -195,29 +196,65 @@ const sendUpdateCommand = async (updateBody) => {
 const putFindingsIntos3bucket = async (failedFindings) => {
   const bucketParams = {
     Bucket: process.env.S3_BUCKET_NAME,
-    Key: `Failed_finding_${new Date().getTime().toString()}.json`,
+    Key: `failed_finding_${new Date().getTime().toString()}.json`,
     Body: JSON.stringify(failedFindings),
   };
   let data;
   try {
     data = await s3client.send(new PutObjectCommand(bucketParams));
-    logger.info(`Failed findings uploaded to s3://${bucketParams.bucketParams.Bucket}/${bucketParams.bucketParams.Key}`);
+    logger.info(`Failed findings uploaded to s3://${bucketParams.Bucket}/${bucketParams.Key}`);
   } catch (err) {
     logger.debug('Error while uploading failed findings to s3 bucket', { err });
   }
   return data;
 };
 
+const axiosClient = axios.create({
+  baseURL: 'https://heapanalytics.com/api',
+  headers: {
+    'Content-Type': 'application/json',
+    accept: 'application/json',
+  }
+});
+
+const sendCallHomeData = async (callHomePayload) => {
+  const APP_HEAPIO_APP_ID = process.env.APP_HEAPIO_APP_ID
+  let response;
+  if (!APP_HEAPIO_APP_ID) {
+    logger.warn('Missing APP_HEAPIO_APP_ID env var. No data sent.');
+    return;
+  }
+
+  try {
+    const body = {
+      app_id: APP_HEAPIO_APP_ID,
+      identity: callHomePayload.jpd_url,
+      event: 'transform-issue-and-send-to-security-hub',
+      properties: callHomePayload,
+    };
+
+    logger.info('Sending data to Heap.io, path: /track', { body });
+
+    response = await axiosClient.post('/track', body);
+  } catch (e) {
+    logger.error('Failed to send data to Heap.io', { e });
+  }
+  return response;
+}
+
+
 export async function lambdaHandler(event, context) {
   let response;
+  let issue = {};
+  let accountId;
   logger.debug('Lambda triggered by SQS message', { event });
   try {
-    const accountId = process.env.USE_DEV_ACCOUNT_ID === 'true' ? process.env.DEV_ACCOUNT_ID : context.invokedFunctionArn.split(':')[4];
+    accountId = process.env.USE_DEV_ACCOUNT_ID === 'true' ? process.env.DEV_ACCOUNT_ID : context.invokedFunctionArn.split(':')[4];
     const xrayArn = process.env.USE_DEV_ACCOUNT_ID === 'true'
       ? `arn:aws:securityhub:${SECURITY_HUB_REGION}:${accountId}:product/${accountId}/default`
       : `arn:aws:securityhub:${SECURITY_HUB_REGION}::product/jfrog/jfrog-xray`;
     const findingsCollection = event.Records.map((sqsEvent) => {
-      const issue = JSON.parse(sqsEvent.body);
+      issue = JSON.parse(sqsEvent.body);
       return transformIssue(issue, accountId, xrayArn);
     }).flat();
 
@@ -235,7 +272,7 @@ export async function lambdaHandler(event, context) {
     const newFindingsToImport = findingsCollection.filter((item) => !existingFindingIDsInDB.includes(item.Id));
     logger.debug('Findings to import', { newFindingsToImport });
 
-    let hubUpdateResponse;
+    let hubUpdateResponse = {};
     if (existingFindingsToUpdate.length > 0) {
       const updateFindingsPayload = generateUpdatePayload(existingFindingsToUpdate);
       logger.debug('Update payload', { updateFindingsPayload });
@@ -246,6 +283,7 @@ export async function lambdaHandler(event, context) {
     }
 
     let hubImportResponse;
+    let successfulFindings = [];
     let failedFindingsIDs = [];
     if (newFindingsToImport.length > 0) {
       try {
@@ -267,7 +305,7 @@ export async function lambdaHandler(event, context) {
         throw e;
       }
       try {
-        const successfulFindings = newFindingsToImport.filter((item) => !failedFindingsIDs.includes(item.Id));
+        successfulFindings = newFindingsToImport.filter((item) => !failedFindingsIDs.includes(item.Id));
         logger.debug('Successfully imported findings, write IDs to DB', { successfulFindings });
         const dbResponse = await writeFindingsToDB(successfulFindings);
         logger.debug('DB response', { dbResponse });
@@ -275,6 +313,23 @@ export async function lambdaHandler(event, context) {
         logger.error('Error while writing findings IDs to DynamoDB', { e });
         throw e;
       }
+    }
+
+    try {
+      const callHomePayload = {
+        integration: 'xray-aws-security-hub',
+        region: SECURITY_HUB_REGION,
+        xray_issues_received: event.Records.length,
+        xray_issues_imported: successfulFindings.length,
+        xray_issues_updated: hubUpdateResponse.SuccessCount,
+        xray_issues_import_failed: failedFindingsIDs.length,
+        action: 'transform-issue-and-send-to-security-hub',
+        jpd_url: `https://${issue.host_name}`
+      }
+      await sendCallHomeData(callHomePayload);
+      logger.info(`HeapIO request has been sent.`);
+    } catch (e) {
+      logger.warn(`Error while sending info to HeapIO. ${e}`);
     }
 
     response = {
