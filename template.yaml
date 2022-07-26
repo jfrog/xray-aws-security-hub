@@ -28,7 +28,7 @@ Parameters:
     Type: String
 
   SecurityHubRegion:
-    Description: The region, where Security Hub is enabled. Will be used to import and update findings.
+    Description: 'The region, where Security Hub is enabled. It will be used to import and update findings and might be different from your deployment region. Security Hub regions: https://docs.aws.amazon.com/general/latest/gr/sechub.html'
     Default: us-east-1
     AllowedValues:
       - af-south-1
