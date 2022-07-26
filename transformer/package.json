@@ -15,6 +15,7 @@
     "@aws-sdk/client-s3": "^3.131.0",
     "@aws-sdk/client-securityhub": "^3.118.1",
     "@aws-sdk/lib-dynamodb": "^3.121.0",
+    "axios": "^0.27.2",
     "winston": "^3.8.1"
   },
   "scripts": {
