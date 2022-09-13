@@ -3,6 +3,7 @@ import { Lambda, InvokeCommand } from '@aws-sdk/client-lambda';
 import { fromUtf8 } from '@aws-sdk/util-utf8-node';
 import axios from 'axios';
 import { getLogger } from './logger.js';
+import { validateSchema } from './schema.js';
 
 const logger = getLogger();
 const REGION = process.env.AWS_REGION;
@@ -36,7 +37,7 @@ const axiosClient = axios.create({
 });
 
 const sendCallHomeData = async (callHomePayload) => {
-  const APP_HEAPIO_APP_ID = process.env.APP_HEAPIO_APP_ID
+  const APP_HEAPIO_APP_ID = process.env.APP_HEAPIO_APP_ID;
   let response;
   if (!APP_HEAPIO_APP_ID) {
     logger.warn('Missing APP_HEAPIO_APP_ID env var. No data sent.');
@@ -64,16 +65,19 @@ const HOSTNAME_NOT_SET = 'hostname-was-not-set';
 const ASFF_BATCH_SIZE = 10;
 
 export async function lambdaHandler(event) {
-  const xrayEvent = JSON.parse(event.body);
-  logger.debug(`Event body: ${xrayEvent}`);
   const hostName = event.headers.Hostname || HOSTNAME_NOT_SET;
   if (hostName === HOSTNAME_NOT_SET) {
     logger.warn('Hostname was not set in the Xray Webhook header!');
   }
 
+  const xrayEvent = JSON.parse(event.body);
+  logger.debug(`Event body: ${event.body}`);
+
   let response;
   try {
-    const issues = createIssues(xrayEvent, hostName);
+    const validatedEvent = await validateSchema(xrayEvent);
+
+    const issues = createIssues(validatedEvent, hostName);
     const issuesChunks = _.chunk(issues, ASFF_BATCH_SIZE);
     logger.debug('Issue chunks', {issuesChunks});
     const promises = issuesChunks.map((chunk) => lambdaInvoke(chunk));
@@ -105,10 +109,11 @@ export async function lambdaHandler(event) {
       isBase64Encoded: false,
     };
   } catch (err) {
+    err.statusCode ??= 500;
     logger.error('failed to process Xray event', { err });
     response = {
       statusCode: err.statusCode,
-      body: err,
+      body: err.toString(),
     };
   }
   return response;
