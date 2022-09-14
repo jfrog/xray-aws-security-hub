@@ -137,6 +137,8 @@ Resources:
           LoggingLevel: !If [IsDebugEnv, 'INFO', 'ERROR']
           ResourcePath: '/*' # allows for logging on any resource
           HttpMethod: '*' # allows for logging on any method
+          ThrottlingRateLimit: 100
+          ThrottlingBurstLimit: 1000
       Name: security-hub-api-dev
       StageName: !Ref DeploymentEnvironment
       TracingEnabled: !If [IsDebugEnv, True, False]
