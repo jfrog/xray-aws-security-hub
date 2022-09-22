@@ -17,7 +17,7 @@ const xraySchema = Joi.object({
     description: Joi.string().max(MAX_TEXT_CHARS_LIMIT).truncate().required(),
     impacted_artifacts: Joi.array().items(Joi.object({
       name: Joi.string().max(MAX_NAME_CHARS_LIMIT).required(),
-      display_name: Joi.string().required(),
+      display_name: Joi.string().max(MAX_TEXT_CHARS_LIMIT).required(),
       path: Joi.string().max(MAX_PATH_CHARS_LIMIT).required(),
       pkg_type: Joi.string().max(MAX_NAME_CHARS_LIMIT).insensitive().required(),
       sha256: Joi.string().max(66),
@@ -25,7 +25,7 @@ const xraySchema = Joi.object({
       depth: Joi.number(),
       parent_sha: Joi.string().max(64),
       infected_files: Joi.array().items(Joi.object({
-        name: Joi.string(),
+        name: Joi.string().max(MAX_NAME_CHARS_LIMIT),
         path: Joi.string().max(MAX_PATH_CHARS_LIMIT).required().allow(''),
         sha256: Joi.string().max(66),
         depth: Joi.number(),
