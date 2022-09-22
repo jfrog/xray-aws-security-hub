@@ -56,6 +56,25 @@ The first command will build the source of your application. The second command 
 
 You can find your API Gateway Endpoint URL in the output values displayed after deployment.
 
+### Deploy into VPC
+
+If the application is required to be deployed in private VPC, it should be created and managed separately. There are several ways of doing that - 
+in the console, using separate CFT or adding VPC resource to the SAM template directly. Check the following examples for the reference: 
+- [JFrog CFT VPC template example](https://github.com/aws-quickstart/quickstart-jfrog-artifactory/blob/main/templates/jfrog-ami-vpc.template.yaml). 
+- [AWS CFT VPC examples](https://github.com/awslabs/aws-cloudformation-templates/tree/master/aws/services/VPC).
+
+When VPC and VPC endpoint are created, please add following configuration to `AWS::Serverless::Api` resource:
+
+```yaml
+  EndpointConfiguration:
+    Type: PRIVATE
+    VPCEndpointIds:
+      - vpce-123a123a
+      - vpce-321a321a
+```
+
+[AWS documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-api-endpointconfiguration.html) for endpoint configuration.
+
 ## Package and Publish the application
 
 Create a new S3 bucket (`jfrog-xray-aws-security-hub`) to store the SAM build artifact:
