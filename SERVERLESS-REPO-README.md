@@ -18,7 +18,7 @@ After deploying this application, a Xray webhook must be setup before events wil
 
 Follow the [Xray webhook instructions](https://www.jfrog.com/confluence/display/JFROG/Configuring+Xray#ConfiguringXray-ConfiguringWebhooks) and create a new webhook.
 
-For the `URL` field, uses the `ApiEndpoint` output from this application deployment, e.g. `https://<id>.execute-api.<region>.amazonaws.com/<DeploymentEnvironment>/send/`
+For the `URL` field, uses the `ApiEndpoint` output from this application deployment, e.g. `https://<id>.execute-api.<region>.amazonaws.com/<DeploymentEnvironment>/`
 
 Custom headers to be configured:
 - Hostname (required) - Name: `Hostname`, Value: `<JFrog instance hostname>`, e.g. `http://<instance name>.jfrog.io`

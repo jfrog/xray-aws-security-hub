@@ -59,7 +59,7 @@ const sendCallHomeData = async (callHomePayload) => {
     logger.error('Failed to send data to Heap.io', { e });
   }
   return response;
-}
+};
 
 const HOSTNAME_NOT_SET = 'hostname-was-not-set';
 const ASFF_BATCH_SIZE = 10;
@@ -79,7 +79,7 @@ export async function lambdaHandler(event) {
 
     const issues = createIssues(validatedEvent, hostName);
     const issuesChunks = _.chunk(issues, ASFF_BATCH_SIZE);
-    logger.debug('Issue chunks', {issuesChunks});
+    logger.debug('Issue chunks', { issuesChunks });
     const promises = issuesChunks.map((chunk) => lambdaInvoke(chunk));
     const results = await Promise.allSettled(promises);
     logger.debug('IssueProcessor invoked', { results });
@@ -92,10 +92,10 @@ export async function lambdaHandler(event) {
         messages_sent_to_issue_processor: results.filter((result) => (result.status === 'fulfilled')).length,
         failed_messages: results.filter((result) => (result.status === 'rejected')).length,
         action: 'process-xray-payload-security-hub',
-        jpd_url: `https://${hostName}`
-      }
+        jpd_url: `https://${hostName}`,
+      };
       await sendCallHomeData(callHomePayload);
-      logger.info(`HeapIO request has been sent.`);
+      logger.info('HeapIO request has been sent.');
     } catch (e) {
       logger.warn(`Error while sending info to HeapIO. ${e}`);
     }

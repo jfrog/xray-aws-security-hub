@@ -75,7 +75,7 @@ const getVulnerabilitiesFields = (prefix, artifact) => ({
 
 const getSummarySubstring = (body) => {
   return body.summary.length > 256 ? (body.summary).substring(0, 125) + '...' : body.summary;
-}
+};
 
 const getCommonFields = (body, type, accountId, xrayArn) => ({
   AwsAccountId: accountId,
@@ -218,11 +218,11 @@ const axiosClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
     accept: 'application/json',
-  }
+  },
 });
 
 const sendCallHomeData = async (callHomePayload) => {
-  const APP_HEAPIO_APP_ID = process.env.APP_HEAPIO_APP_ID
+  const APP_HEAPIO_APP_ID = process.env.APP_HEAPIO_APP_ID;
   let response;
   if (!APP_HEAPIO_APP_ID) {
     logger.warn('Missing APP_HEAPIO_APP_ID env var. No data sent.');
@@ -244,8 +244,7 @@ const sendCallHomeData = async (callHomePayload) => {
     logger.error('Failed to send data to Heap.io', { e });
   }
   return response;
-}
-
+};
 
 export async function lambdaHandler(event, context) {
   let response;
@@ -328,10 +327,10 @@ export async function lambdaHandler(event, context) {
         xray_issues_updated: hubUpdateResponse.SuccessCount,
         xray_issues_import_failed: failedFindingsIDs.length,
         action: 'transform-issue-and-send-to-security-hub',
-        jpd_url: `https://${issue.host_name}`
-      }
+        jpd_url: `https://${issue.host_name}`,
+      };
       await sendCallHomeData(callHomePayload);
-      logger.info(`HeapIO request has been sent.`);
+      logger.info('HeapIO request has been sent.');
     } catch (e) {
       logger.warn(`Error while sending info to HeapIO. ${e}`);
     }
