@@ -10,9 +10,11 @@ const MAX_TEXT_CHARS_LIMIT = 3000;
 const xraySchema = Joi.object({
   watch_name: Joi.string().max(MAX_NAME_CHARS_LIMIT).required(),
   policy_name: Joi.string().max(MAX_NAME_CHARS_LIMIT).required(),
+  created: Joi.date(),
   issues: Joi.array().items(Joi.object({
     severity: Joi.string().required().valid('Critical', 'High', 'Medium', 'Low', 'Information', 'Unknown'),
     type: Joi.string().required().valid('security', 'License', 'Operational Risk'),
+    created: Joi.date(),
     summary: Joi.string().max(MAX_TEXT_CHARS_LIMIT).truncate().required(),
     description: Joi.string().max(MAX_TEXT_CHARS_LIMIT).truncate().required(),
     impacted_artifacts: Joi.array().items(Joi.object({
@@ -41,7 +43,7 @@ const xraySchema = Joi.object({
 
 export async function validateSchema(xrayEvent) {
   try {
-    return await xraySchema.validateAsync(xrayEvent, { allowUnknown: true, errors: { render: false } });
+    return await xraySchema.validateAsync(xrayEvent, { allowUnknown: true, stripUnknown: true, errors: { render: false } });
   } catch (e) {
     logger.error('schema validation failed', { error: e });
     const err = new Error('Invalid Xray event payload', { cause: e });

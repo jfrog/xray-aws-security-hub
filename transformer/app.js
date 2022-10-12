@@ -64,8 +64,10 @@ const getVulnerablePackages = (infectedFiles) => infectedFiles.map((infectedFile
   PackageManager: infectedFile.pkg_type,
 }));
 
+const truncate = (stringValue, fieldLengthLimit, truncateAt) => (stringValue.length > fieldLengthLimit ? `${(stringValue).substring(0, truncateAt)}...` : stringValue);
+
 const getVulnerabilities = (prefix, impactedArtifact) => ({
-  Id: prefix,
+  Id: truncate(prefix, 128, 125),
   VulnerablePackages: getVulnerablePackages(impactedArtifact.infected_files),
 });
 
@@ -73,15 +75,13 @@ const getVulnerabilitiesFields = (prefix, artifact) => ({
   Vulnerabilities: [getVulnerabilities(prefix, artifact)],
 });
 
-const getSummarySubstring = (body) => {
-  return body.summary.length > 256 ? (body.summary).substring(0, 125) + '...' : body.summary;
-}
+const getSummarySubstring = (body) => (truncate(body.summary, 256, 125));
 
 const getCommonFields = (body, type, accountId, xrayArn) => ({
   AwsAccountId: accountId,
   Region: SECURITY_HUB_REGION,
   CreatedAt: body.created,
-  Description: body.description,
+  Description: truncate(body.description, 1024, 1020),
   GeneratorId: `JFrog - Xray Policy ${body.policy_name}`,
   ProductArn: xrayArn,
   SchemaVersion: '2018-10-08',
@@ -218,11 +218,11 @@ const axiosClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
     accept: 'application/json',
-  }
+  },
 });
 
 const sendCallHomeData = async (callHomePayload) => {
-  const APP_HEAPIO_APP_ID = process.env.APP_HEAPIO_APP_ID
+  const APP_HEAPIO_APP_ID = process.env.APP_HEAPIO_APP_ID;
   let response;
   if (!APP_HEAPIO_APP_ID) {
     logger.warn('Missing APP_HEAPIO_APP_ID env var. No data sent.');
@@ -244,8 +244,7 @@ const sendCallHomeData = async (callHomePayload) => {
     logger.error('Failed to send data to Heap.io', { e });
   }
   return response;
-}
-
+};
 
 export async function lambdaHandler(event, context) {
   let response;
@@ -328,10 +327,10 @@ export async function lambdaHandler(event, context) {
         xray_issues_updated: hubUpdateResponse.SuccessCount,
         xray_issues_import_failed: failedFindingsIDs.length,
         action: 'transform-issue-and-send-to-security-hub',
-        jpd_url: `https://${issue.host_name}`
-      }
+        jpd_url: `https://${issue.host_name}`,
+      };
       await sendCallHomeData(callHomePayload);
-      logger.info(`HeapIO request has been sent.`);
+      logger.info('HeapIO request has been sent.');
     } catch (e) {
       logger.warn(`Error while sending info to HeapIO. ${e}`);
     }
