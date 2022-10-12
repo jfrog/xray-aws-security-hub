@@ -21,5 +21,5 @@ Follow the [Xray webhook instructions](https://www.jfrog.com/confluence/display/
 For the `URL` field, uses the `ApiEndpoint` output from this application deployment, e.g. `https://<id>.execute-api.<region>.amazonaws.com/<DeploymentEnvironment>/`
 
 Custom headers to be configured:
-- Hostname (required) - Name: `Hostname`, Value: `<JFrog instance hostname>`, e.g. `http://<instance name>.jfrog.io`
-- Authorization (optional) - Name: `Authorization`, Value: `<ApiAuthToken> parameter`
+- Hostname (required) - Name: `Hostname`, Value: `<JFrog instance hostname>`, e.g. `<instance name>.jfrog.io` (no protocol in from of the hostname).
+- Authorization (optional) - Name: `Authorization`, Value: `<ApiAuthToken>`
