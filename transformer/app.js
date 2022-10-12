@@ -64,8 +64,10 @@ const getVulnerablePackages = (infectedFiles) => infectedFiles.map((infectedFile
   PackageManager: infectedFile.pkg_type,
 }));
 
+const truncate = (stringValue, fieldLengthLimit, truncateAt) => (stringValue.length > fieldLengthLimit ? `${(stringValue).substring(0, truncateAt)}...` : stringValue);
+
 const getVulnerabilities = (prefix, impactedArtifact) => ({
-  Id: prefix.length > 128 ? `${(prefix).substring(0, 125)}...` : prefix,
+  Id: truncate(prefix, 128, 125),
   VulnerablePackages: getVulnerablePackages(impactedArtifact.infected_files),
 });
 
@@ -73,13 +75,13 @@ const getVulnerabilitiesFields = (prefix, artifact) => ({
   Vulnerabilities: [getVulnerabilities(prefix, artifact)],
 });
 
-const getSummarySubstring = (body) => (body.summary.length > 256 ? `${(body.summary).substring(0, 125)}...` : body.summary);
+const getSummarySubstring = (body) => (truncate(body.summary, 256, 125));
 
 const getCommonFields = (body, type, accountId, xrayArn) => ({
   AwsAccountId: accountId,
   Region: SECURITY_HUB_REGION,
   CreatedAt: body.created,
-  Description: body.description.length > 1024 ? `${(body.summary).substring(0, 1020)}...` : body.description,
+  Description: truncate(body.description, 1024, 1020),
   GeneratorId: `JFrog - Xray Policy ${body.policy_name}`,
   ProductArn: xrayArn,
   SchemaVersion: '2018-10-08',
