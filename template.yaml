@@ -521,7 +521,7 @@ Resources:
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
     Properties:
-      BucketName: !Sub "jfrog-xray-aws-failed-findings-${DeploymentEnvironment}-${AWS::Region}-${AWS::AccountId}"
+      BucketName: !Sub "jfrog-xray-aws-failed-findings-${AWS::Region}-${AWS::AccountId}-${DeploymentEnvironment}"
       BucketEncryption:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
