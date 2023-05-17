@@ -243,6 +243,7 @@ const sendCallHomeData = async (callHomePayload) => {
   } catch (e) {
     logger.error('Failed to send data to Heap.io', { e });
   }
+  // eslint-disable-next-line consistent-return
   return response;
 };
 

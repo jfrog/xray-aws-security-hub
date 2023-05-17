@@ -60,11 +60,11 @@ const axiosClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
     accept: 'application/json',
-  }
+  },
 });
 
 const sendCallHomeData = async (callHomePayload) => {
-  const APP_HEAPIO_APP_ID = process.env.APP_HEAPIO_APP_ID
+  const APP_HEAPIO_APP_ID = process.env.APP_HEAPIO_APP_ID;
   let response;
   if (!APP_HEAPIO_APP_ID) {
     logger.warn('Missing APP_HEAPIO_APP_ID env var. No data sent.');
@@ -85,8 +85,9 @@ const sendCallHomeData = async (callHomePayload) => {
   } catch (e) {
     logger.error('Failed to send data to Heap.io', { e });
   }
+  // eslint-disable-next-line consistent-return
   return response;
-}
+};
 
 export async function lambdaHandler(event) {
   logger.debug('event', { event });
@@ -101,10 +102,10 @@ export async function lambdaHandler(event) {
         xray_issues_received: event.length,
         messages_sent_to_sqs: results.Successful.length,
         action: 'send-issue-to-sqs-security-hub',
-        jpd_url: `https://${event[0].host_name}`
-      }
+        jpd_url: `https://${event[0].host_name}`,
+      };
       await sendCallHomeData(callHomePayload);
-      logger.info(`HeapIO request has been sent.`);
+      logger.info('HeapIO request has been sent.');
     } catch (e) {
       logger.warn(`Error while sending info to HeapIO. ${e}`);
     }
