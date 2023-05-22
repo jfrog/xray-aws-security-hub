@@ -1,4 +1,4 @@
-## 1.1.1 (May 17, 2023)
+## 1.1.2 (May 17, 2023)
 
 * Fix S3 bucket name in the SAM template
 * Update dependencies
