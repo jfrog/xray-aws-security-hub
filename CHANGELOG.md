@@ -1,3 +1,11 @@
+## 1.1.3 (June 12, 2023)
+
+* Added `PointInTimeRecoverySpecification` to DynamoDB configuration
+* Fixed creating of default redundant stage (Stage, Prod) in `SecurityHubApi` resource
+
+Issue: [#30](https://github.com/jfrog/xray-aws-security-hub/issues/30)
+PR: []
+
 ## 1.1.2 (May 17, 2023)
 
 * Fix S3 bucket name in the SAM template
