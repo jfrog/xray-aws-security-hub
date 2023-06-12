@@ -4,7 +4,7 @@
 * Fixed creating of default redundant stage (Stage, Prod) in `SecurityHubApi` resource
 
 Issue: [#30](https://github.com/jfrog/xray-aws-security-hub/issues/30)
-PR: []
+PR: [#31](https://github.com/jfrog/xray-aws-security-hub/pull/31)
 
 ## 1.1.2 (May 17, 2023)
 
