@@ -77,6 +77,8 @@ const getVulnerabilitiesFields = (prefix, artifact) => ({
 
 const getSummarySubstring = (body) => (truncate(body.summary, 256, 125));
 
+const getHostName = (rawHostname) => rawHostname.replace(/^(?:https?:\/\/)?(?:www\.)?/i, '');
+
 const getCommonFields = (body, type, accountId, xrayArn) => ({
   AwsAccountId: accountId,
   Region: SECURITY_HUB_REGION,
@@ -85,7 +87,7 @@ const getCommonFields = (body, type, accountId, xrayArn) => ({
   GeneratorId: `JFrog - Xray Policy ${body.policy_name}`,
   ProductArn: xrayArn,
   SchemaVersion: '2018-10-08',
-  SourceUrl: `https://${body.host_name}/ui/watchesNew/edit/${body.watch_name}?activeTab=violations`,
+  SourceUrl: `https://${getHostName(body.host_name)}/ui/watchesNew/edit/${body.watch_name}?activeTab=violations`,
   Title: getSummarySubstring(body),
   UpdatedAt: body.created,
   CompanyName: 'JFrog',
@@ -222,16 +224,11 @@ const axiosClient = axios.create({
 });
 
 const sendCallHomeData = async (callHomePayload) => {
-  const APP_HEAPIO_APP_ID = process.env.APP_HEAPIO_APP_ID;
   let response;
-  if (!APP_HEAPIO_APP_ID) {
-    logger.warn('Missing APP_HEAPIO_APP_ID env var. No data sent.');
-    return;
-  }
 
   try {
     const body = {
-      app_id: APP_HEAPIO_APP_ID,
+      app_id: '251985503',
       identity: callHomePayload.jpd_url,
       event: 'transform-issue-and-send-to-security-hub',
       properties: callHomePayload,
@@ -328,7 +325,7 @@ export async function lambdaHandler(event, context) {
         xray_issues_updated: hubUpdateResponse.SuccessCount,
         xray_issues_import_failed: failedFindingsIDs.length,
         action: 'transform-issue-and-send-to-security-hub',
-        jpd_url: `https://${issue.host_name}`,
+        jpd_url: `https://${getHostName(issue.host_name)}`,
       };
       await sendCallHomeData(callHomePayload);
       logger.info('HeapIO request has been sent.');

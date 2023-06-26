@@ -64,16 +64,11 @@ const axiosClient = axios.create({
 });
 
 const sendCallHomeData = async (callHomePayload) => {
-  const APP_HEAPIO_APP_ID = process.env.APP_HEAPIO_APP_ID;
   let response;
-  if (!APP_HEAPIO_APP_ID) {
-    logger.warn('Missing APP_HEAPIO_APP_ID env var. No data sent.');
-    return;
-  }
 
   try {
     const body = {
-      app_id: APP_HEAPIO_APP_ID,
+      app_id: '251985503',
       identity: callHomePayload.jpd_url,
       event: 'send-issue-to-sqs-security-hub',
       properties: callHomePayload,

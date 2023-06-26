@@ -9,13 +9,15 @@ Globals:
 
 Parameters:
   DeploymentEnvironment:
-    Default: prod
     Description: Deployment environment for the app (e.g. dev, stage, prod). 'dev' should only be used for development purpose and will enable additional logging (including API token as part of HTTP request log) to CloudWatch.
-    AllowedValues:
-      - dev
-      - stage
-      - prod
     Type: String
+    Default: prod
+
+  DebugLogsEnabled:
+    Description: Enable or disable debug logs.
+    Type: String
+    Default: false
+    AllowedValues: [true, false]
 
   ApiAuthToken:
     Description: Authentication token for API endpoint. This will be stored in Secrets Manager and used to verify Xray webhook requests. No requirements are applied to this token but we encourage you to apply good security practices. Leave blank to not use any authentication. This value needs to be set as custom HTTP Authorization header in Xray webhook.
@@ -23,12 +25,13 @@ Parameters:
     Type: String
 
   NotificationEmail:
-    Default: jane.doe@example.com
     Description: Email address to notify of operational issues. When set, an alert email notification will be sent to this address when the Xray Dead Letter Queue has more than 10 messages.
+    Default: jane.doe@example.com
     Type: String
 
   SecurityHubRegion:
     Description: 'The region, where Security Hub is enabled. It will be used to import and update findings and might be different from your deployment region. Security Hub regions: https://docs.aws.amazon.com/general/latest/gr/sechub.html'
+    Type: String
     Default: us-east-1
     AllowedValues:
       - af-south-1
@@ -53,7 +56,6 @@ Parameters:
       - us-east-2
       - us-west-1
       - us-west-2
-    Type: String
 
 Metadata:
   AWS::ServerlessRepo::Application:
@@ -65,22 +67,13 @@ Metadata:
     ReadmeUrl: SERVERLESS-REPO-README.md
     Labels: ['jfrog', 'xray', 'devops', 'security', 'license', 'operational_risk', 'serverless', 'securityhub']
     HomePageUrl: https://github.com/jfrog/xray-aws-security-hub
-    SemanticVersion: 1.1.3
+    SemanticVersion: 1.2.0
     SourceCodeUrl: https://github.com/jfrog/xray-aws-security-hub
 
 Conditions:
-  IsDebugEnv: !Equals [!Ref 'DeploymentEnvironment', 'dev']
+  IsDebugEnv: !Equals [!Ref 'DebugLogsEnabled', 'true']
   HasAuthToken: !Not [!Equals [!Ref 'ApiAuthToken', '']]
   HasNotificationEmail: !Not [!Equals [!Ref 'NotificationEmail', '']]
-
-Mappings:
-  HeapIOAppId:
-    dev:
-      AppId: '1303266293'
-    stage:
-      AppId: '2142228165'
-    prod:
-      AppId: '251985503'
 
 Resources:
   SecurityHubAuthTokenSecret:
@@ -367,7 +360,7 @@ Resources:
           MAX_LOG_LEVEL: !If [IsDebugEnv, 'debug', 'info']
           NODE_ENV: !If [IsDebugEnv, 'development', 'production']
           SECURITY_HUB_REGION: !Ref SecurityHubRegion
-          APP_HEAPIO_APP_ID: !FindInMap [HeapIOAppId, !Ref DeploymentEnvironment, AppId]
+          APP_HEAPIO_APP_ID: '251985503'
       Handler: app.lambdaHandler
       Runtime: nodejs16.x
       Role: !GetAtt EventProcessorRole.Arn # access to lambda, logs
@@ -398,7 +391,7 @@ Resources:
           NODE_ENV: !If [IsDebugEnv, 'development', 'production']
           SQS_QUEUE_URL: !Ref XraySourceQueue
           SECURITY_HUB_REGION: !Ref SecurityHubRegion
-          APP_HEAPIO_APP_ID: !FindInMap [HeapIOAppId, !Ref DeploymentEnvironment, AppId]
+          APP_HEAPIO_APP_ID: '251985503'
       Tags:
         App: xray-aws-security-hub
         Environment: !Ref DeploymentEnvironment
@@ -420,7 +413,7 @@ Resources:
           SECURITY_HUB_REGION: !Ref SecurityHubRegion
           XRAY_FINDINGS_TABLE: !Ref DynamoDBTable
           S3_BUCKET_NAME: !Ref S3Bucket
-          APP_HEAPIO_APP_ID: !FindInMap [HeapIOAppId, !Ref DeploymentEnvironment, AppId]
+          APP_HEAPIO_APP_ID: '251985503'
       Events: # Initiated by the message in SQS queue
         TransformCallPayload:
           Type: SQS # More info https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#sqs
@@ -465,6 +458,7 @@ Resources:
     Type: AWS::SNS::Topic
     Condition: HasNotificationEmail
     Properties:
+      KmsMasterKeyId: alias/aws/sns
       Subscription:
         - Endpoint:
             Ref: NotificationEmail
@@ -498,6 +492,7 @@ Resources:
   DynamoDBTable:
     Type: AWS::DynamoDB::Table
     DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       TableName: !Sub "xray-findings-${DeploymentEnvironment}"
       AttributeDefinitions:

@@ -75,6 +75,10 @@ When VPC and VPC endpoint are created, please add following configuration to `AW
 
 [AWS documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-api-endpointconfiguration.html) for endpoint configuration.
 
+### Uninstall the application with SAM CLI
+
+Run `sam delete` to delete the application. Note: S3 bucket and DynamoDB, created by the application, won't be deleted automatically and require to be removed manually.
+
 ## Package and Publish the application
 
 Create a new S3 bucket (`jfrog-xray-aws-security-hub`) to store the SAM build artifact:
@@ -146,7 +150,7 @@ To simplify troubleshooting, SAM CLI has a command called `sam logs`. `sam logs`
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
 ```bash
-$ sam logs -n eventProcessor --stack-name xray-aws-security-hub --tail
+$ sam logs -n EventProcessorFunction --stack-name xray-aws-security-hub --tail
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
