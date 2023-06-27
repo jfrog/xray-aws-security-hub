@@ -360,7 +360,6 @@ Resources:
           MAX_LOG_LEVEL: !If [IsDebugEnv, 'debug', 'info']
           NODE_ENV: !If [IsDebugEnv, 'development', 'production']
           SECURITY_HUB_REGION: !Ref SecurityHubRegion
-          APP_HEAPIO_APP_ID: '251985503'
       Handler: app.lambdaHandler
       Runtime: nodejs16.x
       Role: !GetAtt EventProcessorRole.Arn # access to lambda, logs
@@ -391,7 +390,6 @@ Resources:
           NODE_ENV: !If [IsDebugEnv, 'development', 'production']
           SQS_QUEUE_URL: !Ref XraySourceQueue
           SECURITY_HUB_REGION: !Ref SecurityHubRegion
-          APP_HEAPIO_APP_ID: '251985503'
       Tags:
         App: xray-aws-security-hub
         Environment: !Ref DeploymentEnvironment
@@ -413,7 +411,6 @@ Resources:
           SECURITY_HUB_REGION: !Ref SecurityHubRegion
           XRAY_FINDINGS_TABLE: !Ref DynamoDBTable
           S3_BUCKET_NAME: !Ref S3Bucket
-          APP_HEAPIO_APP_ID: '251985503'
       Events: # Initiated by the message in SQS queue
         TransformCallPayload:
           Type: SQS # More info https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#sqs
