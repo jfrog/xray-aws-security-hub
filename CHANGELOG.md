@@ -8,7 +8,7 @@
 * Added missing retention policy attribute in DynamoDB configuration.
 * Improved logging.
 
-PR: [#]()
+PR: [#32](https://github.com/jfrog/xray-aws-security-hub/pull/32)
 
 ## 1.1.3 (June 12, 2023)
 
