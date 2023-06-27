@@ -89,6 +89,7 @@ export async function lambdaHandler(event) {
         failed_messages: results.filter((result) => (result.status === 'rejected')).length,
         action: 'process-xray-payload-security-hub',
         jpd_url: `https://${hostName}`,
+        app_version: process.env.APP_VERSION,
       };
       await sendCallHomeData(callHomePayload);
       logger.info('HeapIO request has been sent.');

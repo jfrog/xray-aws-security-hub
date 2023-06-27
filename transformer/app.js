@@ -326,6 +326,7 @@ export async function lambdaHandler(event, context) {
         xray_issues_import_failed: failedFindingsIDs.length,
         action: 'transform-issue-and-send-to-security-hub',
         jpd_url: `https://${getHostName(issue.host_name)}`,
+        app_version: process.env.APP_VERSION,
       };
       await sendCallHomeData(callHomePayload);
       logger.info('HeapIO request has been sent.');

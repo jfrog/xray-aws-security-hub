@@ -6,6 +6,9 @@ Description: SAM Template for xray-aws-security-hub
 Globals:
   Function:
     Timeout: 20
+    Environment:
+      Variables:
+        APP_VERSION: 1.2.0
 
 Parameters:
   DeploymentEnvironment:
