@@ -77,7 +77,9 @@ When VPC and VPC endpoint are created, please add following configuration to `AW
 
 ### Uninstall the application with SAM CLI
 
-Run `sam delete` to delete the application. Note: S3 bucket and DynamoDB, created by the application, won't be deleted automatically and require to be removed manually.
+Run `sam delete` to delete the application. 
+
+**Note:** S3 bucket and DynamoDB, created by the application, won't be deleted automatically and require to be removed manually.
 
 ## Package and Publish the application
 
