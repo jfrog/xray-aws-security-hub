@@ -39,14 +39,17 @@ export async function handler(event) {
       SecretId: process.env.SECRET_ID,
     });
     const output = await secretsManagerClient.send(command);
-    logger.debug(output);
 
     if (output.SecretString === event.authorizationToken) {
       logger.info('event.authorizationToken match secret token');
+      output.SecretString = '<hidden>';
+      logger.debug(output);
       return buildResponse(true, event.methodArn);
     }
 
     logger.error('event.authorizationToken not match secret token');
+    output.SecretString = '<hidden>';
+    logger.debug(output);
     return buildResponse(false, event.methodArn);
   } catch (err) {
     logger.error('failed to authorize request', { err });
