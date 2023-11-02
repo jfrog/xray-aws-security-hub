@@ -1,3 +1,23 @@
+## 1.2.1 (November 3, 2023)
+
+* Update dependencies from security Dependabot
+
+PRs:
+
+[#22](https://github.com/jfrog/xray-aws-security-hub/pull/22)
+[#23](https://github.com/jfrog/xray-aws-security-hub/pull/23)
+[#24](https://github.com/jfrog/xray-aws-security-hub/pull/24)
+[#25](https://github.com/jfrog/xray-aws-security-hub/pull/25)
+[#26](https://github.com/jfrog/xray-aws-security-hub/pull/26)
+[#34](https://github.com/jfrog/xray-aws-security-hub/pull/34)
+[#35](https://github.com/jfrog/xray-aws-security-hub/pull/35)
+[#36](https://github.com/jfrog/xray-aws-security-hub/pull/36)
+[#37](https://github.com/jfrog/xray-aws-security-hub/pull/37)
+[#38](https://github.com/jfrog/xray-aws-security-hub/pull/38)
+[#39](https://github.com/jfrog/xray-aws-security-hub/pull/39)
+[#40](https://github.com/jfrog/xray-aws-security-hub/pull/40)
+[#41](https://github.com/jfrog/xray-aws-security-hub/pull/41)
+
 ## 1.2.0 (June 28, 2023)
 
 * Allow users to set a name for their environment without any restrictions.

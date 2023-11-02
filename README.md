@@ -95,6 +95,8 @@ You can use `--parameters` option to override the S3 bucket name:
 aws cloudformation create-stack --stack-name xray-aws-security-hub-bucket --template-body file://cfts/serverless-application-repository-s3.yml --region us-west-1 --parameters ParameterKey=S3BucketName,ParameterValue=some-other-bucket-name
 ```
 
+Update Serverless Repository application version in `Metadata::AWS::ServerlessRepo::Application::SemanticVersion` and `Globals::Function::Environment::Variables::APP_VERSION` in `template.yaml`
+
 Use the SAM CLI to first build and package this application then [publish it to Serverless Application Repository](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-template-publishing-applications.html#serverless-sam-template-publishing-applications-prerequisites)
 
 ```bash
