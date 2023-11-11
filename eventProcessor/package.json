@@ -15,7 +15,7 @@
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.110.0",
     "@aws-sdk/util-utf8-node": "^3.109.0",
-    "axios": "^0.27.2",
+    "axios": "^1.6.0",
     "joi": "^17.6.0",
     "lodash": "^4.17.21",
     "uuid": "^8.3.2",
