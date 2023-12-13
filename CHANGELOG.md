@@ -1,3 +1,13 @@
+## 1.2.2 (December 14, 2023)
+
+* Update dependencies from security Dependabot
+
+PRs:
+
+[#43](https://github.com/jfrog/xray-aws-security-hub/pull/43)
+[#44](https://github.com/jfrog/xray-aws-security-hub/pull/44)
+[#45](https://github.com/jfrog/xray-aws-security-hub/pull/45)
+
 ## 1.2.1 (November 3, 2023)
 
 * Update dependencies from security Dependabot
