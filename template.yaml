@@ -8,7 +8,7 @@ Globals:
     Timeout: 20
     Environment:
       Variables:
-        APP_VERSION: 1.2.2
+        APP_VERSION: 1.2.3
 
 Parameters:
   DeploymentEnvironment:
