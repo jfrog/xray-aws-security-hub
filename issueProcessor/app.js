@@ -98,7 +98,7 @@ export async function lambdaHandler(event) {
         messages_sent_to_sqs: results.Successful.length,
         action: 'send-issue-to-sqs-security-hub',
         jpd_url: `https://${event[0].host_name}`,
-        app_version:  process.env.APP_VERSION,
+        app_version: process.env.APP_VERSION,
       };
       await sendCallHomeData(callHomePayload);
       logger.info('HeapIO request has been sent.');

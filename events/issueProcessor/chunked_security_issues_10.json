@@ -2,6 +2,7 @@
   {
     "watch_name": "SlackTest",
     "policy_name": "slack_watch_test_bug",
+    "event_created": "2021-05-28T19:37:50.075822379Z",
     "host_name": "165.225.242.111",
     "severity": "Medium",
     "type": "security",
@@ -39,6 +40,7 @@
   {
     "watch_name": "SlackTest",
     "policy_name": "slack_watch_test_bug",
+    "event_created": "2021-05-28T19:37:50.075822379Z",
     "host_name": "165.225.242.111",
     "severity": "High",
     "type": "security",
@@ -76,6 +78,7 @@
   {
     "watch_name": "SlackTest",
     "policy_name": "slack_watch_test_bug",
+    "event_created": "2021-05-28T19:37:50.075822379Z",
     "host_name": "165.225.242.111",
     "severity": "Low",
     "type": "security",
@@ -113,6 +116,7 @@
   {
     "watch_name": "SlackTest",
     "policy_name": "slack_watch_test_bug",
+    "event_created": "2021-05-28T19:37:50.075822379Z",
     "host_name": "165.225.242.111",
     "severity": "High",
     "type": "security",
@@ -150,6 +154,7 @@
   {
     "watch_name": "SlackTest",
     "policy_name": "slack_watch_test_bug",
+    "event_created": "2021-05-28T19:37:50.075822379Z",
     "host_name": "165.225.242.111",
     "severity": "High",
     "type": "security",
@@ -187,6 +192,7 @@
   {
     "watch_name": "SlackTest",
     "policy_name": "slack_watch_test_bug",
+    "event_created": "2021-05-28T19:37:50.075822379Z",
     "host_name": "165.225.242.111",
     "severity": "High",
     "type": "security",
@@ -224,6 +230,7 @@
   {
     "watch_name": "SlackTest",
     "policy_name": "slack_watch_test_bug",
+    "event_created": "2021-05-28T19:37:50.075822379Z",
     "host_name": "165.225.242.111",
     "severity": "High",
     "type": "security",
@@ -261,6 +268,7 @@
   {
     "watch_name": "SlackTest",
     "policy_name": "slack_watch_test_bug",
+    "event_created": "2021-05-28T19:37:50.075822379Z",
     "host_name": "165.225.242.111",
     "severity": "High",
     "type": "security",
@@ -298,6 +306,7 @@
   {
     "watch_name": "SlackTest",
     "policy_name": "slack_watch_test_bug",
+    "event_created": "2021-05-28T19:37:50.075822379Z",
     "host_name": "165.225.242.111",
     "severity": "High",
     "type": "security",
@@ -335,6 +344,7 @@
   {
     "watch_name": "SlackTest",
     "policy_name": "slack_watch_test_bug",
+    "event_created": "2021-05-28T19:37:50.075822379Z",
     "host_name": "165.225.242.111",
     "severity": "High",
     "type": "security",

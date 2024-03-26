@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "authorizer",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "engines": {
     "node": ">=16.0.0"
   },

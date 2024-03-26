@@ -14,7 +14,7 @@ const lambda = new Lambda({});
 const createIssues = (event, hostName) => event.issues.map((issue) => ({
   watch_name: event.watch_name,
   policy_name: event.policy_name,
-  created: event.created,
+  event_created: event.created,
   host_name: hostName,
   ...issue,
 }));

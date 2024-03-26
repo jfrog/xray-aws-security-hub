@@ -1,3 +1,9 @@
+## 1.2.3 (March 27, 2024)
+
+* Update Finding's 'Created at' and 'Updated at' values to use Xray scan event's 'created' date time.
+
+PR: [#32](https://github.com/jfrog/xray-aws-security-hub/pull/32)
+
 ## 1.2.2 (December 14, 2023)
 
 * Update dependencies from security Dependabot
