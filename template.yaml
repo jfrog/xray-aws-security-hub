@@ -70,7 +70,7 @@ Metadata:
     ReadmeUrl: SERVERLESS-REPO-README.md
     Labels: ['jfrog', 'xray', 'devops', 'security', 'license', 'operational_risk', 'serverless', 'securityhub']
     HomePageUrl: https://github.com/jfrog/xray-aws-security-hub
-    SemanticVersion: 1.2.2
+    SemanticVersion: 1.2.3
     SourceCodeUrl: https://github.com/jfrog/xray-aws-security-hub
 
 Conditions:
