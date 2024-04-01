@@ -99,9 +99,12 @@ Update Serverless Repository application version in `Metadata::AWS::ServerlessRe
 
 Use the SAM CLI to first build and package this application then [publish it to Serverless Application Repository](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-template-publishing-applications.html#serverless-sam-template-publishing-applications-prerequisites)
 
+> [!IMPORTANT]
+> Make sure you are using the JFrog Seller account (595206835686) credential for publishing the application.
+
 ```bash
 sam build
-sam package --output-template-file packaged.yaml --s3-bucket jfrog-xray-aws-security-hub --region us-west-1
+sam package --output-template-file packaged.yaml --s3-bucket jfrog-xray-aws-security-hub-1 --region us-west-1
 sam publish --template packaged.yaml --region us-west-1
 ```
 
