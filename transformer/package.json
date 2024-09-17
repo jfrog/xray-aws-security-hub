@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "transformer",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "engines": {
     "node": ">=16.0.0"
   },
@@ -11,11 +11,11 @@
   "author": "JFrog",
   "license": "MIT",
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.121.0",
-    "@aws-sdk/client-s3": "^3.131.0",
-    "@aws-sdk/client-securityhub": "^3.118.1",
-    "@aws-sdk/lib-dynamodb": "^3.121.0",
-    "axios": "^1.6.0",
+    "@aws-sdk/client-dynamodb": "^3.651.1",
+    "@aws-sdk/client-s3": "^3.651.1",
+    "@aws-sdk/client-securityhub": "^3.651.1",
+    "@aws-sdk/lib-dynamodb": "^3.651.1",
+    "axios": "^1.7.7",
     "winston": "^3.8.1"
   },
   "scripts": {
