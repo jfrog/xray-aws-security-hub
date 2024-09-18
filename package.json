@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "xray-aws-security-hub",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "engines": {
     "node": ">=16.0.0"
   },

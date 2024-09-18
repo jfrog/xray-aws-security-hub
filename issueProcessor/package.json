@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "issueProcessor",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "engines": {
     "node": ">=16.0.0"
   },
@@ -13,8 +13,8 @@
   "module": "app",
   "sourceType": "module",
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.110.0",
-    "axios": "^1.6.0",
+    "@aws-sdk/client-sqs": "^3.651.1",
+    "axios": "^1.7.7",
     "lodash": "^4.17.21",
     "uuid": "^8.3.2",
     "winston": "^3.8.1"

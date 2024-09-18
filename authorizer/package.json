@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "authorizer",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "engines": {
     "node": ">=16.0.0"
   },
@@ -13,7 +13,7 @@
   "module": "app",
   "sourceType": "module",
   "dependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.110.0",
+    "@aws-sdk/client-secrets-manager": "^3.651.1",
     "lodash": "^4.17.21",
     "winston": "^3.8.1"
   },

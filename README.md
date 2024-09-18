@@ -39,7 +39,7 @@ To use the SAM CLI, you need the following tools.
 
 To build and deploy your application for the first time, run the following in your shell:
 
-```bash
+```sh
 sam build
 sam deploy --guided
 ```
@@ -66,11 +66,11 @@ in the console, using separate CFT or adding VPC resource to the SAM template di
 When VPC and VPC endpoint are created, please add following configuration to `AWS::Serverless::Api` resource:
 
 ```yaml
-  EndpointConfiguration:
-    Type: PRIVATE
-    VPCEndpointIds:
-      - vpce-123a123a
-      - vpce-321a321a
+EndpointConfiguration:
+  Type: PRIVATE
+  VPCEndpointIds:
+    - vpce-123a123a
+    - vpce-321a321a
 ```
 
 [AWS documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-api-endpointconfiguration.html) for endpoint configuration.
@@ -85,13 +85,13 @@ Run `sam delete` to delete the application.
 
 Create a new S3 bucket (`jfrog-xray-aws-security-hub`) to store the SAM build artifact:
 
-```bash
+```sh
 aws cloudformation create-stack --stack-name xray-aws-security-hub-bucket --template-body file://cfts/serverless-application-repository-s3.yml --region us-west-1
 ```
 
 You can use `--parameters` option to override the S3 bucket name:
 
-```bash
+```sh
 aws cloudformation create-stack --stack-name xray-aws-security-hub-bucket --template-body file://cfts/serverless-application-repository-s3.yml --region us-west-1 --parameters ParameterKey=S3BucketName,ParameterValue=some-other-bucket-name
 ```
 
@@ -102,7 +102,7 @@ Use the SAM CLI to first build and package this application then [publish it to 
 > [!IMPORTANT]
 > Make sure you are using the JFrog Seller account (595206835686) credential for publishing the application.
 
-```bash
+```sh
 sam build
 sam package --output-template-file packaged.yaml --s3-bucket jfrog-xray-aws-security-hub-1 --region us-west-1
 sam publish --template packaged.yaml --region us-west-1
@@ -112,8 +112,8 @@ sam publish --template packaged.yaml --region us-west-1
 
 Build your application with the `sam build` command.
 
-```bash
-$ sam build
+```sh
+sam build
 ```
 
 The SAM CLI installs dependencies defined in each Lambda's `package.json`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
@@ -122,8 +122,8 @@ Test a single function by invoking it directly with a test event. An event is a 
 
 Run functions locally and invoke them with the `sam local invoke` command. e.g.
 
-```bash
-$ sam local invoke EventProcessorFunction --event events/eventProcessor/xray_license_issues_payload_string.json -n envs/test.json --region us-west-2
+```sh
+sam local invoke EventProcessorFunction --event events/eventProcessor/xray_license_issues_payload_string.json -n envs/test.json --region us-west-2
 ```
 
 The region must match the region for the SQS queue (defined in env var json file).
@@ -132,9 +132,9 @@ For security reason, only a sample env var file (`envs/sample.json`) is provided
 
 The SAM CLI can also emulate your application's API. Use the `sam local start-api` to run the API locally on port 3000.
 
-```bash
-$ sam local start-api
-$ curl http://localhost:3000/
+```sh
+sam local start-api
+curl http://localhost:3000/
 ```
 
 The SAM CLI reads the application template to determine the API's routes and the functions that they invoke. The `Events` property on each function's definition includes the route and method for each path.
@@ -156,8 +156,8 @@ To simplify troubleshooting, SAM CLI has a command called `sam logs`. `sam logs`
 
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
-```bash
-$ sam logs -n EventProcessorFunction --stack-name xray-aws-security-hub --tail
+```sh
+sam logs -n EventProcessorFunction --stack-name xray-aws-security-hub --tail
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
@@ -166,7 +166,7 @@ You can find more information and examples about filtering Lambda function logs 
 
 To delete the sample application that you created, use the AWS CLI. Assuming you used your project name for the stack name, you can run the following:
 
-```bash
+```sh
 aws cloudformation delete-stack --stack-name xray-aws-security-hub
 ```
 
