@@ -1,3 +1,8 @@
+## 1.2.4 (September 19, 2024)
+
+* Update dependencies from security Dependabot alerts
+* Enabled `DeletionProtectionEnabled` for DynamoDB in CFT
+
 ## 1.2.3 (March 27, 2024)
 
 * Update Finding's 'Created at' and 'Updated at' values to use Xray scan event's 'created' date time.
