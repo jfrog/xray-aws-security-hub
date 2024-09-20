@@ -492,9 +492,9 @@ Resources:
   DynamoDBTable:
     Type: AWS::DynamoDB::Table
     DeletionPolicy: Retain
-    DeletionProtectionEnabled: true
     UpdateReplacePolicy: Retain
     Properties:
+      DeletionProtectionEnabled: true
       TableName: !Sub "xray-findings-${DeploymentEnvironment}"
       AttributeDefinitions:
         - AttributeName: ID
