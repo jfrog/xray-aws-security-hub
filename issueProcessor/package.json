@@ -14,7 +14,7 @@
   "sourceType": "module",
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.651.1",
-    "axios": "^1.7.7",
+    "axios": "^1.12.0",
     "lodash": "^4.17.21",
     "uuid": "^8.3.2",
     "winston": "^3.8.1"
