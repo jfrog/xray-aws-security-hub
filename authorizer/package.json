@@ -14,7 +14,7 @@
   "sourceType": "module",
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.651.1",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "winston": "^3.8.1"
   },
   "scripts": {
